@@ -28,6 +28,10 @@ class Soft_Label_Objective_Metrics:
                                                                                                    real_data_path, 
                                                                                                    im_size, 
                                                                                                    use_zca)
+        channel, im_size, num_classes, dst_train, dst_test, class_map, class_map_inv = get_dataset(dataset, 
+                                                                                                   real_data_path, 
+                                                                                                   im_size, 
+                                                                                                   use_zca)
         self.images_train, self.labels_train, self.class_indices_train = self.load_real_data(dst_train, class_map, num_classes)
         self.test_loader = DataLoader(dst_test, batch_size=batch_size, shuffle=False)
 
@@ -250,7 +254,29 @@ class Soft_Label_Objective_Metrics:
                 hard_labels=hard_labels
             )
             print(f"Syn data hard label acc: {syn_data_hard_label_acc:.2f}%")
+            print("Caculating syn data hard label metrics...")
+            syn_data_hard_label_acc, best_lr = self.hyper_param_search_for_hard_label(
+                images=syn_images, 
+                hard_labels=hard_labels
+            )
+            print(f"Syn data hard label acc: {syn_data_hard_label_acc:.2f}%")
 
+            print("Caculating full data hard label metrics...")
+            model = build_model(
+                model_name=self.model_name, 
+                num_classes=self.num_classes, 
+                im_size=self.im_size, 
+                pretrained=False, 
+                device=self.device
+            )
+            full_data_hard_label_acc = self.compute_hard_label_metrics(
+                model=model, 
+                images=self.images_train, 
+                lr=self.default_lr, 
+                hard_labels=self.labels_train
+            )
+            del model
+            print(f"Full data hard label acc: {full_data_hard_label_acc:.2f}%")
             print("Caculating full data hard label metrics...")
             model = build_model(
                 model_name=self.model_name, 
@@ -345,6 +371,10 @@ class Hard_Label_Objective_Metrics:
                  use_zca: bool=False, num_eval: int=5, im_size: tuple=(32, 32), num_epochs: int=300, batch_size: int=256, 
                  default_lr: float=0.01, save_path: str=None, device: str="cuda"):
 
+        channel, im_size, num_classes, dst_train, dst_test, class_map, class_map_inv = get_dataset(dataset, 
+                                                                                                   real_data_path, 
+                                                                                                   im_size, 
+                                                                                                   use_zca)
         channel, im_size, num_classes, dst_train, dst_test, class_map, class_map_inv = get_dataset(dataset, 
                                                                                                    real_data_path, 
                                                                                                    im_size, 
