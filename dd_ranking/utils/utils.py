@@ -411,7 +411,6 @@ def train_one_epoch(
     grad_accum_steps=1,
     logging=False,
     log_interval=10,
-    temperature=1.2,
     device='cuda',
 ):
 
@@ -453,7 +452,7 @@ def train_one_epoch(
             stu_output = stu_model(input)
             if soft_label_mode == 'M':
                 tea_output = tea_model(input)
-                loss = loss_fn(stu_output, tea_output, temperature=temperature)
+                loss = loss_fn(stu_output, tea_output)
             else:
                 loss = loss_fn(stu_output, target)
             if accum_steps > 1:
