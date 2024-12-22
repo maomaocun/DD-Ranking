@@ -5,13 +5,17 @@ import time
 import timm
 import numpy as np
 import pandas as pd
+import math
 import random
+import kornia as K
 from tqdm import tqdm
 from collections import OrderedDict
 from torch import Tensor
 from torchvision import transforms, datasets
 from .networks import MLP, ConvNet, LeNet, AlexNet, VGG, ResNet, BasicBlock, Bottleneck
 from .networks import VGG11, VGG11_Tiny, VGG11BN, ResNet18, ResNet18_Tiny, ResNet18BN, ResNet18BN_Tiny, ResNet18BN_AP, ResNet18_AP
+from torch.optim.lr_scheduler import StepLR, CosineAnnealingLR, LambdaLR
+from torch.optim import SGD, Adam, AdamW
 
 
 def set_seed():
@@ -64,7 +68,7 @@ class TensorDataset(torch.utils.data.Dataset):
         return len(self.images)
 
 
-def get_dataset(dataset, data_path, im_size):
+def get_dataset(dataset, data_path, im_size, use_zca):
     class_map_inv = None
 
     if dataset == 'CIFAR10':
@@ -161,6 +165,30 @@ def get_dataset(dataset, data_path, im_size):
         class_map = {x: i for i, x in enumerate(range(num_classes))}
         class_map_inv = {i: x for i, x in enumerate(range(num_classes))}
     
+    if use_zca:
+        images, labels = [], []
+        for i in range(len(dst_train)):
+            im, lab = dst_train[i]
+            images.append(im)
+            labels.append(lab)
+        images = torch.stack(images, dim=0)
+        labels = torch.tensor(labels, dtype=torch.long)
+        zca = K.enhance.ZCAWhitening(eps=0.1, compute_inv=True)
+        zca.fit(images)
+        zca_images = zca(images)
+        dst_train = TensorDataset(zca_images, labels)
+
+        images, labels = [], []
+        for i in range(len(dst_test)):
+            im, lab = dst_test[i]
+            images.append(im)
+            labels.append(lab)
+        images = torch.stack(images, dim=0)
+        labels = torch.tensor(labels, dtype=torch.long)
+
+        zca_images = zca(images)
+        dst_test = TensorDataset(zca_images, labels)
+
     return channel, im_size, num_classes, dst_train, dst_test, class_map, class_map_inv
 
 
@@ -345,6 +373,30 @@ def get_pretrained_model_path(model_name, dataset, ipc):
 def default_augmentation(images):    
     return images
 
+def get_optimizer(optimizer_name, model, lr, weight_decay=0.0005, momentum=0.9):
+    if optimizer_name == 'sgd':
+        return SGD(model.parameters(), lr=lr, momentum=momentum, weight_decay=weight_decay)
+    elif optimizer_name == 'adam':
+        return Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
+    elif optimizer_name == 'adamw':
+        return AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
+    else:
+        raise NotImplementedError(f"Optimizer {optimizer_name} not implemented")
+
+def get_lr_scheduler(lr_scheduler_name, optimizer, num_epochs):
+    if lr_scheduler_name == 'step':
+        return StepLR(optimizer, step_size=num_epochs // 2 + 1, gamma=0.1)
+    elif lr_scheduler_name == 'cosine':
+        return CosineAnnealingLR(optimizer, T_max=num_epochs)
+    elif lr_scheduler_name == 'lambda':
+        return LambdaLR(optimizer, lambda step: 0.5 * (1.0 + math.cos(math.pi * step / num_epochs / 2))
+            if step <= num_epochs
+            else 0,
+            last_epoch=-1,
+        )
+    else:
+        raise NotImplementedError(f"LR Scheduler {lr_scheduler_name} not implemented")
+
 # modified from pytorch-image-models/train.py
 def train_one_epoch(
     epoch,
@@ -359,7 +411,6 @@ def train_one_epoch(
     grad_accum_steps=1,
     logging=False,
     log_interval=10,
-    temperature=1.2,
     device='cuda',
 ):
 
@@ -401,7 +452,7 @@ def train_one_epoch(
             stu_output = stu_model(input)
             if soft_label_mode == 'M':
                 tea_output = tea_model(input)
-                loss = loss_fn(stu_output, tea_output, temperature=temperature)
+                loss = loss_fn(stu_output, tea_output)
             else:
                 loss = loss_fn(stu_output, target)
             if accum_steps > 1:
