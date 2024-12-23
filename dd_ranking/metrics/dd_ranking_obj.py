@@ -17,14 +17,6 @@ from dd_ranking.aug import DSA_Augmentation, ZCA_Whitening_Augmentation, Mixup_A
 from dd_ranking.config import Config
 
 
-def SoftCrossEntropy(inputs, target, reduction='average'):
-    input_log_likelihood = -F.log_softmax(inputs, dim=1)
-    target_log_likelihood = F.softmax(target, dim=1)
-    batch = inputs.shape[0]
-    loss = torch.sum(torch.mul(input_log_likelihood, target_log_likelihood)) / batch
-    return loss
-
-
 class Soft_Label_Objective_Metrics:
 
     def __init__(self, config: Config=None, dataset: str='CIFAR10', real_data_path: str='./dataset/', ipc: int=10, model_name: str='ConvNet-3', 
