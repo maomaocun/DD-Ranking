@@ -1,0 +1,18 @@
+dataset: "CIFAR10"
+real_data_path: "./dataset/"
+ipc: 10
+model_name: "ConvNet-3"
+data_aug_func: "dsa"
+aug_params: {"prob_flip": 0.5, "ratio_rotate": 15.0, "saturation": 2.0, "brightness": 1.0, "contrast": 0.5, "ratio_scale": 1.2, "ratio_crop_pad": 0.125, "ratio_cutout": 0.5}
+optimizer: "sgd"
+lr_scheduler: "sgd"
+weight_decay: 0.01
+momentum: 0.9
+num_eval: 5
+im_size: (32, 32)
+num_epochs: 300
+use_zca: False
+batch_size: 256
+default_lr: 0.01
+save_path: "./results/my_method_hard_label_scores.csv"
+device: "cuda"
