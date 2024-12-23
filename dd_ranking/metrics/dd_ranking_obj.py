@@ -29,7 +29,7 @@ class Soft_Label_Objective_Metrics:
                                                                                                    im_size, 
                                                                                                    use_zca)
         self.images_train, self.labels_train, self.class_indices_train = self.load_real_data(dst_train, class_map, num_classes)
-        self.test_loader = DataLoader(dst_test, batch_size=batch_size, shuffle=False)
+        self.test_loader = DataLoader(dst_test, batch_size=batch_size, num_workers=4, shuffle=False)
 
         self.soft_label_mode = soft_label_mode
         self.soft_label_criterion = soft_label_criterion
@@ -349,7 +349,7 @@ class Hard_Label_Objective_Metrics:
                                                                                                    im_size, 
                                                                                                    use_zca)
         self.images_train, self.labels_train, self.class_indices_train = self.load_real_data(dst_train, class_map, num_classes)
-        self.test_loader = DataLoader(dst_test, batch_size=batch_size, shuffle=False)
+        self.test_loader = DataLoader(dst_test, batch_size=batch_size, num_workers=4, shuffle=False)
 
         # data info
         self.im_size = im_size
