@@ -10,7 +10,7 @@ class DSA_Augmentation:
         self.seed = seed
         self.aug_mode = aug_mode
 
-        default_funcs = ['scale', 'rotate', 'flip', 'brightness', 'saturation', 'contrast', 'crop', 'cutout']
+        default_funcs = ['scale', 'rotate', 'flip', 'color', 'crop', 'cutout']
         self.transform_funcs = self.create_transform_funcs(default_funcs)
 
     def create_transform_funcs(self, func_names):
@@ -40,8 +40,8 @@ class DSA_Augmentation:
         theta = torch.tensor(theta, dtype=torch.float)
         if self.params["siamese"]: # Siamese augmentation:
             theta[:] = theta[0]
-        grid = F.affine_grid(theta, x.shape).to(x.device)
-        x = F.grid_sample(x, grid)
+        grid = F.affine_grid(theta, x.shape, align_corners=True).to(x.device)
+        x = F.grid_sample(x, grid, align_corners=True)
         return x
 
     def rand_rotate(self, x): # [-180, 180], 90: anticlockwise 90 degree
@@ -53,8 +53,8 @@ class DSA_Augmentation:
         theta = torch.tensor(theta, dtype=torch.float)
         if self.params["siamese"]: # Siamese augmentation:
             theta[:] = theta[0]
-        grid = F.affine_grid(theta, x.shape).to(x.device)
-        x = F.grid_sample(x, grid)
+        grid = F.affine_grid(theta, x.shape, align_corners=True).to(x.device)
+        x = F.grid_sample(x, grid, align_corners=True)
         return x
 
     def rand_flip(self, x):
@@ -93,6 +93,9 @@ class DSA_Augmentation:
             randc[:] = randc[0]
         x = (x - x_mean) * (randc + ratio) + x_mean
         return x
+    
+    def rand_color(self, x):
+        return self.rand_contrast(self.rand_saturation(self.rand_brightness(x)))
 
     def rand_crop(self, x):
         # The image is padded on its surrounding and then cropped.
@@ -150,16 +153,15 @@ class DSA_Augmentation:
             
         self.params["latestseed"] = self.seed
         
-        transformed_images = images
         if self.aug_mode == 'M': # original
             for f in self.transform_funcs:
-                transformed_images = f(transformed_images)
+                images = f(images)
                 
         elif self.aug_mode == 'S':
             self.set_seed_DiffAug()
             p = self.transform_funcs[torch.randint(0, len(self.transform_funcs), size=(1,)).item()]
-            transformed_images = p(transformed_images)
+            images = p(images)
                 
-        transformed_images = transformed_images.contiguous()
+        images = images.contiguous()
             
-        return transformed_images
+        return images

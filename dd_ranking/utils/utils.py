@@ -68,7 +68,7 @@ class TensorDataset(torch.utils.data.Dataset):
         return len(self.images)
 
 
-def get_dataset(dataset, data_path, im_size, use_zca):
+def get_dataset(dataset, data_path, im_size, use_zca, device):
     class_map_inv = None
 
     if dataset == 'CIFAR10':
@@ -78,10 +78,15 @@ def get_dataset(dataset, data_path, im_size, use_zca):
         mean = [0.4914, 0.4822, 0.4465]
         std = [0.2023, 0.1994, 0.2010]
 
-        transform = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize(mean=mean, std=std),
-        ])
+        if not use_zca:
+            transform = transforms.Compose([
+                transforms.ToTensor(),
+                transforms.Normalize(mean=mean, std=std),
+            ])
+        else:
+            transform = transforms.Compose([
+                transforms.ToTensor()
+            ])
 
         dst_train = datasets.CIFAR10(data_path, train=True, download=True, transform=transform)
         dst_test = datasets.CIFAR10(data_path, train=False, download=True, transform=transform)
@@ -94,10 +99,15 @@ def get_dataset(dataset, data_path, im_size, use_zca):
         mean = [0.4914, 0.4822, 0.4465]
         std = [0.2023, 0.1994, 0.2010]
 
-        transform = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize(mean=mean, std=std),
-        ])
+        if not use_zca:
+            transform = transforms.Compose([
+                transforms.ToTensor(),
+                transforms.Normalize(mean=mean, std=std),
+            ])
+        else:
+            transform = transforms.Compose([
+                transforms.ToTensor()
+            ])
 
         dst_train = datasets.CIFAR100(data_path, train=True, download=True, transform=transform)  # no augmentation
         dst_test = datasets.CIFAR100(data_path, train=False, download=True, transform=transform)
@@ -109,11 +119,15 @@ def get_dataset(dataset, data_path, im_size, use_zca):
         num_classes = 200
         mean = [0.485, 0.456, 0.406]
         std = [0.229, 0.224, 0.225]
-        transform = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize(mean=mean, std=std),
-        ])
-
+        if not use_zca:
+            transform = transforms.Compose([
+                transforms.ToTensor(),
+                transforms.Normalize(mean=mean, std=std),
+            ])
+        else:
+            transform = transforms.Compose([
+                transforms.ToTensor()
+            ])
         dst_train = datasets.ImageFolder(os.path.join(data_path, "train"), transform=transform)  # no augmentation
         dst_test = datasets.ImageFolder(os.path.join(data_path, "val"), transform=transform)
         class_map = {x: x for x in range(num_classes)}
@@ -167,26 +181,26 @@ def get_dataset(dataset, data_path, im_size, use_zca):
     
     if use_zca:
         images, labels = [], []
-        for i in range(len(dst_train)):
+        for i in tqdm(range(len(dst_train))):
             im, lab = dst_train[i]
             images.append(im)
             labels.append(lab)
-        images = torch.stack(images, dim=0)
-        labels = torch.tensor(labels, dtype=torch.long)
+        images = torch.stack(images, dim=0).to(device)
+        labels = torch.tensor(labels, dtype=torch.long, device='cpu')
         zca = K.enhance.ZCAWhitening(eps=0.1, compute_inv=True)
         zca.fit(images)
-        zca_images = zca(images)
+        zca_images = zca(images).to("cpu")
         dst_train = TensorDataset(zca_images, labels)
 
         images, labels = [], []
-        for i in range(len(dst_test)):
+        for i in tqdm(range(len(dst_test))):
             im, lab = dst_test[i]
             images.append(im)
             labels.append(lab)
-        images = torch.stack(images, dim=0)
-        labels = torch.tensor(labels, dtype=torch.long)
+        images = torch.stack(images, dim=0).to(device)
+        labels = torch.tensor(labels, dtype=torch.long, device='cpu')
 
-        zca_images = zca(images)
+        zca_images = zca(images).to("cpu")
         dst_test = TensorDataset(zca_images, labels)
 
     return channel, im_size, num_classes, dst_train, dst_test, class_map, class_map_inv
@@ -442,9 +456,8 @@ def train_one_epoch(
         if batch_idx >= last_batch_idx_to_accum:
             accum_steps = last_accum_steps
 
-        input = aug_func(input)
         input, target = input.to(device), target.to(device)
-
+        input = aug_func(input)
         # multiply by accum steps to get equivalent for full update
         data_time_m.update(accum_steps * (time.time() - data_start_time))
 
@@ -530,10 +543,9 @@ def validate(
     with torch.no_grad():
         for batch_idx, (input, target) in enumerate(loader):
             last_batch = batch_idx == last_idx
-            input = aug_func(input)
             input = input.to(device)
             target = target.to(device)
-
+            input = aug_func(input)
             output = model(input)
             if isinstance(output, (tuple, list)):
                 output = output[0]
@@ -564,24 +576,22 @@ def validate(
     return metrics
 
 
-def train_one_epoch_dc(epoch, model, dataloader, loss_fn, optimizer, lr_scheduler=None, device='cuda'):
-    loss_avg, acc_avg, num_exp = 0, 0, 0
+def train_one_epoch_dc(epoch, model, dataloader, loss_fn, optimizer, aug_func=None, lr_scheduler=None, device='cuda'):
+    loss_avg, num_exp = 0, 0
     model = model.to(device)
-    loss_fn = loss_fn.to(device)
 
     model.train()
-
+    if aug_func is None:
+        aug_func = default_augmentation
     for i_batch, datum in enumerate(dataloader):
-        img = datum[0].float().to(device)
-        lab = datum[1].long().to(device)
+        img = datum[0].to(device)
+        lab = datum[1].to(device)
         n_b = lab.shape[0]
 
         output = model(img)
         loss = loss_fn(output, lab)
-        acc = np.sum(np.equal(np.argmax(output.cpu().data.numpy(), axis=-1), lab.cpu().data.numpy()))
 
         loss_avg += loss.item() * n_b
-        acc_avg += acc
         num_exp += n_b
 
         optimizer.zero_grad()
@@ -592,36 +602,34 @@ def train_one_epoch_dc(epoch, model, dataloader, loss_fn, optimizer, lr_schedule
             lr_scheduler.step(epoch)
 
     loss_avg /= num_exp
-    acc_avg /= num_exp
-    print(f'Epoch {epoch}\tTrain Loss: {loss_avg:>7.3f}\tTrain Acc: {acc_avg:>7.3f}')
+    # print(f'Epoch {epoch}\tTrain Loss: {loss_avg:>7.3f}')
 
-    return loss_avg, acc_avg
+    return loss_avg
 
 def validate_dc(
-    stu_model,
+    model,
     loader,
-    loss_fn,
+    aug_func=None,
     device='cuda'
 ):
-    loss_avg, acc_avg, num_exp = 0, 0, 0
-    stu_model = stu_model.to(device)
+    acc_avg, num_exp = 0, 0
+    model = model.to(device)
+    model.eval()
 
-    stu_model.eval()
+    if aug_func is None:
+        aug_func = default_augmentation
 
     for i_batch, datum in enumerate(loader):
-        img = datum[0].float().to(device)
-        lab = datum[1].long().to(device)
+        img = datum[0].to(device)
+        lab = datum[1].to(device)
         n_b = lab.shape[0]
-
-        output = stu_model(img)
-        loss = loss_fn(output, lab)
+        img = aug_func(img)
+        output = model(img)
         acc = np.sum(np.equal(np.argmax(output.cpu().data.numpy(), axis=-1), lab.cpu().data.numpy()))
 
-        loss_avg += loss.item()*n_b
         acc_avg += acc
         num_exp += n_b
 
-    loss_avg /= num_exp
     acc_avg /= num_exp
-    print(f'Test Loss: {loss_avg:>7.3f}\tTest Acc: {acc_avg:>7.3f}')
-    return loss_avg, acc_avg
+    # print(f'Test Acc: {acc_avg:>7.3f}')
+    return {'top1': acc_avg}

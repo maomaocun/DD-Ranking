@@ -16,6 +16,15 @@ from dd_ranking.loss import SoftCrossEntropyLoss, KLDivergenceLoss
 from dd_ranking.aug import DSA_Augmentation, ZCA_Whitening_Augmentation, Mixup_Augmentation, Cutmix_Augmentation
 from dd_ranking.config import Config
 
+
+def SoftCrossEntropy(inputs, target, reduction='average'):
+    input_log_likelihood = -F.log_softmax(inputs, dim=1)
+    target_log_likelihood = F.softmax(target, dim=1)
+    batch = inputs.shape[0]
+    loss = torch.sum(torch.mul(input_log_likelihood, target_log_likelihood)) / batch
+    return loss
+
+
 class Soft_Label_Objective_Metrics:
 
     def __init__(self, config: Config=None, dataset: str='CIFAR10', real_data_path: str='./dataset/', ipc: int=10, model_name: str='ConvNet-3', 
@@ -50,7 +59,8 @@ class Soft_Label_Objective_Metrics:
         channel, im_size, num_classes, dst_train, dst_test, class_map, class_map_inv = get_dataset(dataset, 
                                                                                                    real_data_path, 
                                                                                                    im_size, 
-                                                                                                   use_zca)
+                                                                                                   use_zca,
+                                                                                                   device)
         self.images_train, self.labels_train, self.class_indices_train = self.load_real_data(dst_train, class_map, num_classes)
         self.test_loader = DataLoader(dst_test, batch_size=batch_size, num_workers=4, shuffle=False)
 
@@ -74,7 +84,7 @@ class Soft_Label_Objective_Metrics:
         self.batch_size = batch_size
         self.num_epochs = num_epochs
         self.default_lr = default_lr
-        self.test_interval = 10
+        self.test_interval = 100
         self.device = device
 
         if data_aug_func == 'dsa':
@@ -105,6 +115,8 @@ class Soft_Label_Objective_Metrics:
         labels_all = []
         class_indices = [[] for c in range(num_classes)]
         for i, (image, label) in enumerate(dataset):
+            if torch.is_tensor(label):
+                label = label.item()
             images_all.append(torch.unsqueeze(image, 0))
             labels_all.append(class_map[label])
         images_all = torch.cat(images_all, dim=0)
@@ -209,30 +221,30 @@ class Soft_Label_Objective_Metrics:
         train_loader = DataLoader(soft_label_dataset, batch_size=self.batch_size, shuffle=True)
 
         if self.soft_label_criterion == 'sce':
-            loss_fn = SoftCrossEntropyLoss()
+            loss_fn = SoftCrossEntropyLoss().to(self.device)
         elif self.soft_label_criterion == 'kl':
-            loss_fn = KLDivergenceLoss()
+            loss_fn = KLDivergenceLoss().to(self.device)
         else:
             raise NotImplementedError(f"Soft label criterion {self.soft_label_criterion} not implemented")
         
         optimizer = get_optimizer(self.optimizer, model, lr, self.weight_decay, self.momentum)
         lr_scheduler = get_lr_scheduler(self.lr_scheduler, optimizer, self.num_epochs)
-        
+
         best_acc1 = 0
-        for epoch in tqdm(range(self.num_epochs)):
+        for epoch in tqdm(range(self.num_epochs + 1)):
             train_one_epoch(
                 epoch=epoch, 
                 stu_model=model,
-                loader=train_loader, 
-                loss_fn=loss_fn, 
+                loader=train_loader,
+                loss_fn=loss_fn,
                 optimizer=optimizer,
                 aug_func=self.aug_func,
                 soft_label_mode=self.soft_label_mode,
-                lr_scheduler=lr_scheduler, 
+                lr_scheduler=lr_scheduler,
                 tea_model=self.teacher_model, 
                 device=self.device
             )
-            if epoch % self.test_interval == 0:
+            if (epoch + 1) % self.test_interval == 0:
                 metric = validate(
                     model=model, 
                     loader=self.test_loader,
@@ -303,7 +315,7 @@ class Soft_Label_Objective_Metrics:
                 syn_data_soft_label_acc = self.compute_soft_label_metrics(
                     model=model, 
                     images=syn_images, 
-                    lr=syn_lr, 
+                    lr=syn_lr,
                     soft_labels=soft_labels
                 )
                 del model
@@ -391,7 +403,8 @@ class Hard_Label_Objective_Metrics:
         channel, im_size, num_classes, dst_train, dst_test, class_map, class_map_inv = get_dataset(dataset, 
                                                                                                    real_data_path, 
                                                                                                    im_size, 
-                                                                                                   use_zca)
+                                                                                                   use_zca,
+                                                                                                   device)
         self.images_train, self.labels_train, self.class_indices_train = self.load_real_data(dst_train, class_map, num_classes)
         self.test_loader = DataLoader(dst_test, batch_size=batch_size, num_workers=4, shuffle=False)
 
