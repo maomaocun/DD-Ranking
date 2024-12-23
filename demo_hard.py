@@ -1,12 +1,21 @@
 import os
 import torch
 from dd_ranking.metrics import Hard_Label_Objective_Metrics
+from dd_ranking.config import Config
 
 
+"""Use config file to specify the parameters (Recommended)"""
+config = Config.from_file("./configs/Demo_Hard_Label.yaml")
+convd3_hard_obj = Hard_Label_Objective_Metrics(config)
+syn_images = torch.load(os.path.join("./DC/CIFAR10/IPC10/", f"images.pt"), map_location='cpu')
+print(convd3_hard_obj.compute_metrics(syn_images))
+
+
+"""Use hardcoded parameters"""
 device = "cuda"
 method_name = "DM"                    # Specify your method name
+ipc = 10                              # Specify your IPC
 dataset = "CIFAR10"                   # Specify your dataset name
-syn_data_dir = "./DC/CIFAR10/IPC10/"  # Specify your synthetic data path
 data_dir = "./datasets"               # Specify your dataset path
 model_name = "ConvNet-3"              # Specify your model name
 im_size = (32, 32)                    # Specify your image size
@@ -22,9 +31,7 @@ dsa_params = {
     "ratio_cutout": 0.5,
 }
 
-
-ipc = 10
-syn_images = torch.load(os.path.join(syn_data_dir, f"images.pt"), map_location='cpu')
+syn_images = torch.load(os.path.join("./DC/CIFAR10/IPC10/", f"images.pt"), map_location='cpu')
 save_path = f"./results/{dataset}/{model_name}/IPC{ipc}/dm_hard_scores.csv"
 convd3_hard_obj = Hard_Label_Objective_Metrics(
     dataset=dataset, 
