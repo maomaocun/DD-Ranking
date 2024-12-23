@@ -195,7 +195,6 @@ class Soft_Label_Objective_Metrics:
                 metric = validate(
                     model=model, 
                     loader=self.test_loader,
-                    aug_func=self.aug_func,
                     device=self.device
                 )
                 if metric['top1'] > best_acc1:
@@ -240,7 +239,6 @@ class Soft_Label_Objective_Metrics:
                 metric = validate(
                     model=model, 
                     loader=self.test_loader,
-                    aug_func=self.aug_func,
                     device=self.device
                 )
                 if metric['top1'] > best_acc1:
@@ -500,7 +498,6 @@ class Hard_Label_Objective_Metrics:
                 metric = validate(
                     model=model, 
                     loader=self.test_loader,
-                    aug_func=self.aug_func,
                     device=self.device
                 )
                 if metric['top1'] > best_acc1:

@@ -524,7 +524,6 @@ def train_one_epoch(
 def validate(
     model,
     loader,
-    aug_func=None,
     device=torch.device('cuda'),
     logging=False,
     log_interval=10
@@ -545,7 +544,7 @@ def validate(
             last_batch = batch_idx == last_idx
             input = input.to(device)
             target = target.to(device)
-            input = aug_func(input)
+
             output = model(input)
             if isinstance(output, (tuple, list)):
                 output = output[0]
