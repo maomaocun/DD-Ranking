@@ -268,50 +268,45 @@ def get_vgg(model_name, im_size, channel, num_classes, depth=11, batchnorm=False
     if use_torchvision:
         if depth == 11:
             if batchnorm:
-                return torchvision.models.vgg11_bn(num_classes=num_classes, pretrained=pretrained)
+                return torchvision.models.vgg11_bn(num_classes=num_classes, pretrained=False)
             else:
-                return torchvision.models.vgg11(num_classes=num_classes, pretrained=pretrained)
+                return torchvision.models.vgg11(num_classes=num_classes, pretrained=False)
         elif depth == 13:
             if batchnorm:
-                return torchvision.models.vgg13_bn(num_classes=num_classes, pretrained=pretrained)
+                return torchvision.models.vgg13_bn(num_classes=num_classes, pretrained=False)
             else:
-                return torchvision.models.vgg13(num_classes=num_classes, pretrained=pretrained)
+                return torchvision.models.vgg13(num_classes=num_classes, pretrained=False)
         elif depth == 16:
             if batchnorm:
-                return torchvision.models.vgg16_bn(num_classes=num_classes, pretrained=pretrained)
+                return torchvision.models.vgg16_bn(num_classes=num_classes, pretrained=False)
             else:
-                return torchvision.models.vgg16(num_classes=num_classes, pretrained=pretrained)
+                return torchvision.models.vgg16(num_classes=num_classes, pretrained=False)
         elif depth == 19:
             if batchnorm:
-                return torchvision.models.vgg19_bn(num_classes=num_classes, pretrained=pretrained)
+                return torchvision.models.vgg19_bn(num_classes=num_classes, pretrained=False)
             else:
-                return torchvision.models.vgg19(num_classes=num_classes, pretrained=pretrained)
+                return torchvision.models.vgg19(num_classes=num_classes, pretrained=False)
     else:
         model = VGG(f'VGG{depth}', channel, num_classes, norm='batchnorm' if batchnorm else 'instancenorm', res=im_size[0])
-        if pretrained:
-            model.load_state_dict(torch.load(model_path, map_location='cpu', weights_only=True))
-        
-        return model
+    
+    if pretrained:
+        model.load_state_dict(torch.load(model_path, map_location='cpu', weights_only=True))    
+    return model
     
 
 def get_resnet(model_name, im_size, channel, num_classes, depth=18, batchnorm=False, use_torchvision=False, pretrained=False, model_path=None):
     print(f"Creating {model_name} with channel={channel}, num_classes={num_classes}")
     if use_torchvision:
+        print(f"ResNet in torchvision uses batchnorm by default.")
         if depth == 18:
-            if batchnorm:
-                return torchvision.models.resnet18_bn(num_classes=num_classes, pretrained=pretrained)
-            else:
-                return torchvision.models.resnet18(num_classes=num_classes, pretrained=pretrained)
+            model = torchvision.models.resnet18(num_classes=num_classes, pretrained=False)
         elif depth == 34:
-            if batchnorm:
-                return torchvision.models.resnet34_bn(num_classes=num_classes, pretrained=pretrained)
-            else:
-                return torchvision.models.resnet34(num_classes=num_classes, pretrained=pretrained)
+            model = torchvision.models.resnet34(num_classes=num_classes, pretrained=False)
         elif depth == 50:
-            if batchnorm:
-                return torchvision.models.resnet50_bn(num_classes=num_classes, pretrained=pretrained)
-            else:
-                return torchvision.models.resnet50(num_classes=num_classes, pretrained=pretrained)
+            model = torchvision.models.resnet50(num_classes=num_classes, pretrained=False)
+        if im_size == (64, 64):
+            model.conv1 = torch.nn.Conv2d(3,64, kernel_size=(3,3), stride=(1,1), padding=(1,1), bias=False)
+            model.maxpool = torch.nn.Identity()
     else:
         if depth == 18:
             model = ResNet(BasicBlock, [2,2,2,2], channel=channel, num_classes=num_classes, norm='batchnorm' if batchnorm else 'instancenorm', res=im_size[0])
@@ -319,10 +314,10 @@ def get_resnet(model_name, im_size, channel, num_classes, depth=18, batchnorm=Fa
             model = ResNet(BasicBlock, [3,4,6,3], channel=channel, num_classes=num_classes, norm='batchnorm' if batchnorm else 'instancenorm', res=im_size[0])
         elif depth == 50:
             model = ResNet(Bottleneck, [3,4,6,3], channel=channel, num_classes=num_classes, norm='batchnorm' if batchnorm else 'instancenorm', res=im_size[0])
-        if pretrained:
-            model.load_state_dict(torch.load(model_path, map_location='cpu', weights_only=True))
-        
-        return model
+    
+    if pretrained:
+        model.load_state_dict(torch.load(model_path, map_location='cpu', weights_only=True))
+    return model
 
 
 def get_other_models(model_name, channel, num_classes, im_size=(32, 32), pretrained=False, model_path=None):
