@@ -534,9 +534,6 @@ def validate(
 
     model.eval()
 
-    if aug_func is None:
-        aug_func = default_augmentation
-
     end = time.time()
     last_idx = len(loader) - 1
     with torch.no_grad():
@@ -614,9 +611,6 @@ def validate_dc(
     acc_avg, num_exp = 0, 0
     model = model.to(device)
     model.eval()
-
-    if aug_func is None:
-        aug_func = default_augmentation
 
     for i_batch, datum in enumerate(loader):
         img = datum[0].to(device)

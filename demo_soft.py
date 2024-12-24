@@ -8,7 +8,8 @@ from dd_ranking.config import Config
 config = Config.from_file("./configs/Demo_Soft_Label.yaml")
 convd3_soft_obj = Soft_Label_Objective_Metrics(config)
 syn_images = torch.load(os.path.join(syn_data_dir, f"images.pt"), map_location='cpu')
-print(convd3_soft_obj.compute_metrics(syn_images))
+soft_labels = torch.load(os.path.join(syn_data_dir, f"labels.pt"), map_location='cpu')
+print(convd3_soft_obj.compute_metrics(syn_images, soft_labels, syn_lr=0.01))
 
 
 """Use hardcoded parameters"""
@@ -32,6 +33,7 @@ dsa_params = {                          # Specify your data augmentation paramet
 }
 
 syn_images = torch.load(os.path.join(syn_data_dir, f"images.pt"), map_location='cpu')
+soft_labels = torch.load(os.path.join(syn_data_dir, f"labels.pt"), map_location='cpu')
 save_path = f"./results/{dataset}/{model_name}/IPC{ipc}/dm_hard_scores.csv"
 convd3_hard_obj = Soft_Label_Objective_Metrics(
     dataset=dataset,
@@ -40,16 +42,19 @@ convd3_hard_obj = Soft_Label_Objective_Metrics(
     model_name=model_name,
     soft_label_criterion='sce',  # Use Soft Cross Entropy Loss
     soft_label_mode='S',         # Use one-to-one image to soft label mapping
+    default_lr=0.01,
     optimizer='sgd',             # Use SGD optimizer
     lr_scheduler='step',         # Use StepLR learning rate scheduler
     weight_decay=0.0005,         
     momentum=0.9,                
-    use_zca=True,                # Use ZCA whitening
+    use_zca=True,                # Use ZCA whitening (please disable it if you didn't use it to distill synthetic data)
     num_eval=5,                  
     data_aug_func='dsa',         # Use DSA data augmentation
     aug_params=dsa_params,       # Specify dsa parameters
     im_size=im_size,
+    num_epochs=1000,
+    num_workers=4,
     device=device,
     save_path=save_path
 )
-print(convd3_hard_obj.compute_metrics(syn_images))
+print(convd3_hard_obj.compute_metrics(syn_images, soft_labels, syn_lr=0.01))
