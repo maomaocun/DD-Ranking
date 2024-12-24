@@ -1,8 +1,4 @@
-<center>
-
-# DD-Ranking
-
-</center>
+# <center>DD-Ranking</center>
 
 ## Motivation
 
