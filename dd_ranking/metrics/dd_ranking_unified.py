@@ -18,22 +18,24 @@ from dd_ranking.utils import set_seed, get_optimizer, get_lr_scheduler
 from dd_ranking.utils import train_one_epoch, validate
 from dd_ranking.loss import SoftCrossEntropyLoss, KLDivergenceLoss
 from dd_ranking.aug import DSA_Augmentation, Mixup_Augmentation, Cutmix_Augmentation, ZCA_Whitening_Augmentation
+from dd_ranking.config import Config
 
 
 class Unified_Evaluator:
 
-    def __init__(self, 
-        dataset: str, 
-        real_data_path: str, 
-        ipc: int,
-        model_name: str,
-        use_soft_label: bool,
+    def __init__(self,
+        config: Config=None,
+        dataset: str='CIFAR10', 
+        real_data_path: str='./dataset', 
+        ipc: int=10,
+        model_name: str='ConvNet-3',
+        use_soft_label: bool=False,
         optimizer: str='sgd',
         lr_scheduler: str='step',
-        data_aug_func: str=None,
+        data_aug_func: str='dsa',
         aug_params: dict=None,
-        soft_label_mode: str=None,
-        soft_label_criterion: str=None,
+        soft_label_mode: str='M',
+        soft_label_criterion: str='kl',
         num_eval: int=5,
         im_size: tuple=(32, 32), 
         num_epochs: int=300,
@@ -42,14 +44,51 @@ class Unified_Evaluator:
         momentum: float=0.9,
         use_zca: bool=False,
         temperature: float=1.0,
+        use_torchvision: bool=False,
+        num_workers: int=4,
         save_path: str=None,
         device: str="cuda"
     ):
 
+        if config is not None:
+            self.config = config
+            dataset = self.config.get('dataset', 'CIFAR10')
+            real_data_path = self.config.get('real_data_path', './dataset')
+            ipc = self.config.get('ipc', 10)
+            model_name = self.config.get('model_name', 'ConvNet-3')
+            use_soft_label = self.config.get('use_soft_label', False)
+            soft_label_criterion = self.config.get('soft_label_criterion', 'sce')
+            data_aug_func = self.config.get('data_aug_func', 'dsa')
+            aug_params = self.config.get('aug_params', {
+                "prob_flip": 0.5,
+                "ratio_rotate": 15.0,
+                "saturation": 2.0,
+                "brightness": 1.0,
+                "contrast": 0.5,
+                "ratio_scale": 1.2,
+                "ratio_crop_pad": 0.125,
+                "ratio_cutout": 0.5
+            })
+            soft_label_mode = self.config.get('soft_label_mode', 'S')
+            optimizer = self.config.get('optimizer', 'sgd')
+            lr_scheduler = self.config.get('lr_scheduler', 'step')
+            temperature = self.config.get('temperature', 1.0)
+            weight_decay = self.config.get('weight_decay', 0.0005)
+            momentum = self.config.get('momentum', 0.9)
+            num_eval = self.config.get('num_eval', 5)
+            im_size = self.config.get('im_size', (32, 32))
+            num_epochs = self.config.get('num_epochs', 300)
+            batch_size = self.config.get('batch_size', 256)
+            default_lr = self.config.get('default_lr', 0.01)
+            save_path = self.config.get('save_path', None)
+            num_workers = self.config.get('num_workers', 4)
+            use_torchvision = self.config.get('use_torchvision', False)
+            device = self.config.get('device', 'cuda')
+
         channel, im_size, num_classes, dst_train, dst_test, class_map, class_map_inv = get_dataset(dataset, real_data_path, im_size, use_zca)
         self.num_classes = num_classes
         self.im_size = im_size
-        self.test_loader = DataLoader(dst_test, batch_size=batch_size, num_workers=4, shuffle=False)
+        self.test_loader = DataLoader(dst_test, batch_size=batch_size, num_workers=num_workers, shuffle=False)
 
         self.ipc = ipc
         self.model_name = model_name
@@ -77,26 +116,30 @@ class Unified_Evaluator:
             os.makedirs(os.path.dirname(save_path))
         self.save_path = save_path
 
-        pretrained_model_path = get_pretrained_model_path(model_name, dataset, ipc)
+        if not use_torchvision:
+            pretrained_model_path = get_pretrained_model_path(model_name, dataset, ipc)
+        else:
+            pretrained_model_path = None
+
         self.teacher_model = build_model(
             model_name=model_name, 
             num_classes=num_classes, 
             im_size=self.im_size, 
             pretrained=True, 
             device=self.device, 
-            model_path=pretrained_model_path
+            model_path=pretrained_model_path,
+            use_torchvision=use_torchvision
         )
         self.teacher_model.eval()
 
         if data_aug_func is None:
             self.aug_func = None
-        elif data_aug_func == 'DSA':
+        elif data_aug_func == 'dsa':
             self.aug_func = DSA_Augmentation(aug_params)
-        elif data_aug_func == 'ZCA':
-            self.aug_func = ZCA_Whitening_Augmentation(aug_params)
-        elif data_aug_func == 'Mixup':
+            self.num_epochs = 1000
+        elif data_aug_func == 'mixup':
             self.aug_func = Mixup_Augmentation(aug_params)  
-        elif data_aug_func == 'Cutmix':
+        elif data_aug_func == 'cutmix':
             self.aug_func = Cutmix_Augmentation(aug_params)
         else:
             raise ValueError(f"Invalid data augmentation function: {data_aug_func}")
@@ -168,7 +211,6 @@ class Unified_Evaluator:
             acc = validate(
                 model=model, 
                 loader=loader,
-                aug_func=self.aug_func,
                 logging=True,
                 device=self.device
             )

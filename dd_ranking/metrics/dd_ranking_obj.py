@@ -23,7 +23,7 @@ class Soft_Label_Objective_Metrics:
                  soft_label_criterion: str='kl', data_aug_func: str='cutmix', aug_params: dict={'cutmix_p': 1.0}, soft_label_mode: str='S',
                  optimizer: str='sgd', lr_scheduler: str='step', temperature: float=1.0, weight_decay: float=0.0005, 
                  momentum: float=0.9, num_eval: int=5, im_size: tuple=(32, 32), num_epochs: int=300, use_zca: bool=False,
-                 batch_size: int=256, default_lr: float=0.01, save_path: str=None, device: str="cuda"):
+                 batch_size: int=256, default_lr: float=0.01, save_path: str=None, use_torchvision: bool=False, device: str="cuda"):
 
         if config is not None:
             self.config = config
@@ -46,6 +46,8 @@ class Soft_Label_Objective_Metrics:
             batch_size = self.config.get('batch_size')
             default_lr = self.config.get('default_lr')
             save_path = self.config.get('save_path')
+            num_workers = self.config.get('num_workers')
+            use_torchvision = self.config.get('use_torchvision')
             device = self.config.get('device')
 
         channel, im_size, num_classes, dst_train, dst_test, class_map, class_map_inv = get_dataset(dataset, 
@@ -82,8 +84,6 @@ class Soft_Label_Objective_Metrics:
         if data_aug_func == 'dsa':
             self.aug_func = DSA_Augmentation(aug_params)
             self.num_epochs = 1000
-        elif data_aug_func == 'zca':
-            self.aug_func = ZCA_Whitening_Augmentation(aug_params)
         elif data_aug_func == 'mixup':
             self.aug_func = Mixup_Augmentation(aug_params)
         elif data_aug_func == 'cutmix':
@@ -98,8 +98,17 @@ class Soft_Label_Objective_Metrics:
         self.save_path = save_path
 
         # teacher model
-        pretrained_model_path = get_pretrained_model_path(model_name, dataset, ipc)
-        self.teacher_model = build_model(model_name, num_classes=self.num_classes, im_size=self.im_size, pretrained=True, device=self.device, model_path=pretrained_model_path)
+        if not use_torchvision:
+            pretrained_model_path = get_pretrained_model_path(model_name, dataset, ipc)
+        else:
+            pretrained_model_path = None
+        self.teacher_model = build_model(model_name, 
+                                         num_classes=self.num_classes, 
+                                         im_size=self.im_size, 
+                                         pretrained=True, 
+                                         device=self.device, 
+                                         model_path=pretrained_model_path,
+                                         use_torchvision=use_torchvision)
         self.teacher_model.eval()
 
     def load_real_data(self, dataset, class_map, num_classes):

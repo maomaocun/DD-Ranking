@@ -29,7 +29,7 @@ dsa_params = {                          # Specify your data augmentation paramet
     "contrast": 0.5,
     "ratio_scale": 1.2,
     "ratio_crop_pad": 0.125,
-    "ratio_cutout": 0.5,
+    "ratio_cutout": 0.5
 }
 
 syn_images = torch.load(os.path.join(syn_data_dir, f"images.pt"), map_location='cpu')
