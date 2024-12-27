@@ -1,0 +1,10 @@
+# Documentation
+# * mdbook   https://rust-lang.github.io/mdBook/
+# * template https://github.com/kg4zow/mdbook-template/
+
+[book]
+authors             = ["DD-Ranking Team"]
+language            = "en"
+multilingual        = false
+src                 = "doc"
+title               = "DD-Ranking Benchmark"
