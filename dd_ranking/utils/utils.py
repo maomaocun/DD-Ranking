@@ -3,6 +3,7 @@ import torch
 import torch.nn as nn
 import time
 import timm
+import torchvision
 import numpy as np
 import pandas as pd
 import math
@@ -68,7 +69,7 @@ class TensorDataset(torch.utils.data.Dataset):
         return len(self.images)
 
 
-def get_dataset(dataset, data_path, im_size, use_zca, device):
+def get_dataset(dataset, data_path, im_size, use_zca, custom_val_trans, device):
     class_map_inv = None
 
     if dataset == 'CIFAR10':
@@ -89,7 +90,7 @@ def get_dataset(dataset, data_path, im_size, use_zca, device):
             ])
 
         dst_train = datasets.CIFAR10(data_path, train=True, download=True, transform=transform)
-        dst_test = datasets.CIFAR10(data_path, train=False, download=True, transform=transform)
+        dst_test = datasets.CIFAR10(data_path, train=False, download=True, transform=transform if custom_val_trans is None else custom_val_trans)
         class_map = {x: x for x in range(num_classes)}
 
     elif dataset == 'CIFAR100':
@@ -109,8 +110,8 @@ def get_dataset(dataset, data_path, im_size, use_zca, device):
                 transforms.ToTensor()
             ])
 
-        dst_train = datasets.CIFAR100(data_path, train=True, download=True, transform=transform)  # no augmentation
-        dst_test = datasets.CIFAR100(data_path, train=False, download=True, transform=transform)
+        dst_train = datasets.CIFAR100(data_path, train=True, download=True, transform=transform)
+        dst_test = datasets.CIFAR100(data_path, train=False, download=True, transform=transform if custom_val_trans is None else custom_val_trans)
         class_map = {x: x for x in range(num_classes)}
 
     elif dataset == 'TinyImageNet':
@@ -128,8 +129,8 @@ def get_dataset(dataset, data_path, im_size, use_zca, device):
             transform = transforms.Compose([
                 transforms.ToTensor()
             ])
-        dst_train = datasets.ImageFolder(os.path.join(data_path, "train"), transform=transform)  # no augmentation
-        dst_test = datasets.ImageFolder(os.path.join(data_path, "val"), transform=transform)
+        dst_train = datasets.ImageFolder(os.path.join(data_path, "train"), transform=transform)
+        dst_test = datasets.ImageFolder(os.path.join(data_path, "val"), transform=transform if custom_val_trans is None else custom_val_trans)
         class_map = {x: x for x in range(num_classes)}
 
     elif dataset in ['ImageNette', 'ImageWoof', 'ImageMeow', 'ImageSquawk', 'ImageFruit', 'ImageYellow']:
@@ -151,7 +152,7 @@ def get_dataset(dataset, data_path, im_size, use_zca, device):
 
         dst_train = datasets.ImageFolder(os.path.join(data_path, "train"), transform=transform)
         dst_train = torch.utils.data.Subset(dst_train, np.squeeze(np.argwhere(np.isin(dst_train.targets, config.img_net_classes))))
-        dst_test = datasets.ImageFolder(os.path.join(data_path, "val"), transform=transform)
+        dst_test = datasets.ImageFolder(os.path.join(data_path, "val"), transform=transform if custom_val_trans is None else custom_val_trans)
         dst_test = torch.utils.data.Subset(dst_test, np.squeeze(np.argwhere(np.isin(dst_test.targets, config.img_net_classes))))
         for c in range(len(config.img_net_classes)):
             dst_test.dataset.targets[dst_test.dataset.targets == config.img_net_classes[c]] = c
@@ -174,7 +175,7 @@ def get_dataset(dataset, data_path, im_size, use_zca, device):
         ])
 
         dst_train = datasets.ImageFolder(os.path.join(data_path, "train"), transform=transform)
-        dst_test = datasets.ImageFolder(os.path.join(data_path, "val"), transform=transform)
+        dst_test = datasets.ImageFolder(os.path.join(data_path, "val"), transform=transform if custom_val_trans is None else custom_val_trans)
 
         class_map = {x: i for i, x in enumerate(range(num_classes))}
         class_map_inv = {i: x for i, x in enumerate(range(num_classes))}
@@ -268,24 +269,24 @@ def get_vgg(model_name, im_size, channel, num_classes, depth=11, batchnorm=False
     if use_torchvision:
         if depth == 11:
             if batchnorm:
-                return torchvision.models.vgg11_bn(num_classes=num_classes, pretrained=False)
+                model = torchvision.models.vgg11_bn(num_classes=num_classes, pretrained=False)
             else:
-                return torchvision.models.vgg11(num_classes=num_classes, pretrained=False)
+                model = torchvision.models.vgg11(num_classes=num_classes, pretrained=False)
         elif depth == 13:
             if batchnorm:
-                return torchvision.models.vgg13_bn(num_classes=num_classes, pretrained=False)
+                model = torchvision.models.vgg13_bn(num_classes=num_classes, pretrained=False)
             else:
-                return torchvision.models.vgg13(num_classes=num_classes, pretrained=False)
+                model = torchvision.models.vgg13(num_classes=num_classes, pretrained=False)
         elif depth == 16:
             if batchnorm:
-                return torchvision.models.vgg16_bn(num_classes=num_classes, pretrained=False)
+                model = torchvision.models.vgg16_bn(num_classes=num_classes, pretrained=False)
             else:
-                return torchvision.models.vgg16(num_classes=num_classes, pretrained=False)
+                model = torchvision.models.vgg16(num_classes=num_classes, pretrained=False)
         elif depth == 19:
             if batchnorm:
-                return torchvision.models.vgg19_bn(num_classes=num_classes, pretrained=False)
+                model = torchvision.models.vgg19_bn(num_classes=num_classes, pretrained=False)
             else:
-                return torchvision.models.vgg19(num_classes=num_classes, pretrained=False)
+                model = torchvision.models.vgg19(num_classes=num_classes, pretrained=False)
     else:
         model = VGG(f'VGG{depth}', channel, num_classes, norm='batchnorm' if batchnorm else 'instancenorm', res=im_size[0])
     
@@ -304,8 +305,8 @@ def get_resnet(model_name, im_size, channel, num_classes, depth=18, batchnorm=Fa
             model = torchvision.models.resnet34(num_classes=num_classes, pretrained=False)
         elif depth == 50:
             model = torchvision.models.resnet50(num_classes=num_classes, pretrained=False)
-        if im_size == (64, 64):
-            model.conv1 = torch.nn.Conv2d(3,64, kernel_size=(3,3), stride=(1,1), padding=(1,1), bias=False)
+        if im_size == (64, 64) or im_size == (32, 32):
+            model.conv1 = torch.nn.Conv2d(3, 64, kernel_size=(3,3), stride=(1,1), padding=(1,1), bias=False)
             model.maxpool = torch.nn.Identity()
     else:
         if depth == 18:
@@ -330,23 +331,25 @@ def get_other_models(model_name, channel, num_classes, im_size=(32, 32), pretrai
     return model
 
 
-def build_model(model_name: str, num_classes: int, im_size: tuple, pretrained: bool=False, model_path: str=None, device: str="cuda"):
+def build_model(model_name: str, num_classes: int, im_size: tuple, pretrained: bool=False, model_path: str=None, use_torchvision: bool=False, device: str="cuda"):
     assert model_name is not None, "model name must be provided"
     depth, batchnorm = parse_model_name(model_name)
     if model_name.startswith("ConvNet"):
         model = get_convnet(model_name, channel=3, num_classes=num_classes, im_size=im_size, net_depth=depth, 
                             net_norm="instancenorm" if not batchnorm else "batchnorm", pretrained=pretrained, model_path=model_path)
     elif model_name.startswith("AlexNet"):
-        model = get_alexnet(model_name, im_size=im_size, channel=3, num_classes=num_classes, pretrained=pretrained, model_path=model_path)
+        model = get_alexnet(model_name, im_size=im_size, channel=3, num_classes=num_classes, pretrained=pretrained, 
+                            use_torchvision=use_torchvision, model_path=model_path)
     elif model_name.startswith("ResNet"):
-        model = get_resnet(model_name, im_size=im_size, channel=3, num_classes=num_classes, depth=depth, 
+        model = get_resnet(model_name, im_size=im_size, channel=3, num_classes=num_classes, depth=depth, use_torchvision=use_torchvision,
                             batchnorm=batchnorm, pretrained=pretrained, model_path=model_path)
     elif model_name.startswith("LeNet"):
         model = get_lenet(model_name, im_size=im_size, channel=3, num_classes=num_classes, pretrained=pretrained, model_path=model_path)
     elif model_name.startswith("MLP"):
         model = get_mlp(model_name, im_size=im_size, channel=3, num_classes=num_classes, pretrained=pretrained, model_path=model_path)
     elif model_name.startswith("VGG"):
-        model = get_vgg(model_name, im_size=im_size, channel=3, num_classes=num_classes, depth=depth, batchnorm=batchnorm, pretrained=pretrained, model_path=model_path)
+        model = get_vgg(model_name, im_size=im_size, channel=3, num_classes=num_classes, depth=depth, batchnorm=batchnorm, 
+                        use_torchvision=use_torchvision, pretrained=pretrained, model_path=model_path)
     else:
         model = get_other_models(model_name, num_classes=num_classes, im_size=im_size, pretrained=pretrained, model_path=model_path)
     
@@ -354,29 +357,29 @@ def build_model(model_name: str, num_classes: int, im_size: tuple, pretrained: b
     return model
 
 
-def get_pretrained_model_path(model_name, dataset, ipc):
-    if dataset == 'CIFAR10':
-        if ipc <= 10:
-            return os.path.join(f"./teacher_models/{dataset}", f"{model_name}", "ckpt_20.pt")
-        elif ipc <= 100:
-            return os.path.join(f"./teacher_models/{dataset}", f"{model_name}", "ckpt_40.pt")
-        elif ipc <= 1000:
-            return os.path.join(f"./teacher_models/{dataset}", f"{model_name}", "ckpt_80.pt")
-    elif dataset == 'CIFAR100':
-        if ipc <= 1:
-            return os.path.join(f"./teacher_models/{dataset}", f"{model_name}", "ckpt_20.pt")
-        elif ipc <= 10:
-            return os.path.join(f"./teacher_models/{dataset}", f"{model_name}", "ckpt_60.pt")
-        elif ipc <= 100:
-            return os.path.join(f"./teacher_models/{dataset}", f"{model_name}", "ckpt_80.pt")
-    elif dataset == 'TinyImageNet':
-        if ipc <= 1:
-            return os.path.join(f"./teacher_models/{dataset}", f"{model_name}", "ckpt_20.pt")
-        elif ipc <= 10:
-            return os.path.join(f"./teacher_models/{dataset}", f"{model_name}", "ckpt_60.pt")
-        elif ipc <= 100:
-            return os.path.join(f"./teacher_models/{dataset}", f"{model_name}", "ckpt_80.pt")
-    # return os.path.join(f"./teacher_models/{dataset}", f"{model_name}", "ckpt_100.pt")
+def get_pretrained_model_path(teacher_dir, model_name, dataset, ipc):
+    # if dataset == 'CIFAR10':
+    #     if ipc <= 10:
+    #         return os.path.join(teacher_dir, f"{dataset}", f"{model_name}", "ckpt_20.pt")
+    #     elif ipc <= 100:
+    #         return os.path.join(teacher_dir, f"{dataset}", f"{model_name}", "ckpt_40.pt")
+    #     elif ipc <= 1000:
+    #         return os.path.join(teacher_dir, f"{dataset}", f"{model_name}", "ckpt_80.pt")
+    # elif dataset == 'CIFAR100':
+    #     if ipc <= 1:
+    #         return os.path.join(teacher_dir, f"{dataset}", f"{model_name}", "ckpt_20.pt")
+    #     elif ipc <= 10:
+    #         return os.path.join(teacher_dir, f"{dataset}", f"{model_name}", "ckpt_60.pt")
+    #     elif ipc <= 100:
+    #         return os.path.join(teacher_dir, f"{dataset}", f"{model_name}", "ckpt_100.pt")
+    # elif dataset == 'TinyImageNet':
+    #     if ipc <= 1:
+    #         return os.path.join(teacher_dir, f"{dataset}", f"{model_name}", "ckpt_20.pt")
+    #     elif ipc <= 10:
+    #         return os.path.join(teacher_dir, f"{dataset}", f"{model_name}", "ckpt_60.pt")
+    #     elif ipc <= 100:
+    #         return os.path.join(teacher_dir, f"{dataset}", f"{model_name}", "ckpt_80.pt")
+    return os.path.join(os.path.join(teacher_dir, f"{dataset}", f"{model_name}", "ckpt_best.pt"))
 ################################################################################ train and validate ################################################################################
 
 def default_augmentation(images):    
@@ -397,12 +400,14 @@ def get_lr_scheduler(lr_scheduler_name, optimizer, num_epochs):
         return StepLR(optimizer, step_size=num_epochs // 2 + 1, gamma=0.1)
     elif lr_scheduler_name == 'cosine':
         return CosineAnnealingLR(optimizer, T_max=num_epochs)
-    elif lr_scheduler_name == 'lambda':
+    elif lr_scheduler_name == 'lambda_cos':
         return LambdaLR(optimizer, lambda step: 0.5 * (1.0 + math.cos(math.pi * step / num_epochs / 2))
             if step <= num_epochs
             else 0,
             last_epoch=-1,
         )
+    elif lr_scheduler_name == 'lambda_step':
+        return LambdaLR(optimizer, lambda step: (1.0 - step / num_epochs) if step <= num_epochs else 0, last_epoch=-1)
     else:
         raise NotImplementedError(f"LR Scheduler {lr_scheduler_name} not implemented")
 
@@ -459,7 +464,8 @@ def train_one_epoch(
         def _forward():
             stu_output = stu_model(input)
             if soft_label_mode == 'M':
-                tea_output = tea_model(input)
+                with torch.no_grad():
+                    tea_output = tea_model(input)
                 loss = loss_fn(stu_output, tea_output)
             else:
                 loss = loss_fn(stu_output, target)
@@ -565,59 +571,3 @@ def validate(
     metrics = OrderedDict([('top1', top1_m.avg), ('top5', top5_m.avg)])
 
     return metrics
-
-
-def train_one_epoch_dc(epoch, model, dataloader, loss_fn, optimizer, aug_func=None, lr_scheduler=None, device='cuda'):
-    loss_avg, num_exp = 0, 0
-    model = model.to(device)
-
-    model.train()
-    if aug_func is None:
-        aug_func = default_augmentation
-    for i_batch, datum in enumerate(dataloader):
-        img = datum[0].to(device)
-        lab = datum[1].to(device)
-        n_b = lab.shape[0]
-
-        output = model(img)
-        loss = loss_fn(output, lab)
-
-        loss_avg += loss.item() * n_b
-        num_exp += n_b
-
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-
-        if lr_scheduler is not None:
-            lr_scheduler.step(epoch)
-
-    loss_avg /= num_exp
-    # print(f'Epoch {epoch}\tTrain Loss: {loss_avg:>7.3f}')
-
-    return loss_avg
-
-def validate_dc(
-    model,
-    loader,
-    aug_func=None,
-    device='cuda'
-):
-    acc_avg, num_exp = 0, 0
-    model = model.to(device)
-    model.eval()
-
-    for i_batch, datum in enumerate(loader):
-        img = datum[0].to(device)
-        lab = datum[1].to(device)
-        n_b = lab.shape[0]
-        img = aug_func(img)
-        output = model(img)
-        acc = np.sum(np.equal(np.argmax(output.cpu().data.numpy(), axis=-1), lab.cpu().data.numpy()))
-
-        acc_avg += acc
-        num_exp += n_b
-
-    acc_avg /= num_exp
-    # print(f'Test Acc: {acc_avg:>7.3f}')
-    return {'top1': acc_avg}
