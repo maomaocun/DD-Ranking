@@ -5,13 +5,6 @@ import kornia
 
 class Mixup_Augmentation:
     def __init__(self, params: dict):
-        # self.transform = kornia.augmentation.RandomMixUpV2(
-        #     lambda_val = params["lambda_range"],
-        #     same_on_batch = params["same_on_batch"],
-        #     keepdim = params["keepdim"],
-        #     p = params["prob"]
-        # )
-
         self.mixup_p = params["mixup_p"]
 
     def mixup(self, images):

@@ -11,7 +11,7 @@ from torch.utils.data import DataLoader
 from torchvision import transforms, datasets
 from dd_ranking.utils import build_model, get_pretrained_model_path
 from dd_ranking.utils import TensorDataset, get_random_images, get_dataset, save_results
-from dd_ranking.utils import set_seed, train_one_epoch, train_one_epoch_dc, validate, validate_dc, get_optimizer, get_lr_scheduler
+from dd_ranking.utils import set_seed, train_one_epoch, validate, get_optimizer, get_lr_scheduler
 from dd_ranking.loss import SoftCrossEntropyLoss, KLDivergenceLoss
 from dd_ranking.aug import DSA_Augmentation, ZCA_Whitening_Augmentation, Mixup_Augmentation, Cutmix_Augmentation
 from dd_ranking.config import Config
@@ -23,7 +23,9 @@ class Soft_Label_Objective_Metrics:
                  soft_label_criterion: str='kl', data_aug_func: str='cutmix', aug_params: dict={'cutmix_p': 1.0}, soft_label_mode: str='S',
                  optimizer: str='sgd', lr_scheduler: str='step', temperature: float=1.0, weight_decay: float=0.0005, 
                  momentum: float=0.9, num_eval: int=5, im_size: tuple=(32, 32), num_epochs: int=300, use_zca: bool=False,
-                 batch_size: int=256, default_lr: float=0.01, save_path: str=None, use_torchvision: bool=False, device: str="cuda"):
+                 real_batch_size: int=256, syn_batch_size: int=256, default_lr: float=0.01, save_path: str=None, 
+                 stu_use_torchvision: bool=False, tea_use_torchvision: bool=False, num_workers: int=4, teacher_dir: str='./teacher_models', 
+                 custom_val_trans=None, device: str="cuda"):
 
         if config is not None:
             self.config = config
@@ -43,20 +45,23 @@ class Soft_Label_Objective_Metrics:
             num_eval = self.config.get('num_eval')
             im_size = self.config.get('im_size')
             num_epochs = self.config.get('num_epochs')
-            batch_size = self.config.get('batch_size')
+            real_batch_size = self.config.get('real_batch_size')
+            syn_batch_size = self.config.get('syn_batch_size')
             default_lr = self.config.get('default_lr')
             save_path = self.config.get('save_path')
             num_workers = self.config.get('num_workers')
             use_torchvision = self.config.get('use_torchvision')
+            teacher_dir = self.config.get('teacher_dir')
             device = self.config.get('device')
 
         channel, im_size, num_classes, dst_train, dst_test, class_map, class_map_inv = get_dataset(dataset, 
                                                                                                    real_data_path, 
                                                                                                    im_size, 
                                                                                                    use_zca,
+                                                                                                   custom_val_trans,
                                                                                                    device)
         self.images_train, self.labels_train, self.class_indices_train = self.load_real_data(dst_train, class_map, num_classes)
-        self.test_loader = DataLoader(dst_test, batch_size=batch_size, num_workers=4, shuffle=False)
+        self.test_loader = DataLoader(dst_test, batch_size=real_batch_size, num_workers=num_workers, shuffle=False)
 
         self.soft_label_mode = soft_label_mode
         self.soft_label_criterion = soft_label_criterion
@@ -75,15 +80,16 @@ class Soft_Label_Objective_Metrics:
         self.momentum = momentum
         self.num_eval = num_eval
         self.model_name = model_name
-        self.batch_size = batch_size
+        self.real_batch_size = real_batch_size
+        self.syn_batch_size = syn_batch_size
         self.num_epochs = num_epochs
         self.default_lr = default_lr
-        self.test_interval = 100
+        self.test_interval = 20
+        self.num_workers = num_workers
         self.device = device
 
         if data_aug_func == 'dsa':
             self.aug_func = DSA_Augmentation(aug_params)
-            self.num_epochs = 1000
         elif data_aug_func == 'mixup':
             self.aug_func = Mixup_Augmentation(aug_params)
         elif data_aug_func == 'cutmix':
@@ -98,17 +104,17 @@ class Soft_Label_Objective_Metrics:
         self.save_path = save_path
 
         # teacher model
-        if not use_torchvision:
-            pretrained_model_path = get_pretrained_model_path(model_name, dataset, ipc)
-        else:
-            pretrained_model_path = None
+        self.tea_use_torchvision = tea_use_torchvision
+        self.stu_use_torchvision = stu_use_torchvision
+
+        pretrained_model_path = get_pretrained_model_path(teacher_dir, model_name, dataset, ipc)
         self.teacher_model = build_model(model_name, 
                                          num_classes=self.num_classes, 
-                                         im_size=self.im_size, 
+                                         im_size=self.im_size,
                                          pretrained=True, 
                                          device=self.device, 
                                          model_path=pretrained_model_path,
-                                         use_torchvision=use_torchvision)
+                                         use_torchvision=tea_use_torchvision)
         self.teacher_model.eval()
 
     def load_real_data(self, dataset, class_map, num_classes):
@@ -127,7 +133,7 @@ class Soft_Label_Objective_Metrics:
         
         return images_all, labels_all, class_indices
     
-    def hyper_param_search_for_hard_label(self, images, hard_labels):
+    def hyper_param_search_for_hard_label(self, images, hard_labels, mode='real'):
         lr_list = [0.001, 0.005, 0.01, 0.05, 0.1]
         best_acc = 0
         best_lr = 0
@@ -137,14 +143,16 @@ class Soft_Label_Objective_Metrics:
                 model_name=self.model_name, 
                 num_classes=self.num_classes, 
                 im_size=self.im_size, 
-                pretrained=False, 
+                pretrained=False,
+                use_torchvision=self.stu_use_torchvision,
                 device=self.device
             )
             acc = self.compute_hard_label_metrics(
                 model=model, 
                 images=images, 
                 lr=lr, 
-                hard_labels=hard_labels
+                hard_labels=hard_labels,
+                mode=mode
             )
             if acc > best_acc:
                 best_acc = acc
@@ -163,7 +171,8 @@ class Soft_Label_Objective_Metrics:
                 model_name=self.model_name, 
                 num_classes=self.num_classes, 
                 im_size=self.im_size, 
-                pretrained=False, 
+                pretrained=False,
+                use_torchvision=self.stu_use_torchvision,
                 device=self.device
             )
             acc = self.compute_soft_label_metrics(
@@ -178,17 +187,18 @@ class Soft_Label_Objective_Metrics:
             del model
         return best_acc, best_lr
     
-    def compute_hard_label_metrics(self, model, images, lr, hard_labels):
+    def compute_hard_label_metrics(self, model, images, lr, hard_labels, mode='real'):
         
         hard_label_dataset = TensorDataset(images, hard_labels)
-        train_loader = DataLoader(hard_label_dataset, batch_size=self.batch_size, shuffle=True)
+        train_loader = DataLoader(hard_label_dataset, batch_size=self.real_batch_size if mode == 'real' else self.syn_batch_size, 
+                                  num_workers=self.num_workers, shuffle=True)
 
         loss_fn = torch.nn.CrossEntropyLoss()
         optimizer = get_optimizer(self.optimizer, model, lr, self.weight_decay, self.momentum)
         lr_scheduler = get_lr_scheduler(self.lr_scheduler, optimizer, self.num_epochs)
 
         best_acc1 = 0
-        for epoch in tqdm(range(self.num_epochs)):
+        for epoch in tqdm(range(self.num_epochs), total=self.num_epochs, desc="Training with hard labels"):
             train_one_epoch(
                 epoch=epoch, 
                 stu_model=model, 
@@ -200,7 +210,7 @@ class Soft_Label_Objective_Metrics:
                 tea_model=self.teacher_model, 
                 device=self.device
             )
-            if epoch % self.test_interval == 0:
+            if epoch > 0.8 * self.num_epochs and (epoch + 1) % self.test_interval == 0:
                 metric = validate(
                     model=model, 
                     loader=self.test_loader,
@@ -218,12 +228,12 @@ class Soft_Label_Objective_Metrics:
         else:
             labels = soft_labels
         soft_label_dataset = TensorDataset(images, labels)
-        train_loader = DataLoader(soft_label_dataset, batch_size=self.batch_size, shuffle=True)
+        train_loader = DataLoader(soft_label_dataset, batch_size=self.syn_batch_size, num_workers=self.num_workers, shuffle=True)
 
         if self.soft_label_criterion == 'sce':
-            loss_fn = SoftCrossEntropyLoss().to(self.device)
+            loss_fn = SoftCrossEntropyLoss(temperature=self.temperature).to(self.device)
         elif self.soft_label_criterion == 'kl':
-            loss_fn = KLDivergenceLoss().to(self.device)
+            loss_fn = KLDivergenceLoss(temperature=self.temperature).to(self.device)
         else:
             raise NotImplementedError(f"Soft label criterion {self.soft_label_criterion} not implemented")
         
@@ -231,7 +241,7 @@ class Soft_Label_Objective_Metrics:
         lr_scheduler = get_lr_scheduler(self.lr_scheduler, optimizer, self.num_epochs)
 
         best_acc1 = 0
-        for epoch in tqdm(range(self.num_epochs + 1)):
+        for epoch in tqdm(range(self.num_epochs), total=self.num_epochs, desc="Training with soft labels"):
             train_one_epoch(
                 epoch=epoch, 
                 stu_model=model,
@@ -241,10 +251,10 @@ class Soft_Label_Objective_Metrics:
                 aug_func=self.aug_func,
                 soft_label_mode=self.soft_label_mode,
                 lr_scheduler=lr_scheduler,
-                tea_model=self.teacher_model, 
+                tea_model=self.teacher_model,
                 device=self.device
             )
-            if (epoch + 1) % self.test_interval == 0:
+            if epoch > 0.8 * self.num_epochs and (epoch + 1) % self.test_interval == 0:
                 metric = validate(
                     model=model, 
                     loader=self.test_loader,
@@ -256,7 +266,7 @@ class Soft_Label_Objective_Metrics:
         return best_acc1
 
     def generate_soft_labels(self, images):
-        batches = torch.split(images, self.batch_size)
+        batches = torch.split(images, self.syn_batch_size)
         soft_labels = []
         with torch.no_grad():
             for image_batch in batches:
@@ -281,7 +291,8 @@ class Soft_Label_Objective_Metrics:
             print("Caculating syn data hard label metrics...")
             syn_data_hard_label_acc, best_lr = self.hyper_param_search_for_hard_label(
                 images=syn_images, 
-                hard_labels=hard_labels
+                hard_labels=hard_labels,
+                mode='syn'
             )
             print(f"Syn data hard label acc: {syn_data_hard_label_acc:.2f}%")
 
@@ -290,14 +301,16 @@ class Soft_Label_Objective_Metrics:
                 model_name=self.model_name, 
                 num_classes=self.num_classes, 
                 im_size=self.im_size, 
-                pretrained=False, 
+                pretrained=False,
+                use_torchvision=self.stu_use_torchvision,
                 device=self.device
             )
             full_data_hard_label_acc = self.compute_hard_label_metrics(
                 model=model, 
                 images=self.images_train, 
                 lr=self.default_lr, 
-                hard_labels=self.labels_train
+                hard_labels=self.labels_train,
+                mode='real'
             )
             del model
             print(f"Full data hard label acc: {full_data_hard_label_acc:.2f}%")
@@ -308,7 +321,8 @@ class Soft_Label_Objective_Metrics:
                     model_name=self.model_name, 
                     num_classes=self.num_classes, 
                     im_size=self.im_size,
-                    pretrained=False, 
+                    pretrained=False,
+                    use_torchvision=self.stu_use_torchvision,
                     device=self.device
                 )
                 syn_data_soft_label_acc = self.compute_soft_label_metrics(
@@ -374,10 +388,10 @@ class Soft_Label_Objective_Metrics:
 class Hard_Label_Objective_Metrics:
 
     def __init__(self, config: Config=None, dataset: str='CIFAR10', real_data_path: str='./dataset/', ipc: int=10, 
-                 model_name: str='ConvNet-3', data_aug_func: str='cutmix', aug_params: dict={'cutmix_p': 1.0},
-                 optimizer: str='SGD', lr_scheduler: str='StepLR', weight_decay: float=0.0005, momentum: float=0.9, 
-                 use_zca: bool=False, num_eval: int=5, im_size: tuple=(32, 32), num_epochs: int=300, batch_size: int=256, 
-                 default_lr: float=0.01, save_path: str=None, device: str="cuda"):
+                 model_name: str='ConvNet-3', data_aug_func: str='cutmix', aug_params: dict={'cutmix_p': 1.0}, optimizer: str='sgd', 
+                 lr_scheduler: str='step', weight_decay: float=0.0005, momentum: float=0.9, use_zca: bool=False, num_eval: int=5, 
+                 im_size: tuple=(32, 32), num_epochs: int=300, real_batch_size: int=256, syn_batch_size: int=256, use_torchvision: bool=False,
+                 default_lr: float=0.01, num_workers: int=4, save_path: str=None, custom_val_trans=None, device: str="cuda"):
         
         if config is not None:
             self.config = config
@@ -394,18 +408,23 @@ class Hard_Label_Objective_Metrics:
             num_eval = self.config.get('num_eval')
             im_size = self.config.get('im_size')
             num_epochs = self.config.get('num_epochs')
-            batch_size = self.config.get('batch_size')
+            real_batch_size = self.config.get('real_batch_size')
+            syn_batch_size = self.config.get('syn_batch_size')
             default_lr = self.config.get('default_lr')
             save_path = self.config.get('save_path')
+            use_zca = self.config.get('use_zca')
+            use_torchvision = self.config.get('use_torchvision')
+            num_workers = self.config.get('num_workers')
             device = self.config.get('device')
 
         channel, im_size, num_classes, dst_train, dst_test, class_map, class_map_inv = get_dataset(dataset, 
                                                                                                    real_data_path, 
                                                                                                    im_size, 
                                                                                                    use_zca,
+                                                                                                   custom_val_trans,
                                                                                                    device)
         self.images_train, self.labels_train, self.class_indices_train = self.load_real_data(dst_train, class_map, num_classes)
-        self.test_loader = DataLoader(dst_test, batch_size=batch_size, num_workers=4, shuffle=False)
+        self.test_loader = DataLoader(dst_test, batch_size=real_batch_size, num_workers=num_workers, shuffle=False)
 
         # data info
         self.im_size = im_size
@@ -419,15 +438,17 @@ class Hard_Label_Objective_Metrics:
         self.momentum = momentum
         self.num_eval = num_eval
         self.model_name = model_name
-        self.batch_size = batch_size
+        self.real_batch_size = real_batch_size
+        self.syn_batch_size = syn_batch_size
         self.num_epochs = num_epochs
         self.default_lr = default_lr
+        self.num_workers = num_workers
         self.test_interval = 10
+        self.use_torchvision = use_torchvision
         self.device = device
 
         if data_aug_func == 'dsa':
             self.aug_func = DSA_Augmentation(aug_params)
-            self.num_epochs = 1000
         elif data_aug_func == 'zca':
             self.aug_func = ZCA_Whitening_Augmentation(aug_params)
         elif data_aug_func == 'mixup':
@@ -448,6 +469,8 @@ class Hard_Label_Objective_Metrics:
         labels_all = []
         class_indices = [[] for c in range(num_classes)]
         for i, (image, label) in enumerate(dataset):
+            if torch.is_tensor(label):
+                label = label.item()
             images_all.append(torch.unsqueeze(image, 0))
             labels_all.append(class_map[label])
         images_all = torch.cat(images_all, dim=0)
@@ -457,7 +480,7 @@ class Hard_Label_Objective_Metrics:
         
         return images_all, labels_all, class_indices
     
-    def hyper_param_search_for_hard_label(self, images, hard_labels):
+    def hyper_param_search_for_hard_label(self, images, hard_labels, mode='real'):
         lr_list = [0.001, 0.005, 0.01, 0.05, 0.1]
         best_acc = 0
         best_lr = 0
@@ -467,14 +490,16 @@ class Hard_Label_Objective_Metrics:
                 model_name=self.model_name, 
                 num_classes=self.num_classes, 
                 im_size=self.im_size, 
-                pretrained=False, 
+                pretrained=False,
+                use_torchvision=self.use_torchvision,
                 device=self.device
             )
             acc = self.compute_hard_label_metrics(
                 model=model, 
                 images=images, 
                 lr=lr,
-                hard_labels=hard_labels
+                hard_labels=hard_labels,
+                mode=mode
             )
             if acc > best_acc:
                 best_acc = acc
@@ -482,10 +507,11 @@ class Hard_Label_Objective_Metrics:
             del model
         return best_acc, best_lr
 
-    def compute_hard_label_metrics(self, model, images, lr, hard_labels):
+    def compute_hard_label_metrics(self, model, images, lr, hard_labels, mode='real'):
         
         hard_label_dataset = TensorDataset(images, hard_labels)
-        train_loader = DataLoader(hard_label_dataset, batch_size=self.batch_size, shuffle=True)
+        train_loader = DataLoader(hard_label_dataset, batch_size=self.real_batch_size if mode == 'real' else self.syn_batch_size, 
+                                  num_workers=self.num_workers, shuffle=True)
 
         loss_fn = torch.nn.CrossEntropyLoss()
         optimizer = get_optimizer(self.optimizer, model, lr, self.weight_decay, self.momentum)
@@ -503,7 +529,7 @@ class Hard_Label_Objective_Metrics:
                 lr_scheduler=lr_scheduler, 
                 device=self.device
             )
-            if epoch % self.test_interval == 0:
+            if epoch > 0.8 * self.num_epochs and (epoch + 1) % self.test_interval == 0:
                 metric = validate(
                     model=model, 
                     loader=self.test_loader,
@@ -531,20 +557,23 @@ class Hard_Label_Objective_Metrics:
                     model_name=self.model_name, 
                     num_classes=self.num_classes, 
                     im_size=self.im_size, 
-                    pretrained=False, 
+                    pretrained=False,
+                    use_torchvision=self.use_torchvision,
                     device=self.device
                 )
                 syn_data_hard_label_acc = self.compute_hard_label_metrics(
                     model=model, 
                     images=syn_images, 
                     lr=syn_lr, 
-                    hard_labels=hard_labels
+                    hard_labels=hard_labels,
+                    mode='syn'
                 )
                 del model
             else:
                 syn_data_hard_label_acc, best_lr = self.hyper_param_search_for_hard_label(
                     images=syn_images, 
-                    hard_labels=hard_labels
+                    hard_labels=hard_labels,
+                    mode='syn'
                 )
             print(f"Syn data hard label acc: {syn_data_hard_label_acc:.2f}%")
 
@@ -554,13 +583,15 @@ class Hard_Label_Objective_Metrics:
                 num_classes=self.num_classes, 
                 im_size=self.im_size,
                 pretrained=False,
+                use_torchvision=self.use_torchvision,
                 device=self.device
             )
             full_data_hard_label_acc = self.compute_hard_label_metrics(
                 model=model, 
-                images=self.images_train, 
+                images=self.images_train,
                 lr=self.default_lr, 
-                hard_labels=self.labels_train
+                hard_labels=self.labels_train,
+                mode='real'
             )
             del model
             print(f"Full data hard label acc: {full_data_hard_label_acc:.2f}%")
@@ -569,7 +600,8 @@ class Hard_Label_Objective_Metrics:
             random_images, random_data_hard_labels = get_random_images(self.images_train, self.labels_train, self.class_indices_train, self.ipc)
             random_data_hard_label_acc, best_lr = self.hyper_param_search_for_hard_label(
                 images=random_images, 
-                hard_labels=random_data_hard_labels
+                hard_labels=random_data_hard_labels,
+                mode='syn'
             )
             print(f"Random data hard label acc: {random_data_hard_label_acc:.2f}%")
 
@@ -594,7 +626,7 @@ class Hard_Label_Objective_Metrics:
         obj_metrics_mean = np.mean(obj_metrics)
         obj_metrics_std = np.std(obj_metrics)
 
-        print(f"SCE Hard Recovery Mean: {hard_recs_mean:.2f}%  Std: {hard_recs_std:.2f}")
+        print(f"Hard Recovery Mean: {hard_recs_mean:.2f}%  Std: {hard_recs_std:.2f}")
         print(f"Hard Improvement Mean: {hard_imps_mean:.2f}%  Std: {hard_imps_std:.2f}")
         print(f"Objective Metrics Mean: {obj_metrics_mean:.2f}  Std: {obj_metrics_std:.2f}")
         return {
