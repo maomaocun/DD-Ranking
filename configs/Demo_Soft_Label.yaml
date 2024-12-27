@@ -1,7 +1,19 @@
+# real data
 dataset: "CIFAR10"
 real_data_path: "./dataset/"
+custom_val_trans: None
+
+# synthetic data
 ipc: 10
+im_size: (32, 32)
+
+# agent model
 model_name: "ConvNet-3"
+stu_use_torchvision: False
+tea_use_torchvision: False
+teacher_dir: "./teacher_models"
+
+# data augmentation
 data_aug_func: "dsa"
 aug_params: {
     "prob_flip": 0.5,
@@ -13,19 +25,25 @@ aug_params: {
     "ratio_crop_pad": 0.125,
     "ratio_cutout": 0.5
 }
+use_zca: True
+
+# soft label settings
 soft_label_mode: "S"
 soft_label_criterion: "sce"
+temperature: 1.0
+
+# training specifics
 optimizer: "sgd"
 lr_scheduler: "step"
-temperature: 20.0
 weight_decay: 0.0005
 momentum: 0.9
 num_eval: 5
-im_size: (32, 32)
 num_epochs: 1000
-use_zca: True
-batch_size: 256
 default_lr: 0.01
 num_workers: 4
-save_path: "./results/my_method_soft_label_scores.csv"
 device: "cuda"
+syn_batch_size: 128
+real_batch_size: 256
+
+# save path
+save_path: "./results/my_method_soft_label_scores.csv"

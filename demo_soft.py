@@ -4,15 +4,16 @@ from dd_ranking.metrics import Soft_Label_Objective_Metrics
 from dd_ranking.config import Config
 
 
-"""Use config file to specify the parameters (Recommended)"""
+""" Use config file to specify the arguments (Recommended) """
 config = Config.from_file("./configs/Demo_Soft_Label.yaml")
 convd3_soft_obj = Soft_Label_Objective_Metrics(config)
 syn_images = torch.load(os.path.join(syn_data_dir, f"images.pt"), map_location='cpu')
 soft_labels = torch.load(os.path.join(syn_data_dir, f"labels.pt"), map_location='cpu')
-print(convd3_soft_obj.compute_metrics(syn_images, soft_labels, syn_lr=0.01))
+syn_lr = torch.load(os.path.join(syn_data_dir, f"lr.pt"), map_location='cpu')
+print(convd3_soft_obj.compute_metrics(syn_images, soft_labels, syn_lr=syn_lr))
 
 
-"""Use hardcoded parameters"""
+""" Use keyword arguments """
 device = "cuda"
 method_name = "DATM"                    # Specify your method name
 ipc = 10                                # Specify your IPC
@@ -54,6 +55,12 @@ convd3_hard_obj = Soft_Label_Objective_Metrics(
     im_size=im_size,
     num_epochs=1000,
     num_workers=4,
+    stu_use_torchvision=False,
+    tea_use_torchvision=False,
+    custom_val_trans=None,
+    syn_batch_size=128,
+    real_batch_size=256,
+    teacher_dir='./teacher_models',
     device=device,
     save_path=save_path
 )
