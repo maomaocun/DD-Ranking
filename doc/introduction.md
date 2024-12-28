@@ -1,3 +1,7 @@
+<span style="display: block; text-align: center;">
+<img src="static/logo.png" alt="logo"/>
+</span>
+
 DD-Ranking (DD, *i.e.*, Dataset Distillation) is an integrated and easy-to-use evaluation benchmark for dataset distillation. It aims to provide a fair evaluation scheme for DD methods that can decouple the impacts from knowledge distillation and data augmentation to reflect the real informativeness of the distilled data.
 ## Motivation
 Dataset Distillation (DD) aims to condense a large dataset into a much smaller one, which allows a model to achieve comparable performance after training on it. DD has gained extensive attention since it was proposed. With some foundational methods such as DC, DM, and MTT, various works have further pushed this area to a new standard with their novel designs.

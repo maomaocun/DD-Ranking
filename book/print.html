@@ -155,7 +155,10 @@
 
                 <div id="content" class="content">
                     <main>
-                        <p>DD-Ranking (DD, <em>i.e.</em>, Dataset Distillation) is an integrated and easy-to-use evaluation benchmark for dataset distillation. It aims to provide a fair evaluation scheme for DD methods that can decouple the impacts from knowledge distillation and data augmentation to reflect the real informativeness of the distilled data.</p>
+                        <span style="display: block; text-align: center;">
+<img src="static/logo.png" alt="logo"/>
+</span>
+<p>DD-Ranking (DD, <em>i.e.</em>, Dataset Distillation) is an integrated and easy-to-use evaluation benchmark for dataset distillation. It aims to provide a fair evaluation scheme for DD methods that can decouple the impacts from knowledge distillation and data augmentation to reflect the real informativeness of the distilled data.</p>
 <h2 id="motivation"><a class="header" href="#motivation">Motivation</a></h2>
 <p>Dataset Distillation (DD) aims to condense a large dataset into a much smaller one, which allows a model to achieve comparable performance after training on it. DD has gained extensive attention since it was proposed. With some foundational methods such as DC, DM, and MTT, various works have further pushed this area to a new standard with their novel designs.</p>
 <p><img src="static/history.png" alt="history" /></p>
@@ -875,6 +878,22 @@ When using torchvision VGG on image size smaller than 224 x 224, we make the fol
 
         </div>
 
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
 
 
 
