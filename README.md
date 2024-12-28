@@ -56,7 +56,7 @@ Motivated by this, we propose DD-Ranking, a new benchmark for DD evaluation. DD-
 
 </details>
 
-## About
+## Introduction
 
 <details>
 <summary>Unfold to see more details.</summary>
@@ -88,32 +88,29 @@ $$\text{IOR}/\text{HLR} = \frac{(\text{Acc.}{\text{syn-any}}-\text{Acc.}{\text{r
 DD-Ranking is integrated with:
 <!-- Uniform Fair Labels: loss on soft label -->
 <!-- Data Aug. -->
-- Multiple [strategies](https://github.com/NUS-HPC-AI-Lab/DD-Ranking/tree/main/dd_ranking/loss) of using soft labels;
-- Data augmentation, reconsidered as [optional tricks](https://github.com/NUS-HPC-AI-Lab/DD-Ranking/tree/main/dd_ranking/aug) in DD;
-- Commonly used [model architectures](https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/networks.py) in DD.
- A new ranking on representative DD methods.
+- Multiple [strategies](https://github.com/NUS-HPC-AI-Lab/DD-Ranking/tree/main/dd_ranking/loss) of using soft labels in existing works;
+- Commonly used [data augmentation](https://github.com/NUS-HPC-AI-Lab/DD-Ranking/tree/main/dd_ranking/aug) methods in existing works;
+- Commonly used [model architectures](https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/networks.py) in existing works.
 
-DD-Ranking is flexible and easy to use, supported by:
-<!-- Defualt configs: Customized configs -->
-<!-- Integrated classes: 1) Optimizer and etc.; 2) random selection tests (additionally, w/ or w/o hard labels)-->
-- Extensive configs provided;
-- Cutomized configs;
-- Testing and training framework with integrated metrics.
+DD-Ranking has the following features:
+- **Fair Evaluation**: DD-Ranking provides a fair evaluation scheme for DD methods that can decouple the impacts from knowledge distillation and data augmentation to reflect the real informativeness of the distilled data.
+- **Easy-to-use**: DD-Ranking provides a unified interface for dataset distillation evaluation.
+- **Extensible**: DD-Ranking supports various datasets and models.
+- **Customizable**: DD-Ranking supports various data augmentations and soft label strategies.
 
 </details>
 
 ## Overview
-Included datasets and methods (hard/soft label).
-|Dataset|Hard Label|Soft Label|
+Included datasets and methods (categorized by hard/soft label).
+|Supported Dataset|Evaluated Hard Label Methods|Evaluated Soft Label Methods|
 |:-|:-|:-|
 |CIFAR-10|DC|DATM|
 |CIFAR-100|DSA|SRe2L|
 |TinyImageNet|DM|RDED|
 ||MTT|D4M|
 
-## Coming Soon
-Rank on different data augmentation methods.
-Rank on different data augmentation methods.
+Evaluation results can be found in the [leaderboard](https://huggingface.co/spaces/Soptq/DD-Ranking).
+
 ## Tutorial
 
 Install DD-Ranking with `pip` or from [source](https://github.com/NUS-HPC-AI-Lab/DD-Ranking/tree/main):
@@ -220,6 +217,10 @@ The following results will be returned to you:
 - [Installation]()
 - [Quickstart]()
 - [Supported Models]() -->
+
+## Coming Soon
+- [ ] DD-Ranking scores that decouple the impacts from data augmentation.
+- [ ] Evaluation results on ImageNet subsets.
 
 ## Contributing
 
