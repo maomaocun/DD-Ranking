@@ -5,13 +5,13 @@
   <!-- Dark theme logo -->
     <source media="(prefers-color-scheme: dark)" srcset="static/logo.png">
     <!-- Light theme logo -->
-    <img alt="DD-Ranking" src="static/logo.png" width=55%>
+    <img alt="DD-Ranking" src="static/logo.png"%>
   </picture>
 </p>
 
-<h3 align="center">
-Integrated and easy-to-use benchmark for data-distillation.
-</h3>
+<!-- <h3 align="center">
+Fair and benchmark for dataset distillation.
+</h3> -->
 <p align="center">
 | <a href=""><b>Documentation</b></a> | <a href=""><b>Leaderboard</b></a> | <b>Paper </b> (Coming Soon) | <a href=""><b>Twitter/X</b></a> | <a href=""><b>Developer Slack</b></a> |
 </p>
