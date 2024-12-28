@@ -1,0 +1,10 @@
+*.egg
+*.eggs
+*.eggs-info
+*.eggs/
+eggs-info/*
+dd_ranking.eggs-info/*
+PKG-INFO
+build/
+*.pyc
+*.txt
