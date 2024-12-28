@@ -206,8 +206,7 @@ The following results will be returned to you:
 - [Supported Models]() -->
 
 ## Contributing
-
-
+ß
 <!-- Only PR for the 1st version of DD-Ranking -->
 Feel free to submit grades to update the DD-Ranking list. We welcome and value any contributions and collaborations.
 Please check out [CONTRIBUTING.md](./CONTRIBUTING.md) for how to get involved.
