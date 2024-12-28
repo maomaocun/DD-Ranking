@@ -8,3 +8,6 @@ language            = "en"
 multilingual        = false
 src                 = "doc"
 title               = "DD-Ranking Benchmark"
+
+[output.html]
+mathjax-support = true
