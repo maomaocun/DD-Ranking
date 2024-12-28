@@ -212,6 +212,10 @@ The following results will be returned to you:
 Feel free to submit grades to update the DD-Ranking list. We welcome and value any contributions and collaborations.
 Please check out [CONTRIBUTING.md](./CONTRIBUTING.md) for how to get involved.
 
+## License
+
+DD-Ranking is released under the MIT License. See [LICENSE](./LICENSE) for more details.
+
 <!-- ## Acknowledgement
 
 DD-Ranking is a community project. The compute resources for development and testing are supported by the following organizations. Thanks for your support! -->
