@@ -1,9 +1,9 @@
-## General Evaluator
+## GeneralEvaluator
 
 <div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; border-top:3px solid #FF0000; font-family:monospace; font-size:14px;">
 
 <span style="color:#FF6B00;">CLASS</span> 
-dd_ranking.metrics.General_Evaluator(config: Optional[Config] = None,
+dd_ranking.metrics.GeneralEvaluator(config: Optional[Config] = None,
     dataset: str = 'CIFAR10',
     real_data_path: str = './dataset/',
     ipc: int = 10,
@@ -68,7 +68,7 @@ A dictionary with the following keys:
 with config file:
 ```python
 >>> config = Config('/path/to/config.yaml')
->>> evaluator = General_Evaluator(config=config)
+>>> evaluator = GeneralEvaluator(config=config)
 # load image and labels
 >>> image_tensor, labels = ... 
 # compute metrics
@@ -79,7 +79,7 @@ with config file:
 
 with keyword arguments:
 ```python
->>> evaluator = General_Evaluator(
+>>> evaluator = GeneralEvaluator(
 ...     dataset='CIFAR10',
 ...     model_name='ConvNet-3',
 ...     soft_label_mode='S',

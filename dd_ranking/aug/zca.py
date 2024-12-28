@@ -1,7 +1,7 @@
 import kornia
 
 
-class ZCA_Whitening_Augmentation:
+class ZCAWhiteningAugmentation:
     def __init__(self, params: dict):
         self.transform = kornia.enhance.ZCAWhitening()
 

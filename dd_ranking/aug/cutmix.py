@@ -3,7 +3,7 @@ import numpy as np
 import kornia
 
 
-class Cutmix_Augmentation:
+class CutmixAugmentation:
     def __init__(self, params: dict):
         self.cutmix_p = params["cutmix_p"]
 

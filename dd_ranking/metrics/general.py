@@ -14,11 +14,11 @@ from dd_ranking.utils import build_model, get_pretrained_model_path, get_dataset
 from dd_ranking.utils import set_seed, get_optimizer, get_lr_scheduler
 from dd_ranking.utils import train_one_epoch, validate
 from dd_ranking.loss import SoftCrossEntropyLoss, KLDivergenceLoss
-from dd_ranking.aug import DSA_Augmentation, Mixup_Augmentation, Cutmix_Augmentation, ZCA_Whitening_Augmentation
+from dd_ranking.aug import DSAugmentation, MixupAugmentation, CutmixAugmentation, ZCAWhiteningAugmentation
 from dd_ranking.config import Config
 
 
-class Unified_Evaluator:
+class GeneralEvaluator:
 
     def __init__(self,
         config: Config=None,

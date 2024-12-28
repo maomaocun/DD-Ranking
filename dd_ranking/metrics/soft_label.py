@@ -17,7 +17,7 @@ from dd_ranking.aug import DSA_Augmentation, ZCA_Whitening_Augmentation, Mixup_A
 from dd_ranking.config import Config
 
 
-class Soft_Label_Evaluator:
+class SoftLabelEvaluator:
 
     def __init__(self, config: Config=None, dataset: str='CIFAR10', real_data_path: str='./dataset/', ipc: int=10, model_name: str='ConvNet-3', 
                  soft_label_criterion: str='kl', data_aug_func: str='cutmix', aug_params: dict={'cutmix_p': 1.0}, soft_label_mode: str='S',

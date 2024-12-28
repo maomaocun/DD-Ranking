@@ -5,11 +5,11 @@ Below is a step-by-step guide on how to use our `dd_ranking`. This demo is based
 **Step1**: Intialize a soft-label metric evaluator object. Config files are recommended for users to specify hyper-parameters. Sample config files are provided [here](https://github.com/NUS-HPC-AI-Lab/DD-Ranking/tree/main/configs).
 
 ```python
-from dd_ranking.metrics import Soft_Label_Evaluator
+from dd_ranking.metrics import SoftLabelEvaluator
 from dd_ranking.config import Config
 
 >>> config = Config.from_file("./configs/Demo_Soft_Label.yaml")
->>> soft_obj = Soft_Label_Evaluator(config)
+>>> soft_obj = SoftLabelEvaluator(config)
 ```
 
 <details>
@@ -38,7 +38,7 @@ dsa_params = {                          # Specify your data augmentation paramet
 save_path = f"./results/{dataset}/{model_name}/IPC{ipc}/dm_hard_scores.csv"
 
 """ We only list arguments that usually need specifying"""
-soft_label_metric_calc = Soft_Label_Evaluator(
+soft_label_metric_calc = SoftLabelEvaluator(
     dataset=dataset,
     real_data_path=real_data_dir, 
     ipc=ipc,

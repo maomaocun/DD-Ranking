@@ -3,7 +3,7 @@ import numpy as np
 import kornia
 
 
-class Mixup_Augmentation:
+class MixupAugmentation:
     def __init__(self, params: dict):
         self.mixup_p = params["mixup_p"]
 

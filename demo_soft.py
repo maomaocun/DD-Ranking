@@ -1,14 +1,14 @@
 import os
 import torch
 import warnings
-from dd_ranking.metrics import Soft_Label_Evaluator
+from dd_ranking.metrics import SoftLabelEvaluator
 from dd_ranking.config import Config
 warnings.filterwarnings("ignore", category=FutureWarning)
 
 
 """ Use config file to specify the arguments (Recommended) """
 config = Config.from_file("./configs/Demo_Soft_Label.yaml")
-soft_label_evaluator = Soft_Label_Evaluator(config)
+soft_label_evaluator = SoftLabelEvaluator(config)
 
 syn_data_dir = "./baselines/DATM/CIFAR10/IPC10/"
 syn_images = torch.load(os.path.join(syn_data_dir, f"images.pt"), map_location='cpu')
@@ -41,7 +41,7 @@ syn_images = torch.load(os.path.join(syn_data_dir, f"images.pt"), map_location='
 soft_labels = torch.load(os.path.join(syn_data_dir, f"labels.pt"), map_location='cpu')
 syn_lr = torch.load(os.path.join(syn_data_dir, f"lr.pt"), map_location='cpu')
 save_path = f"./results/{dataset}/{model_name}/IPC{ipc}/dm_hard_scores.csv"
-soft_label_evaluator = Soft_Label_Evaluator(
+soft_label_evaluator = SoftLabelEvaluator(
     dataset=dataset,
     real_data_path=data_dir, 
     ipc=ipc, 
@@ -69,4 +69,4 @@ soft_label_evaluator = Soft_Label_Evaluator(
     device=device,
     save_path=save_path
 )
-print(soft_label_evaluator.compute_metrics(syn_images, soft_labels, syn_lr=syn_lr))
+print(soft_label_evaluator.compute_metrics(image_tensor=syn_images, soft_labels=soft_labels, syn_lr=syn_lr))

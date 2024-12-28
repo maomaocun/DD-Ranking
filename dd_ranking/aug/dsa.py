@@ -3,7 +3,7 @@ import numpy as np
 import torch.nn.functional as F
 
 
-class DSA_Augmentation:
+class DSAugmentation:
 
     def __init__(self, params: dict, seed: int=-1, aug_mode: str='S'):        
         self.params = params

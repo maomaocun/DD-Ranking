@@ -1,9 +1,9 @@
-## Soft Label Evaluator
+## SoftLabelEvaluator
 
 <div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; border-top:3px solid #FF0000; font-family:monospace; font-size:14px;">
 
 <span style="color:#FF6B00;">CLASS</span> 
-dd_ranking.metrics.Soft_Label_Evaluator(config: Optional[Config] = None,
+dd_ranking.metrics.SoftLabelEvaluator(config: Optional[Config] = None,
     dataset: str = 'CIFAR10',
     real_data_path: str = './dataset/',
     ipc: int = 10,
@@ -112,7 +112,7 @@ A dictionary with the following keys:
 with config file:
 ```python
 >>> config = Config('/path/to/config.yaml')
->>> evaluator = Soft_Label_Evaluator(config=config)
+>>> evaluator = SoftLabelEvaluator(config=config)
 # load image and soft labels
 >>> image_tensor, soft_labels = ... 
 # compute metrics
@@ -123,7 +123,7 @@ with config file:
 
 with keyword arguments:
 ```python
->>> evaluator = Soft_Label_Evaluator(
+>>> evaluator = SoftLabelEvaluator(
 ...     dataset='TinyImageNet',
 ...     model_name='ResNet-18-BN',
 ...     soft_label_mode='M',
