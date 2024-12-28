@@ -3,9 +3,9 @@
 <p align="center">
   <picture>
   <!-- Dark theme logo -->
-    <source media="(prefers-color-scheme: dark)" srcset="XX.png">
+    <source media="(prefers-color-scheme: dark)" srcset="static/logo.png">
     <!-- Light theme logo -->
-    <img alt="vLLM" src="XX.png" width=55%>
+    <img alt="DD-Ranking" src="static/logo.png" width=55%>
   </picture>
 </p>
 
