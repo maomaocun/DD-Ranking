@@ -1,3 +1,3 @@
 from .dd_ranking_unified import Unified_Evaluator
-from .dd_ranking_obj import Soft_Label_Objective_Metrics, Hard_Label_Objective_Metrics
-from .dd_ranking_aug import Augmentation_Metrics, DSA_Augmentation_Metrics, ZCA_Whitening_Augmentation_Metrics, Mixup_Augmentation_Metrics, Cutmix_Augmentation_Metrics
+from .dd_ranking_obj import Soft_Label_Evaluator, Hard_Label_Evaluator
+# from .dd_ranking_aug import Augmentation_Evaluator, DSA_Augmentation_Evaluator, ZCA_Whitening_Augmentation_Evaluator, Mixup_Augmentation_Evaluator, Cutmix_Augmentation_Evaluator
