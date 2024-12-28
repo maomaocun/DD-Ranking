@@ -13,7 +13,7 @@
 Fair and benchmark for dataset distillation.
 </h3> -->
 <p align="center">
-| <a href="https://nus-hpc-ai-lab.github.io/DD-Ranking/"><b>Documentation</b></a> | <a href="https://nus-hpc-ai-lab.github.io/DD-Ranking/"><b>Leaderboard</b></a> | <b>Paper </b> (Coming Soon) | <a href=""><b>Twitter/X</b></a> | <a href=""><b>Developer Slack</b></a> |
+| <a href="https://nus-hpc-ai-lab.github.io/DD-Ranking/"><b>Documentation</b></a> | <a href="https://huggingface.co/spaces/Soptq/DD-Ranking"><b>Leaderboard</b></a> | <b>Paper </b> (Coming Soon) | <a href=""><b>Twitter/X</b></a> | <a href=""><b>Developer Slack</b></a> |
 </p>
 
 
