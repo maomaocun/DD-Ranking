@@ -30,6 +30,8 @@
 
         <!-- Custom theme stylesheets -->
 
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
         <!-- Provide site root to javascript -->
         <script>
@@ -181,21 +183,21 @@ Recently, Deng et al., pointed out that "a label is worth a thousand images". Th
 <p>The evaluation method for DD-Ranking is grounded in the essence of dataset distillation, aiming to better reflect the information content of the synthesized data by assessing the following two aspects:</p>
 <ol>
 <li>
-<p>The degree to which the original dataset is recovered under hard labels (hard label recovery): $\text{HLR} = \text{Acc}<em>{\text{full-hard}} - \text{Acc}</em>{\text{syn-hard}}$</p>
+<p>The degree to which the original dataset is recovered under hard labels (hard label recovery): \( \text{HLR} = \text{Acc.} \text{full-hard} - \text{Acc.} \text{syn-hard} \)</p>
 </li>
 <li>
-<p>The improvement over random selection when using personalized evaluation methods (improvement over random): $\text{IOR} = \text{Acc}<em>{\text{syn-any}} - \text{Acc}</em>{\text{rdm-any}}$</p>
+<p>The improvement over random selection when using personalized evaluation methods (improvement over random): \( \text{IOR} = \text{Acc.} \text{syn-any} - \text{Acc.} \text{rdm-any} \)</p>
 </li>
 </ol>
-<p>$\text{Acc.}$ is the accuracy of models trained on different samples. Samples' marks are as follows:</p>
+<p>\(\text{Acc.}\) is the accuracy of models trained on different samples. Samples' marks are as follows:</p>
 <ul>
-<li>$\text{full-hard}$: Full dataset with hard labels;</li>
-<li>$\text{syn-hard}$: Synthetic dataset with hard labels;</li>
-<li>$\text{syn-any}$: Synthetic dataset with personalized evaluation methods (hard or soft labels);</li>
-<li>$\text{rdm-any}$: Randomly selected dataset (under the same compression ratio) with the same personalized evaluation methods.</li>
+<li>\(\text{full-hard}\): Full dataset with hard labels;</li>
+<li>\(\text{syn-hard}\): Synthetic dataset with hard labels;</li>
+<li>\(\text{syn-any}\): Synthetic dataset with personalized evaluation methods (hard or soft labels);</li>
+<li>\(\text{rdm-any}\): Randomly selected dataset (under the same compression ratio) with the same personalized evaluation methods.</li>
 </ul>
 <p>To rank different methods, we combine the above two metrics as DD-Ranking Score:</p>
-<p>$$\text{DD-Ranking Score} = \frac{\text{IOR}}{\text{HLR}} = \frac{(\text{Acc}<em>{\text{syn-any}}-\text{Acc}</em>{\text{rdm-any}})}{(\text{Acc}<em>{\text{full-hard}}-\text{Acc}</em>{\text{syn-hard}})}$$</p>
+<p>\[\text{DD-Ranking Score} = \frac{\text{IOR}}{\text{HLR}} = \frac{(\text{Acc.} \text{syn-any}-\text{Acc.} \text{rdm-any})}{(\text{Acc.} \text{full-hard}-\text{Acc.} \text{syn-hard})}\]</p>
 
                     </main>
 
@@ -220,22 +222,6 @@ Recently, Deng et al., pointed out that "a label is worth a thousand images". Th
 
         </div>
 
-        <!-- Livereload script (if served using the cli tool) -->
-        <script>
-            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
-            const socket = new WebSocket(wsAddress);
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
 
 
 
