@@ -1,7 +1,9 @@
 from setuptools import setup, find_packages
 
+packages = find_packages()
+
 setup(
-    name='DD-Ranking',  # Package name
+    name='dd_ranking',  # Package name
     version='0.1.0',  # Version number
     description='DD-Ranking: A unified benchmark for dataset distillation method evaluation',
     long_description=open('README.md').read(),  # Use your README as the long description
@@ -13,8 +15,10 @@ setup(
         'repository': 'https://github.com/NUS-HPC-AI-Lab/DD-Ranking',
         'documentation': 'https://github.com/NUS-HPC-AI-Lab/DD-Ranking'
     },
-    license='MIT',  # License type
-    packages=find_packages(),  # Automatically discover submodules
+    # license='MIT',  # License type
+    include_dirs=['dd_ranking', 'configs'],
+    include_package_data=True,
+    packages=packages,  # Automatically discover submodules
     install_requires=[
         'torch',
         'numpy',

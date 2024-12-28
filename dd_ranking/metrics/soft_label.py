@@ -13,7 +13,7 @@ from dd_ranking.utils import build_model, get_pretrained_model_path
 from dd_ranking.utils import TensorDataset, get_random_images, get_dataset, save_results
 from dd_ranking.utils import set_seed, train_one_epoch, validate, get_optimizer, get_lr_scheduler
 from dd_ranking.loss import SoftCrossEntropyLoss, KLDivergenceLoss
-from dd_ranking.aug import DSA_Augmentation, ZCA_Whitening_Augmentation, Mixup_Augmentation, Cutmix_Augmentation
+from dd_ranking.aug import DSAugmentation, MixupAugmentation, CutmixAugmentation, ZCAWhiteningAugmentation
 from dd_ranking.config import Config
 
 
