@@ -9,11 +9,8 @@ from torch import Tensor
 from tqdm import tqdm
 from torch.utils.data import DataLoader
 from torch.nn import CrossEntropyLoss
-from torch.optim import SGD
-from torch.optim.lr_scheduler import CosineAnnealingLR, StepLR
 from torchvision import transforms, datasets
-from dd_ranking.utils import build_model, get_pretrained_model_path
-from dd_ranking.utils import TensorDataset, get_random_images, get_dataset
+from dd_ranking.utils import build_model, get_pretrained_model_path, get_dataset, TensorDataset
 from dd_ranking.utils import set_seed, get_optimizer, get_lr_scheduler
 from dd_ranking.utils import train_one_epoch, validate
 from dd_ranking.loss import SoftCrossEntropyLoss, KLDivergenceLoss
@@ -39,12 +36,17 @@ class Unified_Evaluator:
         num_eval: int=5,
         im_size: tuple=(32, 32), 
         num_epochs: int=300,
-        batch_size: int=256,
+        real_batch_size: int=256,
+        syn_batch_size: int=256,
         weight_decay: float=0.0005,
         momentum: float=0.9,
         use_zca: bool=False,
         temperature: float=1.0,
-        use_torchvision: bool=False,
+        stu_use_torchvision: bool=False,
+        tea_use_torchvision: bool=False,
+        teacher_dir: str='./teacher_models',
+        custom_train_trans: transforms.Compose=None,
+        custom_val_trans: transforms.Compose=None,
         num_workers: int=4,
         save_path: str=None,
         device: str="cuda"
@@ -78,20 +80,30 @@ class Unified_Evaluator:
             num_eval = self.config.get('num_eval', 5)
             im_size = self.config.get('im_size', (32, 32))
             num_epochs = self.config.get('num_epochs', 300)
-            batch_size = self.config.get('batch_size', 256)
+            real_batch_size = self.config.get('real_batch_size', 256)
+            syn_batch_size = self.config.get('syn_batch_size', 256)
             default_lr = self.config.get('default_lr', 0.01)
             save_path = self.config.get('save_path', None)
             num_workers = self.config.get('num_workers', 4)
-            use_torchvision = self.config.get('use_torchvision', False)
+            stu_use_torchvision = self.config.get('stu_use_torchvision', False)
+            tea_use_torchvision = self.config.get('tea_use_torchvision', False)
+            custom_train_trans = self.config.get('custom_train_trans', None)
+            custom_val_trans = self.config.get('custom_val_trans', None)
             device = self.config.get('device', 'cuda')
 
-        channel, im_size, num_classes, dst_train, dst_test, class_map, class_map_inv = get_dataset(dataset, real_data_path, im_size, use_zca)
+        channel, im_size, num_classes, dst_train, dst_test, class_map, class_map_inv = get_dataset(dataset, 
+                                                                                                   real_data_path, 
+                                                                                                   im_size,
+                                                                                                   custom_val_trans,
+                                                                                                   use_zca)
         self.num_classes = num_classes
         self.im_size = im_size
-        self.test_loader = DataLoader(dst_test, batch_size=batch_size, num_workers=num_workers, shuffle=False)
+        self.real_test_loader = DataLoader(dst_test, batch_size=real_batch_size, num_workers=num_workers, shuffle=False)
 
         self.ipc = ipc
         self.model_name = model_name
+        self.stu_use_torchvision = stu_use_torchvision
+        self.custom_train_trans = custom_train_trans
         self.use_soft_label = use_soft_label
         if use_soft_label:
             assert soft_label_mode is not None, "soft_label_mode must be provided if use_soft_label is True"
@@ -107,7 +119,7 @@ class Unified_Evaluator:
 
         self.num_eval = num_eval
         self.num_epochs = num_epochs
-        self.batch_size = batch_size
+        self.syn_batch_size = syn_batch_size
         self.device = device
 
         if not save_path:
@@ -117,7 +129,7 @@ class Unified_Evaluator:
         self.save_path = save_path
 
         if not use_torchvision:
-            pretrained_model_path = get_pretrained_model_path(model_name, dataset, ipc)
+            pretrained_model_path = get_pretrained_model_path(teacher_dir, model_name, dataset, ipc)
         else:
             pretrained_model_path = None
 
@@ -128,7 +140,7 @@ class Unified_Evaluator:
             pretrained=True, 
             device=self.device, 
             model_path=pretrained_model_path,
-            use_torchvision=use_torchvision
+            use_torchvision=tea_use_torchvision
         )
         self.teacher_model.eval()
 
@@ -136,7 +148,6 @@ class Unified_Evaluator:
             self.aug_func = None
         elif data_aug_func == 'dsa':
             self.aug_func = DSA_Augmentation(aug_params)
-            self.num_epochs = 1000
         elif data_aug_func == 'mixup':
             self.aug_func = Mixup_Augmentation(aug_params)  
         elif data_aug_func == 'cutmix':
@@ -145,7 +156,7 @@ class Unified_Evaluator:
             raise ValueError(f"Invalid data augmentation function: {data_aug_func}")
 
     def generate_soft_labels(self, images):
-        batches = torch.split(images, self.batch_size)
+        batches = torch.split(images, self.syn_batch_size)
         soft_labels = []
         with torch.no_grad():
             for image_batch in batches:
@@ -164,12 +175,13 @@ class Unified_Evaluator:
                 model_name=self.model_name, 
                 num_classes=self.num_classes, 
                 im_size=self.im_size, 
-                pretrained=False, 
+                pretrained=False,
+                use_torchvision=self.stu_use_torchvision,
                 device=self.device
             )
             acc = self.compute_metrics_helper(
                 model=model, 
-                loader=loader, 
+                loader=loader,
                 lr=lr
             )
             if acc > best_acc:
@@ -180,13 +192,13 @@ class Unified_Evaluator:
     def get_loss_fn(self):
         if self.use_soft_label:
             if self.soft_label_criterion == 'kl':
-                return KLDivergenceLoss(temperature=self.temperature)
+                return KLDivergenceLoss(temperature=self.temperature).to(self.device)
             elif self.soft_label_criterion == 'sce':
-                return SoftCrossEntropyLoss()
-            else:
+                return SoftCrossEntropyLoss(temperature=self.temperature).to(self.device)
+            else:   
                 raise ValueError(f"Invalid soft label criterion: {self.soft_label_criterion}")
         else:
-            return nn.CrossEntropyLoss()
+            return CrossEntropyLoss().to(self.device)
     
     def compute_metrics_helper(self, model, loader, lr):
         loss_fn = self.get_loss_fn()
@@ -195,7 +207,7 @@ class Unified_Evaluator:
         scheduler = get_lr_scheduler(optimizer, self.lr_scheduler, self.num_epochs)
         
         best_acc = 0
-        for epoch in range(self.num_epochs):
+        for epoch in tqdm(range(self.num_epochs), total=self.num_epochs, desc="Training"):
             train_one_epoch(
                 model=model, 
                 loader=loader, 
@@ -218,9 +230,28 @@ class Unified_Evaluator:
                 best_acc = acc
         return best_acc
         
-    def compute_metrics(self, images, labels, syn_lr=None):
-        syn_dataset = TensorDataset(images, labels)
-        syn_loader = DataLoader(syn_dataset, batch_size=self.batch_size, shuffle=True, num_workers=4)
+    def compute_metrics(self, image_tensor: Tensor=None, image_path: str=None, labels: Tensor=None, syn_lr=None):
+        if image_tensor is None and image_path is None:
+            raise ValueError("Either image_tensor or image_path must be provided")
+        
+        if self.use_soft_label and self.soft_label_mode == 'S' and labels is None:
+            raise ValueError("labels must be provided if soft_label_mode is 'S'")
+        
+        if image_tensor is None:
+            syn_dataset = datasets.ImageFolder(root=image_path, transform=self.custom_train_trans)
+            if labels is not None:
+                syn_dataset.samples = [(path, labels[idx]) for idx, (path, _) in enumerate(syn_dataset.samples)]
+                syn_dataset.targets = labels
+        else:
+            if labels is not None:
+                syn_dataset = TensorDataset(image_tensor, labels, transform=self.custom_train_trans)
+            else:
+                # use hard labels if labels are not provided
+                default_labels = torch.tensor(np.array([np.ones(self.ipc) * i for i in range(self.num_classes)]), 
+                                              dtype=torch.long, requires_grad=False).view(-1)
+                syn_dataset = TensorDataset(image_tensor, default_labels, transform=self.custom_train_trans)
+
+        syn_loader = DataLoader(syn_dataset, batch_size=self.syn_batch_size, shuffle=True, num_workers=4)
 
         accs = []
         lrs = []
@@ -232,12 +263,13 @@ class Unified_Evaluator:
                     model_name=self.model_name, 
                     num_classes=self.num_classes,
                     im_size=self.im_size, 
-                    pretrained=False, 
+                    pretrained=False,
+                    use_torchvision=self.stu_use_torchvision,
                     device=self.device
                 )
                 syn_data_acc = self.compute_metrics_helper(
-                    model=model, 
-                    loader=syn_loader, 
+                    model=model,
+                    loader=syn_loader,
                     lr=syn_lr
                 )
                 del model

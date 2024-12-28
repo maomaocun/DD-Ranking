@@ -6,9 +6,12 @@ from dd_ranking.config import Config
 
 """ Use config file to specify the arguments (Recommended) """
 config = Config.from_file("./configs/Demo_Hard_Label.yaml")
-convd3_hard_obj = Hard_Label_Objective_Metrics(config)
-syn_images = torch.load(os.path.join("./DC/CIFAR10/IPC10/", f"images.pt"), map_location='cpu')
-print(convd3_hard_obj.compute_metrics(syn_images, syn_lr=0.01))
+hard_label_evaluator = Hard_Label_Objective_Metrics(config)
+
+syn_data_dir = "./baselines/DM/CIFAR10/IPC10/"
+syn_images = torch.load(os.path.join(syn_data_dir, f"images.pt"), map_location='cpu')
+syn_lr = 0.01
+print(hard_label_evaluator.compute_metrics(syn_images, syn_lr=syn_lr))
 
 
 """ Use keyword arguments """
@@ -34,7 +37,7 @@ dsa_params = {
 
 syn_images = torch.load(os.path.join(syn_data_dir, f"images.pt"), map_location='cpu')
 save_path = f"./results/{dataset}/{model_name}/IPC{ipc}/dm_hard_scores.csv"
-convd3_hard_obj = Hard_Label_Objective_Metrics(
+hard_label_evaluator = Hard_Label_Objective_Metrics(
     dataset=dataset, 
     real_data_path=data_dir, 
     ipc=ipc, 
@@ -58,4 +61,4 @@ convd3_hard_obj = Hard_Label_Objective_Metrics(
     device=device,
     save_path=save_path
 )
-print(convd3_hard_obj.compute_metrics(syn_images, syn_lr=0.01))
+print(hard_label_evaluator.compute_metrics(syn_images, syn_lr=0.01))
