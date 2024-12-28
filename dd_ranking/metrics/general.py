@@ -207,7 +207,7 @@ class Unified_Evaluator:
         scheduler = get_lr_scheduler(optimizer, self.lr_scheduler, self.num_epochs)
         
         best_acc = 0
-        for epoch in range(self.num_epochs):
+        for epoch in tqdm(range(self.num_epochs), total=self.num_epochs, desc="Training"):
             train_one_epoch(
                 model=model, 
                 loader=loader, 

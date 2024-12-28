@@ -1,16 +1,20 @@
 import os
 import torch
-from dd_ranking.metrics import Soft_Label_Objective_Metrics
+import warnings
+from dd_ranking.metrics import Soft_Label_Evaluator
 from dd_ranking.config import Config
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 
 """ Use config file to specify the arguments (Recommended) """
 config = Config.from_file("./configs/Demo_Soft_Label.yaml")
-convd3_soft_obj = Soft_Label_Objective_Metrics(config)
+soft_label_evaluator = Soft_Label_Evaluator(config)
+
+syn_data_dir = "./baselines/DATM/CIFAR10/IPC10/"
 syn_images = torch.load(os.path.join(syn_data_dir, f"images.pt"), map_location='cpu')
 soft_labels = torch.load(os.path.join(syn_data_dir, f"labels.pt"), map_location='cpu')
 syn_lr = torch.load(os.path.join(syn_data_dir, f"lr.pt"), map_location='cpu')
-print(convd3_soft_obj.compute_metrics(syn_images, soft_labels, syn_lr=syn_lr))
+print(soft_label_evaluator.compute_metrics(image_tensor=syn_images, soft_labels=soft_labels, syn_lr=syn_lr))
 
 
 """ Use keyword arguments """
@@ -35,8 +39,9 @@ dsa_params = {                          # Specify your data augmentation paramet
 
 syn_images = torch.load(os.path.join(syn_data_dir, f"images.pt"), map_location='cpu')
 soft_labels = torch.load(os.path.join(syn_data_dir, f"labels.pt"), map_location='cpu')
+syn_lr = torch.load(os.path.join(syn_data_dir, f"lr.pt"), map_location='cpu')
 save_path = f"./results/{dataset}/{model_name}/IPC{ipc}/dm_hard_scores.csv"
-convd3_hard_obj = Soft_Label_Objective_Metrics(
+soft_label_evaluator = Soft_Label_Evaluator(
     dataset=dataset,
     real_data_path=data_dir, 
     ipc=ipc, 
@@ -64,4 +69,4 @@ convd3_hard_obj = Soft_Label_Objective_Metrics(
     device=device,
     save_path=save_path
 )
-print(convd3_hard_obj.compute_metrics(syn_images, soft_labels, syn_lr=0.01))
+print(soft_label_evaluator.compute_metrics(syn_images, soft_labels, syn_lr=syn_lr))
