@@ -3,7 +3,7 @@
 # * template https://github.com/kg4zow/mdbook-template/
 
 [book]
-authors             = ["DD-Ranking Team"]
+authors             = ["Data Intelligence Team"]
 language            = "en"
 multilingual        = false
 src                 = "doc"
@@ -11,3 +11,4 @@ title               = "DD-Ranking API Documentation"
 
 [output.html]
 mathjax-support = true
+additional-css = ["theme/book.css"]

@@ -30,6 +30,7 @@
         <link rel="stylesheet" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/book.css">
 
         <!-- MathJax -->
         <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
@@ -208,7 +209,69 @@ Recently, Deng et al., pointed out that "a label is worth a thousand images". Th
 </ul>
 <p>To rank different methods, we combine the above two metrics as DD-Ranking Score:</p>
 <p>\[\text{DD-Ranking Score} = \frac{\text{IOR}}{\text{HLR}} = \frac{(\text{Acc.} \text{syn-any}-\text{Acc.} \text{rdm-any})}{(\text{Acc.} \text{full-hard}-\text{Acc.} \text{syn-hard})}\]</p>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="installation"><a class="header" href="#installation">Installation</a></h2>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="contributing"><a class="header" href="#contributing">Contributing</a></h1>
+<p>Welcome! We are glad that you by willing to contribute to the field of dataset distillation.</p>
+<ul>
+<li>
+<p><strong>New Baselines</strong>: If you would like to report new baselines, please submit them by creating a pull request. The exact format is below: name of the baseline, code link, [paper link and score run using this tool].</p>
+</li>
+<li>
+<p><strong>New Components</strong>: If you would like to integrate new components, such as new model architectures, new data augmentation methods, and new soft label strategies, please submit them by creating a pull request.</p>
+</li>
+<li>
+<p><strong>Issues</strong>: If you want to submit issues, you are encouraged to submit yes directly in issues.</p>
+</li>
+<li>
+<p><strong>Appeal</strong>: If you want to appeal for the score of your method, please submit an issue with your code and a detailed readme file of how to reproduce your results. We tried our best to replicate all methods in the leaderboard based on their papers and open-source code. We are sorry if we miss some details and will be grateful if you can help us improve the leaderboard.</p>
+</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="community"><a class="header" href="#community">Community</a></h1>
+<p>Meet our Data Intelligence Team!</p>
+<h2 id="developing-team"><a class="header" href="#developing-team">Developing Team</a></h2>
+<div class="team-section" id="developing-team">
+    <div class="team-row">
+        <div class="team-member">
+            <a href="https://lizekai-richard.github.io/"><h3 id="zekai-li"><a class="header" href="#zekai-li">Zekai Li</a></h3></a>
+            <p>Project Lead</p>
+        </div>
+        <div class="team-member">
+            <a href="https://ndhg1213.github.io/"><h3 id="xinhao-zhong"><a class="header" href="#xinhao-zhong">Xinhao Zhong</a></h3></a>
+            <p>Baseline Reproducer</p>
+        </div>
+        <div class="team-member">
+            <a href="https://yuhaozhou.github.io/"><h3 id="yuhao-zhou"><a class="header" href="#yuhao-zhou">Yuhao Zhou</a></h3></a>
+            <p>Leaderboard Developer</p>
+        </div>
+    </div>
+    <div class="team-row">
+        <div class="team-member">
+            <a href="https://bdemo.github.io/homepage/"><h3 id="mingjia-shi"><a class="header" href="#mingjia-shi">Mingjia Shi</a></h3></a>
+            <p>Repository Developer</p>
+        </div>
+        <div class="team-member">
+            <a href="https://jerryliang24.github.io/"><h3 id="zhiyuan-liang"><a class="header" href="#zhiyuan-liang">Zhiyuan Liang</a></h3></a>
+            <p>Code Developer</p>
+        </div>
+    </div>
+</div>
+<hr />
+<h2 id="advising-team"><a class="header" href="#advising-team">Advising Team</a></h2>
+<div class="team-section" id="advising-team">
+    <div class="team-row">
+        <div class="team-member">
+            <h3 id="kai-wang"><a class="header" href="#kai-wang">Kai Wang</a></h3>
+            <p>Chief Advisor</p>
+        </div>
+        <div class="team-member">
+            <h3 id="xuanlei-zhao"><a class="header" href="#xuanlei-zhao">Xuanlei Zhao</a></h3>
+            <p>Technical Advisor</p>
+        </div>
+        <div class="team-member">
+            <h3 id="wangbo-zhao"><a class="header" href="#wangbo-zhao">Wangbo Zhao</a></h3>
+            <p>Technical Advisor</p>
+        </div>
+    </div>
+</div><div style="break-before: page; page-break-before: always;"></div><h2 id="installation"><a class="header" href="#installation">Installation</a></h2>
 <p>From pip</p>
 <pre><code class="language-bash">pip install dd_ranking
 </code></pre>
@@ -989,6 +1052,22 @@ dd_ranking.aug.Mixup(params: dict)
 
         </div>
 
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
 
 
 
