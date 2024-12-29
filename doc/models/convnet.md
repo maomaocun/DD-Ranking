@@ -8,7 +8,7 @@ By default, we use width 128, average pooling, and ReLU activation. We provide t
 
 dd_ranking.utils.get_convnet(model_name: str, 
 im_size: tuple, channel: int, num_classes: int, net_depth: int, net_norm: str, pretrained: bool, model_path: str)
-[**[SOURCE]**](https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/models.py)
+[**[SOURCE]**](https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/model.py)
 </div>
 
 ### Parameters

@@ -8,7 +8,7 @@ We provide the following interface to initialize a ConvNet model:
 
 dd_ranking.utils.get_vgg(model_name: str, 
 im_size: tuple, channel: int, num_classes: int, depth: int, batchnorm: bool, use_torchvision: bool, pretrained: bool, model_path: str)
-[**[SOURCE]**](https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/models.py)
+[**[SOURCE]**](https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/model.py)
 </div>
 
 ### Parameters
