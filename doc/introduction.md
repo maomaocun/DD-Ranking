@@ -41,7 +41,7 @@ Motivated by this, we propose DD-Ranking, a new benchmark for DD evaluation. DD-
 ## DD-Ranking Score
 
 Revisit the original goal of dataset distillation: 
-> The idea is to synthesize a small number of data points that do not need to come from the correct data distribution, but will, when given to the learning algorithm as training data, approximate the model trained on the original data.
+> The idea is to synthesize a small number of data points that do not need to come from the correct data distribution, but will, when given to the learning algorithm as training data, approximate the model trained on the original data. (Wang et al., 2020)
 >
 
 The evaluation method for DD-Ranking is grounded in the essence of dataset distillation, aiming to better reflect the information content of the synthesized data by assessing the following two aspects:  

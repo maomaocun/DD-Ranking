@@ -188,7 +188,7 @@ Recently, Deng et al., pointed out that "a label is worth a thousand images". Th
 <h2 id="dd-ranking-score"><a class="header" href="#dd-ranking-score">DD-Ranking Score</a></h2>
 <p>Revisit the original goal of dataset distillation:</p>
 <blockquote>
-<p>The idea is to synthesize a small number of data points that do not need to come from the correct data distribution, but will, when given to the learning algorithm as training data, approximate the model trained on the original data.</p>
+<p>The idea is to synthesize a small number of data points that do not need to come from the correct data distribution, but will, when given to the learning algorithm as training data, approximate the model trained on the original data. (Wang et al., 2020)</p>
 </blockquote>
 <p>The evaluation method for DD-Ranking is grounded in the essence of dataset distillation, aiming to better reflect the information content of the synthesized data by assessing the following two aspects:</p>
 <ol>
@@ -989,22 +989,6 @@ dd_ranking.aug.Mixup(params: dict)
 
         </div>
 
-        <!-- Livereload script (if served using the cli tool) -->
-        <script>
-            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
-            const socket = new WebSocket(wsAddress);
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
 
 
 
