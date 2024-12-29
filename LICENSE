@@ -19,3 +19,19 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+This project incorporates code from the following repositories:
+
+1. [DatasetCondensation](https://github.com/VICO-UoE/DatasetCondensation)
+   License: MIT
+
+2. [mtt-distillation](https://github.com/GeorgeCazenavette/mtt-distillation)
+   License: MIT
+
+3. [SRe2L](https://github.com/VILA-Lab/SRe2L/tree/main/SRe2L)
+   License: MIT
+
+4. [RDED](https://github.com/LINs-lab/RDED)
+   License: Apache License 2.0
+   
+The licenses of the above repositories are compatible with the license of this project.
