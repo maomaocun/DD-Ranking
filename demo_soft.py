@@ -3,7 +3,7 @@ import torch
 import warnings
 from dd_ranking.metrics import SoftLabelEvaluator
 from dd_ranking.config import Config
-warnings.filterwarnings("ignore", category=FutureWarning)
+warnings.filterwarnings("ignore")
 
 
 """ Use config file to specify the arguments (Recommended) """
@@ -27,14 +27,14 @@ data_dir = "./datasets"                 # Specify your dataset path
 model_name = "ConvNet-3"                # Specify your model name
 im_size = (32, 32)                      # Specify your image size
 dsa_params = {                          # Specify your data augmentation parameters
-    "prob_flip": 0.5,
-    "ratio_rotate": 15.0,
+    "flip": 0.5,
+    "rotate": 15.0,
     "saturation": 2.0,
     "brightness": 1.0,
     "contrast": 0.5,
-    "ratio_scale": 1.2,
-    "ratio_crop_pad": 0.125,
-    "ratio_cutout": 0.5
+    "scale": 1.2,
+    "crop": 0.125,
+    "cutout": 0.5
 }
 
 syn_images = torch.load(os.path.join(syn_data_dir, f"images.pt"), map_location='cpu')

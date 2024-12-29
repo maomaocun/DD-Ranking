@@ -3,7 +3,7 @@ import numpy as np
 import torch.nn.functional as F
 
 
-class DSAugmentation:
+class DSA:
 
     def __init__(self, params: dict, seed: int=-1, aug_mode: str='S'):        
         self.params = params
@@ -30,7 +30,7 @@ class DSAugmentation:
     def rand_scale(self, x):
         # x>1, max scale
         # sx, sy: (0, +oo), 1: orignial size, 0.5: enlarge 2 times
-        ratio = self.params["ratio_scale"]
+        ratio = self.params["scale"]
         self.set_seed_DiffAug()
         sx = torch.rand(x.shape[0]) * (ratio - 1.0/ratio) + 1.0/ratio
         self.set_seed_DiffAug()
@@ -45,7 +45,7 @@ class DSAugmentation:
         return x
 
     def rand_rotate(self, x): # [-180, 180], 90: anticlockwise 90 degree
-        ratio = self.params["ratio_rotate"]
+        ratio = self.params["rotate"]
         self.set_seed_DiffAug()
         theta = (torch.rand(x.shape[0]) - 0.5) * 2 * ratio / 180 * float(np.pi)
         theta = [[[torch.cos(theta[i]), torch.sin(-theta[i]), 0],
@@ -58,7 +58,7 @@ class DSAugmentation:
         return x
 
     def rand_flip(self, x):
-        prob = self.params["prob_flip"]
+        prob = self.params["flip"]
         self.set_seed_DiffAug()
         randf = torch.rand(x.size(0), 1, 1, 1, device=x.device)
         if self.params["siamese"]: # Siamese augmentation:
@@ -99,7 +99,7 @@ class DSAugmentation:
 
     def rand_crop(self, x):
         # The image is padded on its surrounding and then cropped.
-        ratio = self.params["ratio_crop_pad"]
+        ratio = self.params["crop"]
         shift_x, shift_y = int(x.size(2) * ratio + 0.5), int(x.size(3) * ratio + 0.5)
         self.set_seed_DiffAug()
         translation_x = torch.randint(-shift_x, shift_x + 1, size=[x.size(0), 1, 1], device=x.device)
@@ -120,7 +120,7 @@ class DSAugmentation:
         return x
 
     def rand_cutout(self, x):
-        ratio = self.params["ratio_cutout"]
+        ratio = self.params["cutout"]
         cutout_size = int(x.size(2) * ratio + 0.5), int(x.size(3) * ratio + 0.5)
         self.set_seed_DiffAug()
         offset_x = torch.randint(0, x.size(2) + (1 - cutout_size[0] % 2), size=[x.size(0), 1, 1], device=x.device)

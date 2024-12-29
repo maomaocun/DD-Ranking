@@ -12,7 +12,7 @@ from torchvision import transforms, datasets
 from dd_ranking.utils import build_model, get_pretrained_model_path
 from dd_ranking.utils import TensorDataset, get_random_images, get_dataset, save_results
 from dd_ranking.utils import set_seed, train_one_epoch, validate, get_optimizer, get_lr_scheduler
-from dd_ranking.aug import DSAugmentation, MixupAugmentation, CutmixAugmentation, ZCAWhiteningAugmentation
+from dd_ranking.aug import DSA, Mixup, Cutmix, ZCAWhitening
 from dd_ranking.config import Config
 
 
@@ -82,13 +82,13 @@ class HardLabelEvaluator:
         self.device = device
 
         if data_aug_func == 'dsa':
-            self.aug_func = DSA_Augmentation(aug_params)
+            self.aug_func = DSA(aug_params)
         elif data_aug_func == 'zca':
-            self.aug_func = ZCA_Whitening_Augmentation(aug_params)
+            self.aug_func = ZCAWhitening(aug_params)
         elif data_aug_func == 'mixup':
-            self.aug_func = Mixup_Augmentation(aug_params)
+            self.aug_func = Mixup(aug_params)
         elif data_aug_func == 'cutmix':
-            self.aug_func = Cutmix_Augmentation(aug_params)
+            self.aug_func = Cutmix(aug_params)
         else:
             self.aug_func = None
 

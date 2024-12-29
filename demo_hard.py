@@ -1,7 +1,9 @@
 import os
 import torch
+import warnings
 from dd_ranking.metrics import HardLabelEvaluator
 from dd_ranking.config import Config
+warnings.filterwarnings("ignore")
 
 
 """ Use config file to specify the arguments (Recommended) """

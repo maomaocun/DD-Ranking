@@ -3,9 +3,9 @@ import numpy as np
 import kornia
 
 
-class CutmixAugmentation:
+class Cutmix:
     def __init__(self, params: dict):
-        self.cutmix_p = params["cutmix_p"]
+        self.beta = params["beta"]
 
     def rand_bbox(self, size, lam):
         W = size[2]
@@ -27,7 +27,7 @@ class CutmixAugmentation:
 
     def cutmix(self, images):
         rand_index = torch.randperm(images.size()[0]).to(images.device)
-        lam = np.random.beta(self.cutmix_p, self.cutmix_p)
+        lam = np.random.beta(self.beta, self.beta)
         bbx1, bby1, bbx2, bby2 = self.rand_bbox(images.size(), lam)
 
         images[:, :, bbx1:bbx2, bby1:bby2] = images[rand_index, :, bbx1:bbx2, bby1:bby2]

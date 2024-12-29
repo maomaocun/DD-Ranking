@@ -5,7 +5,7 @@ packages = find_packages()
 setup(
     name='dd_ranking',  # Package name
     version='0.1.0',  # Version number
-    description='DD-Ranking: A unified benchmark for dataset distillation method evaluation',
+    description='DD-Ranking: Rethinking the Evaluation of Dataset Distillation',
     long_description=open('README.md').read(),  # Use your README as the long description
     long_description_content_type='text/markdown',
     author='DD-Ranking Team',
@@ -22,7 +22,6 @@ setup(
     install_requires=[
         'torch',
         'numpy',
-        'optuna',
         'torchvision',
         'tqdm',
         'scipy',

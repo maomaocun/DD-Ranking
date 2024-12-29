@@ -13,14 +13,14 @@ from dd_ranking.utils import build_model, get_pretrained_model_path
 from dd_ranking.utils import TensorDataset, get_random_images, get_dataset, save_results
 from dd_ranking.utils import set_seed, train_one_epoch, validate, get_optimizer, get_lr_scheduler
 from dd_ranking.loss import SoftCrossEntropyLoss, KLDivergenceLoss
-from dd_ranking.aug import DSAugmentation, MixupAugmentation, CutmixAugmentation, ZCAWhiteningAugmentation
+from dd_ranking.aug import DSA, Mixup, Cutmix, ZCAWhitening
 from dd_ranking.config import Config
 
 
 class SoftLabelEvaluator:
 
     def __init__(self, config: Config=None, dataset: str='CIFAR10', real_data_path: str='./dataset/', ipc: int=10, model_name: str='ConvNet-3', 
-                 soft_label_criterion: str='kl', data_aug_func: str='cutmix', aug_params: dict={'cutmix_p': 1.0}, soft_label_mode: str='S',
+                 soft_label_criterion: str='kl', data_aug_func: str='cutmix', aug_params: dict={'beta': 1.0}, soft_label_mode: str='S',
                  optimizer: str='sgd', lr_scheduler: str='step', temperature: float=1.0, weight_decay: float=0.0005, 
                  momentum: float=0.9, num_eval: int=5, im_size: tuple=(32, 32), num_epochs: int=300, use_zca: bool=False,
                  real_batch_size: int=256, syn_batch_size: int=256, default_lr: float=0.01, save_path: str=None, 
@@ -92,11 +92,11 @@ class SoftLabelEvaluator:
         self.device = device
 
         if data_aug_func == 'dsa':
-            self.aug_func = DSA_Augmentation(aug_params)
+            self.aug_func = DSA(aug_params)
         elif data_aug_func == 'mixup':
-            self.aug_func = Mixup_Augmentation(aug_params)
+            self.aug_func = Mixup(aug_params)
         elif data_aug_func == 'cutmix':
-            self.aug_func = Cutmix_Augmentation(aug_params)
+            self.aug_func = Cutmix(aug_params)
         else:
             self.aug_func = None
 
@@ -239,7 +239,7 @@ class SoftLabelEvaluator:
         if image_tensor is None:
             soft_label_dataset = datasets.ImageFolder(root=image_path, transform=self.custom_train_trans)
         else:
-            soft_label_dataset = TensorDataset(image_tensor, labels)
+            soft_label_dataset = TensorDataset(image_tensor, labels, transform=self.custom_train_trans)
         train_loader = DataLoader(soft_label_dataset, batch_size=self.syn_batch_size, num_workers=self.num_workers, shuffle=True)
 
         if self.soft_label_criterion == 'sce':

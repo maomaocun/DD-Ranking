@@ -14,7 +14,7 @@ from dd_ranking.utils import build_model, get_pretrained_model_path, get_dataset
 from dd_ranking.utils import set_seed, get_optimizer, get_lr_scheduler
 from dd_ranking.utils import train_one_epoch, validate
 from dd_ranking.loss import SoftCrossEntropyLoss, KLDivergenceLoss
-from dd_ranking.aug import DSAugmentation, MixupAugmentation, CutmixAugmentation, ZCAWhiteningAugmentation
+from dd_ranking.aug import DSA, Mixup, Cutmix, ZCAWhitening
 from dd_ranking.config import Config
 
 
@@ -147,11 +147,11 @@ class GeneralEvaluator:
         if data_aug_func is None:
             self.aug_func = None
         elif data_aug_func == 'dsa':
-            self.aug_func = DSA_Augmentation(aug_params)
+            self.aug_func = DSA(aug_params)
         elif data_aug_func == 'mixup':
-            self.aug_func = Mixup_Augmentation(aug_params)  
+            self.aug_func = Mixup(aug_params)  
         elif data_aug_func == 'cutmix':
-            self.aug_func = Cutmix_Augmentation(aug_params)
+            self.aug_func = Cutmix(aug_params)
         else:
             raise ValueError(f"Invalid data augmentation function: {data_aug_func}")
 

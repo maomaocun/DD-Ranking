@@ -56,8 +56,8 @@ A class for evaluating the performance of a dataset distillation method with har
 - **default_lr**(<span style="color:#FF6B00;">float</span>): Default learning rate for the optimizer, typically used for training on the real dataset.
 - **num_workers**(<span style="color:#FF6B00;">int</span>): Number of workers for data loading.
 - **save_path**(<span style="color:#FF6B00;">Optional[str]</span>): Path to save the results.
-- **custom_train_trans**(<span style="color:#FF6B00;">Optional[Callable]</span>): Custom transformation function when loading synthetic data. Only support torchvision transformations.
-- **custom_val_trans**(<span style="color:#FF6B00;">Optional[Callable]</span>): Custom transformation function when loading test dataset. Only support torchvision transformations.
+- **custom_train_trans**(<span style="color:#FF6B00;">Optional[Callable]</span>): Custom transformation function when loading synthetic data. Only support torchvision transformations. See [torchvision-based transformations](../augmentations/torchvision.md) for more details.
+- **custom_val_trans**(<span style="color:#FF6B00;">Optional[Callable]</span>): Custom transformation function when loading test dataset. Only support torchvision transformations. See [torchvision-based transformations](../augmentations/torchvision.md) for more details.
 - **device**(<span style="color:#FF6B00;">str</span>): Device to use for evaluation, `cuda` or `cpu`.
 
 ### Methods

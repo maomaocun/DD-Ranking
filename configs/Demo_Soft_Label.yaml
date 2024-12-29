@@ -16,14 +16,14 @@ teacher_dir: ./teacher_models
 # syntheticdata augmentation
 data_aug_func: dsa
 aug_params:
-    prob_flip: 0.5
-    ratio_rotate: 15.0
+    flip: 0.5
+    rotate: 15.0
     saturation: 2.0
     brightness: 1.0
     contrast: 0.5
-    ratio_scale: 1.2
-    ratio_crop_pad: 0.125
-    ratio_cutout: 0.5
+    scale: 1.2
+    crop: 0.125
+    cutout: 0.5
 use_zca: true
 custom_train_trans: null
 

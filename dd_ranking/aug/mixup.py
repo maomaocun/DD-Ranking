@@ -3,13 +3,13 @@ import numpy as np
 import kornia
 
 
-class MixupAugmentation:
+class Mixup:
     def __init__(self, params: dict):
-        self.mixup_p = params["mixup_p"]
+        self.lambda_ = params["lambda"]
 
     def mixup(self, images):
         rand_index = torch.randperm(images.size()[0]).to(images.device)
-        lam = np.random.beta(self.mixup_p, self.mixup_p)
+        lam = np.random.beta(self.lambda_, self.lambda_)
 
         mixed_images = lam * images + (1 - lam) * images[rand_index]
         return mixed_images

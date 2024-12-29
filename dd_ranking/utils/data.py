@@ -34,16 +34,14 @@ config = Config()
 
 
 class TensorDataset(torch.utils.data.Dataset):
-    def __init__(self, images: Tensor, labels: Tensor, transform: transforms.Compose=None):
+    
+    def __init__(self, images: Tensor, labels: Tensor):
         self.images = images
         self.labels = labels
-        self.transform = transform
 
     def __getitem__(self, index: int):
         image = self.images[index]
         label = self.labels[index]
-        if self.transform:
-            image = self.transform(image)
         return image, label
     
     def __len__(self):
