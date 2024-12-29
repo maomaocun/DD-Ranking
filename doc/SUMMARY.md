@@ -23,3 +23,8 @@
     - [MLP](models/mlp.md)
 
 - [Datasets](datasets/overview.md)
+
+- [Augmentations](augmentations/overview.md)
+    - [DSA](augmentations/dsa.md)
+    - [CutMix](augmentations/cutmix.md)
+    - [Mixup](augmentations/mixup.md)
