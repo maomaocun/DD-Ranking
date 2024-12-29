@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>AlexNet - DD-Ranking API Documentation</title>
+        <title>DSA - DD-Ranking API Documentation</title>
 
 
         <!-- Custom HTML head -->
@@ -154,32 +154,47 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h2 id="alexnet"><a class="header" href="#alexnet">AlexNet</a></h2>
-<p>Our <a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/networks.py">implementation</a> of ConvNet is based on <a href="https://github.com/VICO-UoE/DatasetCondensation">DC</a>.</p>
-<p>We provide the following interface to initialize a AlexNet model:</p>
+                        <h2 id="differentiable-siamese-augmentation-dsa"><a class="header" href="#differentiable-siamese-augmentation-dsa">Differentiable Siamese Augmentation (DSA)</a></h2>
+<p>DSA is one of differentiable data augmentations, first used in the dataset distillation task by <a href="https://github.com/VICO-UoE/DatasetCondensation">DSA</a>.
+Our implementation of DSA is adopted from <a href="https://github.com/VICO-UoE/DatasetCondensation">DSA</a>. It supports the following differentiable augmentations:</p>
+<ul>
+<li>Random Flip</li>
+<li>Random Rotation</li>
+<li>Random Saturation</li>
+<li>Random Brightness</li>
+<li>Random Contrast</li>
+<li>Random Scale</li>
+<li>Random Crop</li>
+<li>Random Cutout</li>
+</ul>
 <div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; border-top:3px solid #FF0000; font-family:monospace; font-size:14px;">
-<p>dd_ranking.utils.get_alexnet(model_name: str, im_size: tuple, channel: int, num_classes: int, pretrained: bool, model_path: str)
-<a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/model.py"><strong>[SOURCE]</strong></a></p>
+<p><span style="color:#FF6B00;">CLASS</span>
+dd_ranking.aug.DSA(params: dict, seed: int, aug_mode: str)
+<a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/aug/dsa.py"><strong>[SOURCE]</strong></a></p>
 </div>
 <h3 id="parameters"><a class="header" href="#parameters">Parameters</a></h3>
 <ul>
-<li><strong>model_name</strong>(<span style="color:#FF6B00;">str</span>): Name of the model. Please navigate to <a href="models/overview.html">models</a> for the model naming convention in DD-Ranking.</li>
-<li><strong>im_size</strong>(<span style="color:#FF6B00;">tuple</span>): Image size.</li>
-<li><strong>channel</strong>(<span style="color:#FF6B00;">int</span>): Number of channels of the input image.</li>
-<li><strong>num_classes</strong>(<span style="color:#FF6B00;">int</span>): Number of classes.</li>
-<li><strong>pretrained</strong>(<span style="color:#FF6B00;">bool</span>): Whether to load pretrained weights.</li>
-<li><strong>model_path</strong>(<span style="color:#FF6B00;">str</span>): Path to the pretrained model weights.</li>
+<li><strong>params</strong>(<span style="color:#FF6B00;">dict</span>): Parameters for the DSA augmentations. We require the parameters to be in the format of <code>{'param_name': param_value}</code>. For example, <code>{'flip': 0.5, 'rotate': 15.0, 'scale': 1.2, 'crop': 0.125, 'cutout': 0.5, 'brightness': 1.0, 'contrast': 0.5, 'saturation': 2.0}</code>.</li>
+<li><strong>seed</strong>(<span style="color:#FF6B00;">int</span>): Random seed. Default is <code>-1</code>.</li>
+<li><strong>aug_mode</strong>(<span style="color:#FF6B00;">str</span>): <code>S</code> for randomly selecting one augmentation for each batch. <code>M</code> for applying all augmentations for each batch.</li>
 </ul>
+<h3 id="example"><a class="header" href="#example">Example</a></h3>
+<pre><code class="language-python"># When intializing an evaluator with DSA augmentation, and DSA object will be constructed.
+&gt;&gt;&gt; self.aug_func = DSA(params={'flip': 0.5, 'rotate': 15.0, 'scale': 1.2, 'crop': 0.125, 'cutout': 0.5, 'brightness': 1.0, 'contrast': 0.5, 'saturation': 2.0}, seed=-1, aug_mode='S')
+
+# During training, the DSA object will be used to augment the data.
+&gt;&gt;&gt; images = aug_func(images)
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../models/convnet.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../augmentations/overview.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../models/resnet.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../augmentations/cutmix.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -189,11 +204,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../models/convnet.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../augmentations/overview.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../models/resnet.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../augmentations/cutmix.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

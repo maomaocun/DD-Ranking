@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Models - DD-Ranking Benchmark</title>
+        <title>Models - DD-Ranking API Documentation</title>
 
 
         <!-- Custom HTML head -->
@@ -122,7 +122,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title">DD-Ranking Benchmark</h1>
+                    <h1 class="menu-title">DD-Ranking API Documentation</h1>
 
                     <div class="right-buttons">
                         <a href="../print.html" title="Print this book" aria-label="Print this book">
@@ -170,6 +170,16 @@
 <li><code>model name - model depth - norm type</code></li>
 </ul>
 <p>Model name and depth are required. When norm type is not specified, we use default normalization for the model. For example, <code>ResNet-18-BN</code> means ResNet18 with batch normalization. <code>ConvNet-4</code> means ConvNet with depth 4 and default instance normalization.</p>
+<h2 id="pretrained-model-weights"><a class="header" href="#pretrained-model-weights">Pretrained Model Weights</a></h2>
+<p>For users' convenience, we provide pretrained model weights on CIFAR10, CIFAR100, and TinyImageNet for the following models:</p>
+<ul>
+<li>ConvNet-3 (CIFAR10, CIFAR100)</li>
+<li>ConvNet-3-BN (CIFAR10, CIFAR100)</li>
+<li>ConvNet-4 (TinyImageNet)</li>
+<li>ConvNet-4-BN (TinyImageNet)</li>
+<li>ResNet-18-BN (CIFAR10, CIFAR100, TinyImageNet)</li>
+</ul>
+<p>Users can download the weights from the following links: <a href="https://drive.google.com/drive/folders/19OnR85PRs3TZk8xS8XNr9hiokfsML4m2?usp=sharing">Pretrained Model Weights</a>.</p>
 
                     </main>
 

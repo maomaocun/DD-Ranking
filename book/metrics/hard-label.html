@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Hard Label - DD-Ranking Benchmark</title>
+        <title>Hard Label - DD-Ranking API Documentation</title>
 
 
         <!-- Custom HTML head -->
@@ -122,7 +122,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title">DD-Ranking Benchmark</h1>
+                    <h1 class="menu-title">DD-Ranking API Documentation</h1>
 
                     <div class="right-buttons">
                         <a href="../print.html" title="Print this book" aria-label="Print this book">
@@ -154,10 +154,10 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h2 id="hard-label-evaluator"><a class="header" href="#hard-label-evaluator">Hard Label Evaluator</a></h2>
+                        <h2 id="hardlabelevaluator"><a class="header" href="#hardlabelevaluator">HardLabelEvaluator</a></h2>
 <div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; border-top:3px solid #FF0000; font-family:monospace; font-size:14px;">
 <p><span style="color:#FF6B00;">CLASS</span>
-dd_ranking.metrics.Hard_Label_Evaluator(config=None,
+dd_ranking.metrics.HardLabelEvaluator(config=None,
 dataset: str = 'CIFAR10',
 real_data_path: str = './dataset/',
 ipc: int = 10,
@@ -208,8 +208,8 @@ device: str = "cuda"
 <li><strong>default_lr</strong>(<span style="color:#FF6B00;">float</span>): Default learning rate for the optimizer, typically used for training on the real dataset.</li>
 <li><strong>num_workers</strong>(<span style="color:#FF6B00;">int</span>): Number of workers for data loading.</li>
 <li><strong>save_path</strong>(<span style="color:#FF6B00;">Optional[str]</span>): Path to save the results.</li>
-<li><strong>custom_train_trans</strong>(<span style="color:#FF6B00;">Optional[Callable]</span>): Custom transformation function when loading synthetic data. Only support torchvision transformations.</li>
-<li><strong>custom_val_trans</strong>(<span style="color:#FF6B00;">Optional[Callable]</span>): Custom transformation function when loading test dataset. Only support torchvision transformations.</li>
+<li><strong>custom_train_trans</strong>(<span style="color:#FF6B00;">Optional[Callable]</span>): Custom transformation function when loading synthetic data. Only support torchvision transformations. See <a href="../augmentations/torchvision.html">torchvision-based transformations</a> for more details.</li>
+<li><strong>custom_val_trans</strong>(<span style="color:#FF6B00;">Optional[Callable]</span>): Custom transformation function when loading test dataset. Only support torchvision transformations. See <a href="../augmentations/torchvision.html">torchvision-based transformations</a> for more details.</li>
 <li><strong>device</strong>(<span style="color:#FF6B00;">str</span>): Device to use for evaluation, <code>cuda</code> or <code>cpu</code>.</li>
 </ul>
 <h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
@@ -244,7 +244,7 @@ device: str = "cuda"
 <p><strong>Examples:</strong></p>
 <p>with config file:</p>
 <pre><code class="language-python">&gt;&gt;&gt; config = Config('/path/to/config.yaml')
-&gt;&gt;&gt; evaluator = Hard_Label_Evaluator(config=config)
+&gt;&gt;&gt; evaluator = HardLabelEvaluator(config=config)
 # load the image and hard labels
 &gt;&gt;&gt; image_tensor, hard_labels = ...
 # compute the metrics
@@ -253,7 +253,7 @@ device: str = "cuda"
 &gt;&gt;&gt; evaluator.compute_metrics(image_path='path/to/image.png', hard_labels=hard_labels)
 </code></pre>
 <p>with keyword arguments:</p>
-<pre><code class="language-python">&gt;&gt;&gt; evaluator = Hard_Label_Evaluator(
+<pre><code class="language-python">&gt;&gt;&gt; evaluator = HardLabelEvaluator(
 ...     dataset='CIFAR10',
 ...     model_name='ConvNet-3',
 ...     data_aug_func='dsa',

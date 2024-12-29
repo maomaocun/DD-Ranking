@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>General - DD-Ranking Benchmark</title>
+        <title>General - DD-Ranking API Documentation</title>
 
 
         <!-- Custom HTML head -->
@@ -122,7 +122,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title">DD-Ranking Benchmark</h1>
+                    <h1 class="menu-title">DD-Ranking API Documentation</h1>
 
                     <div class="right-buttons">
                         <a href="../print.html" title="Print this book" aria-label="Print this book">
@@ -154,10 +154,10 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h2 id="general-evaluator"><a class="header" href="#general-evaluator">General Evaluator</a></h2>
+                        <h2 id="generalevaluator"><a class="header" href="#generalevaluator">GeneralEvaluator</a></h2>
 <div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; border-top:3px solid #FF0000; font-family:monospace; font-size:14px;">
 <p><span style="color:#FF6B00;">CLASS</span>
-dd_ranking.metrics.General_Evaluator(config: Optional[Config] = None,
+dd_ranking.metrics.GeneralEvaluator(config: Optional[Config] = None,
 dataset: str = 'CIFAR10',
 real_data_path: str = './dataset/',
 ipc: int = 10,
@@ -215,7 +215,7 @@ This method computes the test accuracy of the surrogate model on the synthetic d
 <h3 id="examples"><a class="header" href="#examples">Examples</a></h3>
 <p>with config file:</p>
 <pre><code class="language-python">&gt;&gt;&gt; config = Config('/path/to/config.yaml')
-&gt;&gt;&gt; evaluator = General_Evaluator(config=config)
+&gt;&gt;&gt; evaluator = GeneralEvaluator(config=config)
 # load image and labels
 &gt;&gt;&gt; image_tensor, labels = ... 
 # compute metrics
@@ -224,7 +224,7 @@ This method computes the test accuracy of the surrogate model on the synthetic d
 &gt;&gt;&gt; evaluator.compute_metrics(image_path='path/to/image.jpg', labels=labels) 
 </code></pre>
 <p>with keyword arguments:</p>
-<pre><code class="language-python">&gt;&gt;&gt; evaluator = General_Evaluator(
+<pre><code class="language-python">&gt;&gt;&gt; evaluator = GeneralEvaluator(
 ...     dataset='CIFAR10',
 ...     model_name='ConvNet-3',
 ...     soft_label_mode='S',

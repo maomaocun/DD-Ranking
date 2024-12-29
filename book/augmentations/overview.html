@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>AlexNet - DD-Ranking API Documentation</title>
+        <title>Augmentations - DD-Ranking API Documentation</title>
 
 
         <!-- Custom HTML head -->
@@ -154,32 +154,44 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h2 id="alexnet"><a class="header" href="#alexnet">AlexNet</a></h2>
-<p>Our <a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/networks.py">implementation</a> of ConvNet is based on <a href="https://github.com/VICO-UoE/DatasetCondensation">DC</a>.</p>
-<p>We provide the following interface to initialize a AlexNet model:</p>
-<div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; border-top:3px solid #FF0000; font-family:monospace; font-size:14px;">
-<p>dd_ranking.utils.get_alexnet(model_name: str, im_size: tuple, channel: int, num_classes: int, pretrained: bool, model_path: str)
-<a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/model.py"><strong>[SOURCE]</strong></a></p>
-</div>
-<h3 id="parameters"><a class="header" href="#parameters">Parameters</a></h3>
+                        <h1 id="augmentations"><a class="header" href="#augmentations">Augmentations</a></h1>
+<p>DD-Ranking supports commonly used data augmentations in existing methods. A list of augmentations is provided below:</p>
 <ul>
-<li><strong>model_name</strong>(<span style="color:#FF6B00;">str</span>): Name of the model. Please navigate to <a href="models/overview.html">models</a> for the model naming convention in DD-Ranking.</li>
-<li><strong>im_size</strong>(<span style="color:#FF6B00;">tuple</span>): Image size.</li>
-<li><strong>channel</strong>(<span style="color:#FF6B00;">int</span>): Number of channels of the input image.</li>
-<li><strong>num_classes</strong>(<span style="color:#FF6B00;">int</span>): Number of classes.</li>
-<li><strong>pretrained</strong>(<span style="color:#FF6B00;">bool</span>): Whether to load pretrained weights.</li>
-<li><strong>model_path</strong>(<span style="color:#FF6B00;">str</span>): Path to the pretrained model weights.</li>
+<li><a href="https://pytorch.org/vision/stable/transforms.html">Torchvision transforms</a></li>
+<li><a href="datm.html">DSA</a></li>
+<li><a href="mixup.html">Mixup</a></li>
+<li><a href="cutmix.html">Cutmix</a></li>
 </ul>
+<p>In DD-Ranking, data augmentations are specified when initializing an evaluator.
+The following arguments are related to data augmentations:</p>
+<ul>
+<li><strong>data_aug_func</strong>(<span style="color:#FF6B00;">str</span>): The name of the data augmentation function used during training. Currently, we support <code>dsa</code>, <code>mixup</code>, <code>cutmix</code>.</li>
+<li><strong>aug_params</strong>(<span style="color:#FF6B00;">dict</span>): The parameters for the data augmentation function.</li>
+<li><strong>custom_train_trans</strong>(<span style="color:#FF6B00;">torchvision.transforms.Compose</span>): The custom train transform used to load the synthetic data when it's in '.jpg' or '.png' format.</li>
+<li><strong>custom_val_trans</strong>(<span style="color:#FF6B00;">torchvision.transforms.Compose</span>): The custom val transform used to load the test dataset.</li>
+<li><strong>use_zca</strong>(<span style="color:#FF6B00;">bool</span>): Whether to use ZCA whitening for the data augmentation. This is only applicable to methods that use ZCA whitening during distillation.</li>
+</ul>
+<pre><code class="language-python"># When initializing an evaluator, the data augmentation function is specified.
+&gt;&gt;&gt; evaluator = SoftLabelEvaluator(
+    ...
+    data_aug_func=..., # Specify the data augmentation function
+    aug_params=..., # Specify the parameters for the data augmentation function
+    custom_train_trans=..., # Specify the custom train transform
+    custom_val_trans=..., # Specify the custom val transform
+    use_zca=..., # Specify whether to use ZCA whitening
+    ...
+)
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../models/convnet.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../datasets/overview.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../models/resnet.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../augmentations/dsa.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -189,11 +201,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../models/convnet.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../datasets/overview.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../models/resnet.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../augmentations/dsa.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
