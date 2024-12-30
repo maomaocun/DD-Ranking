@@ -671,228 +671,6 @@ This method computes the test accuracy of the surrogate model on the synthetic d
 # alternatively, provide image path
 &gt;&gt;&gt; evaluator.compute_metrics(image_path='path/to/image.jpg', labels=labels) 
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="models"><a class="header" href="#models">Models</a></h1>
-<p>DD-Ranking provides a set of commonly used model architectures in existing dataset distillation methods. Users can flexibly use these models for main evaluation or cross-architecture evaluation. We will keep updating this section with more models.</p>
-<ul>
-<li><a href="models/convnet.html">ConvNet</a></li>
-<li><a href="models/resnet.html">ResNet</a></li>
-<li><a href="models/vgg.html">VGG</a></li>
-<li><a href="models/lenet.html">LeNet</a></li>
-<li><a href="models/alexnet.html">AlexNet</a></li>
-<li><a href="models/mlp.html">MLP</a></li>
-</ul>
-<h2 id="naming-convention"><a class="header" href="#naming-convention">Naming Convention</a></h2>
-<p>We use the following naming convention for models in DD-Ranking:</p>
-<ul>
-<li><code>model name - model depth - norm type</code></li>
-</ul>
-<p>Model name and depth are required. When norm type is not specified, we use default normalization for the model. For example, <code>ResNet-18-BN</code> means ResNet18 with batch normalization. <code>ConvNet-4</code> means ConvNet with depth 4 and default instance normalization.</p>
-<h2 id="pretrained-model-weights"><a class="header" href="#pretrained-model-weights">Pretrained Model Weights</a></h2>
-<p>For users' convenience, we provide pretrained model weights on CIFAR10, CIFAR100, and TinyImageNet for the following models:</p>
-<ul>
-<li>ConvNet-3 (CIFAR10, CIFAR100)</li>
-<li>ConvNet-3-BN (CIFAR10, CIFAR100)</li>
-<li>ConvNet-4 (TinyImageNet)</li>
-<li>ConvNet-4-BN (TinyImageNet)</li>
-<li>ResNet-18-BN (CIFAR10, CIFAR100, TinyImageNet)</li>
-</ul>
-<p>Users can download the weights from the following links: <a href="https://drive.google.com/drive/folders/19OnR85PRs3TZk8xS8XNr9hiokfsML4m2?usp=sharing">Pretrained Model Weights</a>.</p>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="convnet"><a class="header" href="#convnet">ConvNet</a></h2>
-<p>Our <a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/networks.py">implementation</a> of ConvNet is based on <a href="https://github.com/VICO-UoE/DatasetCondensation">DC</a>.</p>
-<p>By default, we use width 128, average pooling, and ReLU activation. We provide the following interface to initialize a ConvNet model:</p>
-<div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; border-top:3px solid #FF0000; font-family:monospace; font-size:14px;">
-<p>dd_ranking.utils.get_convnet(model_name: str,
-im_size: tuple, channel: int, num_classes: int, net_depth: int, net_norm: str, pretrained: bool, model_path: str)
-<a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/model.py"><strong>[SOURCE]</strong></a></p>
-</div>
-<h3 id="parameters-6"><a class="header" href="#parameters-6">Parameters</a></h3>
-<ul>
-<li><strong>model_name</strong>(<span style="color:#FF6B00;">str</span>): Name of the model. Please navigate to <a href="models/models/overview.html">models</a> for the model naming convention in DD-Ranking.</li>
-<li><strong>im_size</strong>(<span style="color:#FF6B00;">tuple</span>): Image size.</li>
-<li><strong>channel</strong>(<span style="color:#FF6B00;">int</span>): Number of channels of the input image.</li>
-<li><strong>num_classes</strong>(<span style="color:#FF6B00;">int</span>): Number of classes.</li>
-<li><strong>net_depth</strong>(<span style="color:#FF6B00;">int</span>): Depth of the network.</li>
-<li><strong>net_norm</strong>(<span style="color:#FF6B00;">str</span>): Normalization method. In ConvNet, we support <code>instance</code>, <code>batch</code>, and <code>group</code> normalization.</li>
-<li><strong>pretrained</strong>(<span style="color:#FF6B00;">bool</span>): Whether to load pretrained weights.</li>
-<li><strong>model_path</strong>(<span style="color:#FF6B00;">str</span>): Path to the pretrained model weights.</li>
-</ul>
-<p>To load a ConvNet model with different width or activation function or pooling method, you can use the following interface:</p>
-<div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; border-top:3px solid #FF0000; font-family:monospace; font-size:14px;">
-<p>dd_ranking.utils.networks.ConvNet(channel, num_classes, net_width, net_depth, net_act, net_norm, net_pooling, im_size)
-<a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/networks.py"><strong>[SOURCE]</strong></a></p>
-</div>
-<h3 id="parameters-7"><a class="header" href="#parameters-7">Parameters</a></h3>
-<p>We only list the parameters that are not present in <code>get_convnet</code>.</p>
-<ul>
-<li><strong>net_width</strong>(<span style="color:#FF6B00;">int</span>): Width of the network.</li>
-<li><strong>net_act</strong>(<span style="color:#FF6B00;">str</span>): Activation function. We support <code>relu</code>, <code>leakyrelu</code>, and <code>sigmoid</code>.</li>
-<li><strong>net_pooling</strong>(<span style="color:#FF6B00;">str</span>): Pooling method. We support <code>avgpooling</code>, <code>maxpooling</code>, and <code>none</code>.</li>
-</ul>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="alexnet"><a class="header" href="#alexnet">AlexNet</a></h2>
-<p>Our <a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/networks.py">implementation</a> of ConvNet is based on <a href="https://github.com/VICO-UoE/DatasetCondensation">DC</a>.</p>
-<p>We provide the following interface to initialize a AlexNet model:</p>
-<div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; border-top:3px solid #FF0000; font-family:monospace; font-size:14px;">
-<p>dd_ranking.utils.get_alexnet(model_name: str, im_size: tuple, channel: int, num_classes: int, pretrained: bool, model_path: str)
-<a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/model.py"><strong>[SOURCE]</strong></a></p>
-</div>
-<h3 id="parameters-8"><a class="header" href="#parameters-8">Parameters</a></h3>
-<ul>
-<li><strong>model_name</strong>(<span style="color:#FF6B00;">str</span>): Name of the model. Please navigate to <a href="models/models/overview.html">models</a> for the model naming convention in DD-Ranking.</li>
-<li><strong>im_size</strong>(<span style="color:#FF6B00;">tuple</span>): Image size.</li>
-<li><strong>channel</strong>(<span style="color:#FF6B00;">int</span>): Number of channels of the input image.</li>
-<li><strong>num_classes</strong>(<span style="color:#FF6B00;">int</span>): Number of classes.</li>
-<li><strong>pretrained</strong>(<span style="color:#FF6B00;">bool</span>): Whether to load pretrained weights.</li>
-<li><strong>model_path</strong>(<span style="color:#FF6B00;">str</span>): Path to the pretrained model weights.</li>
-</ul>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="resnet"><a class="header" href="#resnet">ResNet</a></h2>
-<p>DD-Ranking supports implementation of ResNet in both <a href="https://github.com/VICO-UoE/DatasetCondensation">DC</a> and <a href="https://pytorch.org/vision/main/models/resnet.html">torchvision</a>.</p>
-<p>We provide the following interface to initialize a ConvNet model:</p>
-<div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; border-top:3px solid #FF0000; font-family:monospace; font-size:14px;">
-<p>dd_ranking.utils.get_resnet(model_name: str,
-im_size: tuple, channel: int, num_classes: int, depth: int, batchnorm: bool, use_torchvision: bool, pretrained: bool, model_path: str)
-<a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/model.py"><strong>[SOURCE]</strong></a></p>
-</div>
-<h3 id="parameters-9"><a class="header" href="#parameters-9">Parameters</a></h3>
-<ul>
-<li><strong>model_name</strong>(<span style="color:#FF6B00;">str</span>): Name of the model. Please navigate to <a href="models/models/overview.html">models</a> for the model naming convention in DD-Ranking.</li>
-<li><strong>im_size</strong>(<span style="color:#FF6B00;">tuple</span>): Image size.</li>
-<li><strong>channel</strong>(<span style="color:#FF6B00;">int</span>): Number of channels of the input image.</li>
-<li><strong>num_classes</strong>(<span style="color:#FF6B00;">int</span>): Number of classes.</li>
-<li><strong>depth</strong>(<span style="color:#FF6B00;">int</span>): Depth of the network.</li>
-<li><strong>batchnorm</strong>(<span style="color:#FF6B00;">bool</span>): Whether to use batch normalization.</li>
-<li><strong>use_torchvision</strong>(<span style="color:#FF6B00;">bool</span>): Whether to use torchvision to initialize the model. When using torchvision, the ResNet model uses batch normalization by default.</li>
-<li><strong>pretrained</strong>(<span style="color:#FF6B00;">bool</span>): Whether to load pretrained weights.</li>
-<li><strong>model_path</strong>(<span style="color:#FF6B00;">str</span>): Path to the pretrained model weights.</li>
-</ul>
-<div style="background-color:#40C4FF;color: #FFFFFF; padding: 5px; font-weight:bold; font-size:14px;">NOTE</div>
-<div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; font-family:monospace; font-size:14px;">
-When using torchvision ResNet on image size smaller than 224 x 224, we make the following modifications:
-<pre><code class="language-python">model.conv1 = torch.nn.Conv2d(3, 64, kernel_size=(3,3), stride=(1,1), padding=(1,1), bias=False)
-model.maxpool = torch.nn.Identity()
-</code></pre>
-</div>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="lenet"><a class="header" href="#lenet">LeNet</a></h2>
-<p>Our <a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/networks.py">implementation</a> of LeNet is based on <a href="https://github.com/VICO-UoE/DatasetCondensation">DC</a>.</p>
-<p>We provide the following interface to initialize a LeNet model:</p>
-<div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; border-top:3px solid #FF0000; font-family:monospace; font-size:14px;">
-<p>dd_ranking.utils.get_lenet(model_name: str, im_size: tuple, channel: int, num_classes: int, pretrained: bool, model_path: str)
-<a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/model.py"><strong>[SOURCE]</strong></a></p>
-</div>
-<h3 id="parameters-10"><a class="header" href="#parameters-10">Parameters</a></h3>
-<ul>
-<li><strong>model_name</strong>(<span style="color:#FF6B00;">str</span>): Name of the model. Please navigate to <a href="models/models/overview.html">models</a> for the model naming convention in DD-Ranking.</li>
-<li><strong>im_size</strong>(<span style="color:#FF6B00;">tuple</span>): Image size.</li>
-<li><strong>channel</strong>(<span style="color:#FF6B00;">int</span>): Number of channels of the input image.</li>
-<li><strong>num_classes</strong>(<span style="color:#FF6B00;">int</span>): Number of classes.</li>
-<li><strong>pretrained</strong>(<span style="color:#FF6B00;">bool</span>): Whether to load pretrained weights.</li>
-<li><strong>model_path</strong>(<span style="color:#FF6B00;">str</span>): Path to the pretrained model weights.</li>
-</ul>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="vgg"><a class="header" href="#vgg">VGG</a></h2>
-<p>DD-Ranking supports implementation of VGG in both <a href="https://github.com/VICO-UoE/DatasetCondensation">DC</a> and <a href="https://pytorch.org/vision/main/models/vgg.html">torchvision</a>.</p>
-<p>We provide the following interface to initialize a ConvNet model:</p>
-<div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; border-top:3px solid #FF0000; font-family:monospace; font-size:14px;">
-<p>dd_ranking.utils.get_vgg(model_name: str,
-im_size: tuple, channel: int, num_classes: int, depth: int, batchnorm: bool, use_torchvision: bool, pretrained: bool, model_path: str)
-<a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/model.py"><strong>[SOURCE]</strong></a></p>
-</div>
-<h3 id="parameters-11"><a class="header" href="#parameters-11">Parameters</a></h3>
-<ul>
-<li><strong>model_name</strong>(<span style="color:#FF6B00;">str</span>): Name of the model. Please navigate to <a href="models/models/overview.html">models</a> for the model naming convention in DD-Ranking.</li>
-<li><strong>im_size</strong>(<span style="color:#FF6B00;">tuple</span>): Image size.</li>
-<li><strong>channel</strong>(<span style="color:#FF6B00;">int</span>): Number of channels of the input image.</li>
-<li><strong>num_classes</strong>(<span style="color:#FF6B00;">int</span>): Number of classes.</li>
-<li><strong>depth</strong>(<span style="color:#FF6B00;">int</span>): Depth of the network.</li>
-<li><strong>batchnorm</strong>(<span style="color:#FF6B00;">bool</span>): Whether to use batch normalization.</li>
-<li><strong>use_torchvision</strong>(<span style="color:#FF6B00;">bool</span>): Whether to use torchvision to initialize the model.</li>
-<li><strong>pretrained</strong>(<span style="color:#FF6B00;">bool</span>): Whether to load pretrained weights.</li>
-<li><strong>model_path</strong>(<span style="color:#FF6B00;">str</span>): Path to the pretrained model weights.</li>
-</ul>
-<div style="background-color:#40C4FF;color: #FFFFFF; padding: 5px; font-weight:bold; font-size:14px;">NOTE</div>
-<div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; font-family:monospace; font-size:14px;">
-When using torchvision VGG on image size smaller than 224 x 224, we make the following modifications:
-<p>For 32x32 image size:</p>
-<pre><code class="language-python">model.classifier = nn.Sequential(OrderedDict([
-    ('fc1', nn.Linear(512 * 1 * 1, 4096)),
-    ('relu1', nn.ReLU(True)),
-    ('drop1', nn.Dropout()),
-    ('fc2', nn.Linear(4096, 4096)),
-    ('relu2', nn.ReLU(True)),
-    ('drop2', nn.Dropout()),
-    ('fc3', nn.Linear(4096, num_classes)),
-]))
-</code></pre>
-<p>For 64x64 image size:</p>
-<pre><code class="language-python">model.classifier = nn.Sequential(OrderedDict([
-    ('fc1', nn.Linear(512 * 2 * 2, 4096)),
-    ('relu1', nn.ReLU(True)),
-    ('drop1', nn.Dropout()),
-    ('fc2', nn.Linear(4096, 4096)),
-    ('relu2', nn.ReLU(True)),
-    ('drop2', nn.Dropout()),
-    ('fc3', nn.Linear(4096, num_classes)),
-]))
-</code></pre>
-</div><div style="break-before: page; page-break-before: always;"></div><h2 id="mlp"><a class="header" href="#mlp">MLP</a></h2>
-<p>Our <a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/networks.py">implementation</a> of MLP is based on <a href="https://github.com/VICO-UoE/DatasetCondensation">DC</a>.</p>
-<p>We provide the following interface to initialize a MLP model:</p>
-<div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; border-top:3px solid #FF0000; font-family:monospace; font-size:14px;">
-<p>dd_ranking.utils.get_mlp(model_name: str, im_size: tuple, channel: int, num_classes: int, pretrained: bool, model_path: str)
-<a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/model.py"><strong>[SOURCE]</strong></a></p>
-</div>
-<h3 id="parameters-12"><a class="header" href="#parameters-12">Parameters</a></h3>
-<ul>
-<li><strong>model_name</strong>(<span style="color:#FF6B00;">str</span>): Name of the model. Please navigate to <a href="models/models/overview.html">models</a> for the model naming convention in DD-Ranking.</li>
-<li><strong>im_size</strong>(<span style="color:#FF6B00;">tuple</span>): Image size.</li>
-<li><strong>channel</strong>(<span style="color:#FF6B00;">int</span>): Number of channels of the input image.</li>
-<li><strong>num_classes</strong>(<span style="color:#FF6B00;">int</span>): Number of classes.</li>
-<li><strong>pretrained</strong>(<span style="color:#FF6B00;">bool</span>): Whether to load pretrained weights.</li>
-<li><strong>model_path</strong>(<span style="color:#FF6B00;">str</span>): Path to the pretrained model weights.</li>
-</ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="datasets"><a class="header" href="#datasets">Datasets</a></h1>
-<p>DD-Ranking provides a set of commonly used datasets in existing dataset distillation methods. Users can flexibly use these datasets for evaluation. The interface to load datasets is as follows:</p>
-<div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; border-top:3px solid #FF0000; font-family:monospace; font-size:14px;">
-<p>dd_ranking.utils.get_dataset(dataset: str, data_path: str, im_size: tuple, use_zca: bool, custom_val_trans: Optional[Callable], device: str)
-<a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/data.py"><strong>[SOURCE]</strong></a></p>
-</div>
-<h3 id="parameters-13"><a class="header" href="#parameters-13">Parameters</a></h3>
-<ul>
-<li><strong>dataset</strong>(<span style="color:#FF6B00;">str</span>): Name of the dataset.</li>
-<li><strong>data_path</strong>(<span style="color:#FF6B00;">str</span>): Path to the dataset.</li>
-<li><strong>im_size</strong>(<span style="color:#FF6B00;">tuple</span>): Image size.</li>
-<li><strong>use_zca</strong>(<span style="color:#FF6B00;">bool</span>): Whether to use ZCA whitening. When set to True, the dataset will <strong>not be</strong> normalized using the mean and standard deviation of the training set.</li>
-<li><strong>custom_val_trans</strong>(<span style="color:#FF6B00;">Optional[Callable]</span>): Custom transformation on the validation set.</li>
-<li><strong>device</strong>(<span style="color:#FF6B00;">str</span>): Device for performing ZCA whitening.</li>
-</ul>
-<p>Currently, we support the following datasets with default settings. We will keep updating this section with more datasets.</p>
-<ul>
-<li><strong>CIFAR10</strong>
-<ul>
-<li><strong>channels</strong>: <code>3</code></li>
-<li><strong>im_size</strong>: <code>(32, 32)</code></li>
-<li><strong>num_classes</strong>: <code>10</code></li>
-<li><strong>mean</strong>: <code>[0.4914, 0.4822, 0.4465]</code></li>
-<li><strong>std</strong>: <code>[0.2023, 0.1994, 0.2010]</code></li>
-</ul>
-</li>
-<li><strong>CIFAR100</strong>
-<ul>
-<li><strong>channels</strong>: <code>3</code></li>
-<li><strong>im_size</strong>: <code>(32, 32)</code></li>
-<li><strong>num_classes</strong>: <code>100</code></li>
-<li><strong>mean</strong>: <code>[0.4914, 0.4822, 0.4465]</code></li>
-<li><strong>std</strong>: <code>[0.2023, 0.1994, 0.2010]</code></li>
-</ul>
-</li>
-<li><strong>TinyImageNet</strong>
-<ul>
-<li><strong>channels</strong>: <code>3</code></li>
-<li><strong>im_size</strong>: <code>(64, 64)</code></li>
-<li><strong>num_classes</strong>: <code>200</code></li>
-<li><strong>mean</strong>: <code>[0.485, 0.456, 0.406]</code></li>
-<li><strong>std</strong>: <code>[0.229, 0.224, 0.225]</code></li>
-</ul>
-</li>
-</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="augmentations"><a class="header" href="#augmentations">Augmentations</a></h1>
 <p>DD-Ranking supports commonly used data augmentations in existing methods. A list of augmentations is provided below:</p>
 <ul>
@@ -939,7 +717,7 @@ Our implementation of DSA is adopted from <a href="https://github.com/VICO-UoE/D
 dd_ranking.aug.DSA(params: dict, seed: int, aug_mode: str)
 <a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/aug/dsa.py"><strong>[SOURCE]</strong></a></p>
 </div>
-<h3 id="parameters-14"><a class="header" href="#parameters-14">Parameters</a></h3>
+<h3 id="parameters-6"><a class="header" href="#parameters-6">Parameters</a></h3>
 <ul>
 <li><strong>params</strong>(<span style="color:#FF6B00;">dict</span>): Parameters for the DSA augmentations. We require the parameters to be in the format of <code>{'param_name': param_value}</code>. For example, <code>{'flip': 0.5, 'rotate': 15.0, 'scale': 1.2, 'crop': 0.125, 'cutout': 0.5, 'brightness': 1.0, 'contrast': 0.5, 'saturation': 2.0}</code>.</li>
 <li><strong>seed</strong>(<span style="color:#FF6B00;">int</span>): Random seed. Default is <code>-1</code>.</li>
@@ -959,7 +737,7 @@ dd_ranking.aug.DSA(params: dict, seed: int, aug_mode: str)
 dd_ranking.aug.Cutmix(params: dict)
 <a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/aug/cutmix.py"><strong>[SOURCE]</strong></a></p>
 </div>
-<h3 id="parameters-15"><a class="header" href="#parameters-15">Parameters</a></h3>
+<h3 id="parameters-7"><a class="header" href="#parameters-7">Parameters</a></h3>
 <ul>
 <li><strong>params</strong>(<span style="color:#FF6B00;">dict</span>): Parameters for the cutmix augmentation. We require the parameters to be in the format of <code>{'param_name': param_value}</code>. For cutmix, only <code>beta</code> (beta distribution parameter) needs to be specified, e.g. <code>{'beta': 1.0}</code>.</li>
 </ul>
@@ -977,7 +755,7 @@ dd_ranking.aug.Cutmix(params: dict)
 dd_ranking.aug.Mixup(params: dict)
 <a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/aug/mixup.py"><strong>[SOURCE]</strong></a></p>
 </div>
-<h3 id="parameters-16"><a class="header" href="#parameters-16">Parameters</a></h3>
+<h3 id="parameters-8"><a class="header" href="#parameters-8">Parameters</a></h3>
 <ul>
 <li><strong>params</strong>(<span style="color:#FF6B00;">dict</span>): Parameters for the mixup augmentation. We require the parameters to be in the format of <code>{'param_name': param_value}</code>. For mixup, only <code>lambda</code> (mixup strength) needs to be specified, e.g. <code>{'lambda': 0.8}</code>.</li>
 </ul>
@@ -987,6 +765,286 @@ dd_ranking.aug.Mixup(params: dict)
 
 # During training, the mixup object will be used to augment the data.
 &gt;&gt;&gt; images = aug_func(images)
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="models"><a class="header" href="#models">Models</a></h1>
+<p>DD-Ranking provides a set of commonly used model architectures in existing dataset distillation methods. Users can flexibly use these models for main evaluation or cross-architecture evaluation. We will keep updating this section with more models.</p>
+<ul>
+<li><a href="models/convnet.html">ConvNet</a></li>
+<li><a href="models/resnet.html">ResNet</a></li>
+<li><a href="models/vgg.html">VGG</a></li>
+<li><a href="models/lenet.html">LeNet</a></li>
+<li><a href="models/alexnet.html">AlexNet</a></li>
+<li><a href="models/mlp.html">MLP</a></li>
+</ul>
+<h2 id="naming-convention"><a class="header" href="#naming-convention">Naming Convention</a></h2>
+<p>We use the following naming convention for models in DD-Ranking:</p>
+<ul>
+<li><code>model name - model depth - norm type</code></li>
+</ul>
+<p>Model name and depth are required. When norm type is not specified, we use default normalization for the model. For example, <code>ResNet-18-BN</code> means ResNet18 with batch normalization. <code>ConvNet-4</code> means ConvNet with depth 4 and default instance normalization.</p>
+<h2 id="pretrained-model-weights"><a class="header" href="#pretrained-model-weights">Pretrained Model Weights</a></h2>
+<p>For users' convenience, we provide pretrained model weights on CIFAR10, CIFAR100, and TinyImageNet for the following models:</p>
+<ul>
+<li>ConvNet-3 (CIFAR10, CIFAR100)</li>
+<li>ConvNet-3-BN (CIFAR10, CIFAR100)</li>
+<li>ConvNet-4 (TinyImageNet)</li>
+<li>ConvNet-4-BN (TinyImageNet)</li>
+<li>ResNet-18-BN (CIFAR10, CIFAR100, TinyImageNet)</li>
+</ul>
+<p>Users can download the weights from the following links: <a href="https://drive.google.com/drive/folders/19OnR85PRs3TZk8xS8XNr9hiokfsML4m2?usp=sharing">Pretrained Model Weights</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="convnet"><a class="header" href="#convnet">ConvNet</a></h2>
+<p>Our <a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/networks.py">implementation</a> of ConvNet is based on <a href="https://github.com/VICO-UoE/DatasetCondensation">DC</a>.</p>
+<p>By default, we use width 128, average pooling, and ReLU activation. We provide the following interface to initialize a ConvNet model:</p>
+<div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; border-top:3px solid #FF0000; font-family:monospace; font-size:14px;">
+<p>dd_ranking.utils.get_convnet(model_name: str,
+im_size: tuple, channel: int, num_classes: int, net_depth: int, net_norm: str, pretrained: bool, model_path: str)
+<a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/model.py"><strong>[SOURCE]</strong></a></p>
+</div>
+<h3 id="parameters-9"><a class="header" href="#parameters-9">Parameters</a></h3>
+<ul>
+<li><strong>model_name</strong>(<span style="color:#FF6B00;">str</span>): Name of the model. Please navigate to <a href="models/models/overview.html">models</a> for the model naming convention in DD-Ranking.</li>
+<li><strong>im_size</strong>(<span style="color:#FF6B00;">tuple</span>): Image size.</li>
+<li><strong>channel</strong>(<span style="color:#FF6B00;">int</span>): Number of channels of the input image.</li>
+<li><strong>num_classes</strong>(<span style="color:#FF6B00;">int</span>): Number of classes.</li>
+<li><strong>net_depth</strong>(<span style="color:#FF6B00;">int</span>): Depth of the network.</li>
+<li><strong>net_norm</strong>(<span style="color:#FF6B00;">str</span>): Normalization method. In ConvNet, we support <code>instance</code>, <code>batch</code>, and <code>group</code> normalization.</li>
+<li><strong>pretrained</strong>(<span style="color:#FF6B00;">bool</span>): Whether to load pretrained weights.</li>
+<li><strong>model_path</strong>(<span style="color:#FF6B00;">str</span>): Path to the pretrained model weights.</li>
+</ul>
+<p>To load a ConvNet model with different width or activation function or pooling method, you can use the following interface:</p>
+<div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; border-top:3px solid #FF0000; font-family:monospace; font-size:14px;">
+<p>dd_ranking.utils.networks.ConvNet(channel, num_classes, net_width, net_depth, net_act, net_norm, net_pooling, im_size)
+<a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/networks.py"><strong>[SOURCE]</strong></a></p>
+</div>
+<h3 id="parameters-10"><a class="header" href="#parameters-10">Parameters</a></h3>
+<p>We only list the parameters that are not present in <code>get_convnet</code>.</p>
+<ul>
+<li><strong>net_width</strong>(<span style="color:#FF6B00;">int</span>): Width of the network.</li>
+<li><strong>net_act</strong>(<span style="color:#FF6B00;">str</span>): Activation function. We support <code>relu</code>, <code>leakyrelu</code>, and <code>sigmoid</code>.</li>
+<li><strong>net_pooling</strong>(<span style="color:#FF6B00;">str</span>): Pooling method. We support <code>avgpooling</code>, <code>maxpooling</code>, and <code>none</code>.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="alexnet"><a class="header" href="#alexnet">AlexNet</a></h2>
+<p>Our <a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/networks.py">implementation</a> of ConvNet is based on <a href="https://github.com/VICO-UoE/DatasetCondensation">DC</a>.</p>
+<p>We provide the following interface to initialize a AlexNet model:</p>
+<div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; border-top:3px solid #FF0000; font-family:monospace; font-size:14px;">
+<p>dd_ranking.utils.get_alexnet(model_name: str, im_size: tuple, channel: int, num_classes: int, pretrained: bool, model_path: str)
+<a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/model.py"><strong>[SOURCE]</strong></a></p>
+</div>
+<h3 id="parameters-11"><a class="header" href="#parameters-11">Parameters</a></h3>
+<ul>
+<li><strong>model_name</strong>(<span style="color:#FF6B00;">str</span>): Name of the model. Please navigate to <a href="models/models/overview.html">models</a> for the model naming convention in DD-Ranking.</li>
+<li><strong>im_size</strong>(<span style="color:#FF6B00;">tuple</span>): Image size.</li>
+<li><strong>channel</strong>(<span style="color:#FF6B00;">int</span>): Number of channels of the input image.</li>
+<li><strong>num_classes</strong>(<span style="color:#FF6B00;">int</span>): Number of classes.</li>
+<li><strong>pretrained</strong>(<span style="color:#FF6B00;">bool</span>): Whether to load pretrained weights.</li>
+<li><strong>model_path</strong>(<span style="color:#FF6B00;">str</span>): Path to the pretrained model weights.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="resnet"><a class="header" href="#resnet">ResNet</a></h2>
+<p>DD-Ranking supports implementation of ResNet in both <a href="https://github.com/VICO-UoE/DatasetCondensation">DC</a> and <a href="https://pytorch.org/vision/main/models/resnet.html">torchvision</a>.</p>
+<p>We provide the following interface to initialize a ConvNet model:</p>
+<div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; border-top:3px solid #FF0000; font-family:monospace; font-size:14px;">
+<p>dd_ranking.utils.get_resnet(model_name: str,
+im_size: tuple, channel: int, num_classes: int, depth: int, batchnorm: bool, use_torchvision: bool, pretrained: bool, model_path: str)
+<a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/model.py"><strong>[SOURCE]</strong></a></p>
+</div>
+<h3 id="parameters-12"><a class="header" href="#parameters-12">Parameters</a></h3>
+<ul>
+<li><strong>model_name</strong>(<span style="color:#FF6B00;">str</span>): Name of the model. Please navigate to <a href="models/models/overview.html">models</a> for the model naming convention in DD-Ranking.</li>
+<li><strong>im_size</strong>(<span style="color:#FF6B00;">tuple</span>): Image size.</li>
+<li><strong>channel</strong>(<span style="color:#FF6B00;">int</span>): Number of channels of the input image.</li>
+<li><strong>num_classes</strong>(<span style="color:#FF6B00;">int</span>): Number of classes.</li>
+<li><strong>depth</strong>(<span style="color:#FF6B00;">int</span>): Depth of the network.</li>
+<li><strong>batchnorm</strong>(<span style="color:#FF6B00;">bool</span>): Whether to use batch normalization.</li>
+<li><strong>use_torchvision</strong>(<span style="color:#FF6B00;">bool</span>): Whether to use torchvision to initialize the model. When using torchvision, the ResNet model uses batch normalization by default.</li>
+<li><strong>pretrained</strong>(<span style="color:#FF6B00;">bool</span>): Whether to load pretrained weights.</li>
+<li><strong>model_path</strong>(<span style="color:#FF6B00;">str</span>): Path to the pretrained model weights.</li>
+</ul>
+<div style="background-color:#40C4FF;color: #FFFFFF; padding: 5px; font-weight:bold; font-size:14px;">NOTE</div>
+<div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; font-family:monospace; font-size:14px;">
+When using torchvision ResNet on image size smaller than 224 x 224, we make the following modifications:
+<pre><code class="language-python">model.conv1 = torch.nn.Conv2d(3, 64, kernel_size=(3,3), stride=(1,1), padding=(1,1), bias=False)
+model.maxpool = torch.nn.Identity()
+</code></pre>
+</div>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="lenet"><a class="header" href="#lenet">LeNet</a></h2>
+<p>Our <a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/networks.py">implementation</a> of LeNet is based on <a href="https://github.com/VICO-UoE/DatasetCondensation">DC</a>.</p>
+<p>We provide the following interface to initialize a LeNet model:</p>
+<div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; border-top:3px solid #FF0000; font-family:monospace; font-size:14px;">
+<p>dd_ranking.utils.get_lenet(model_name: str, im_size: tuple, channel: int, num_classes: int, pretrained: bool, model_path: str)
+<a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/model.py"><strong>[SOURCE]</strong></a></p>
+</div>
+<h3 id="parameters-13"><a class="header" href="#parameters-13">Parameters</a></h3>
+<ul>
+<li><strong>model_name</strong>(<span style="color:#FF6B00;">str</span>): Name of the model. Please navigate to <a href="models/models/overview.html">models</a> for the model naming convention in DD-Ranking.</li>
+<li><strong>im_size</strong>(<span style="color:#FF6B00;">tuple</span>): Image size.</li>
+<li><strong>channel</strong>(<span style="color:#FF6B00;">int</span>): Number of channels of the input image.</li>
+<li><strong>num_classes</strong>(<span style="color:#FF6B00;">int</span>): Number of classes.</li>
+<li><strong>pretrained</strong>(<span style="color:#FF6B00;">bool</span>): Whether to load pretrained weights.</li>
+<li><strong>model_path</strong>(<span style="color:#FF6B00;">str</span>): Path to the pretrained model weights.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="vgg"><a class="header" href="#vgg">VGG</a></h2>
+<p>DD-Ranking supports implementation of VGG in both <a href="https://github.com/VICO-UoE/DatasetCondensation">DC</a> and <a href="https://pytorch.org/vision/main/models/vgg.html">torchvision</a>.</p>
+<p>We provide the following interface to initialize a ConvNet model:</p>
+<div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; border-top:3px solid #FF0000; font-family:monospace; font-size:14px;">
+<p>dd_ranking.utils.get_vgg(model_name: str,
+im_size: tuple, channel: int, num_classes: int, depth: int, batchnorm: bool, use_torchvision: bool, pretrained: bool, model_path: str)
+<a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/model.py"><strong>[SOURCE]</strong></a></p>
+</div>
+<h3 id="parameters-14"><a class="header" href="#parameters-14">Parameters</a></h3>
+<ul>
+<li><strong>model_name</strong>(<span style="color:#FF6B00;">str</span>): Name of the model. Please navigate to <a href="models/models/overview.html">models</a> for the model naming convention in DD-Ranking.</li>
+<li><strong>im_size</strong>(<span style="color:#FF6B00;">tuple</span>): Image size.</li>
+<li><strong>channel</strong>(<span style="color:#FF6B00;">int</span>): Number of channels of the input image.</li>
+<li><strong>num_classes</strong>(<span style="color:#FF6B00;">int</span>): Number of classes.</li>
+<li><strong>depth</strong>(<span style="color:#FF6B00;">int</span>): Depth of the network.</li>
+<li><strong>batchnorm</strong>(<span style="color:#FF6B00;">bool</span>): Whether to use batch normalization.</li>
+<li><strong>use_torchvision</strong>(<span style="color:#FF6B00;">bool</span>): Whether to use torchvision to initialize the model.</li>
+<li><strong>pretrained</strong>(<span style="color:#FF6B00;">bool</span>): Whether to load pretrained weights.</li>
+<li><strong>model_path</strong>(<span style="color:#FF6B00;">str</span>): Path to the pretrained model weights.</li>
+</ul>
+<div style="background-color:#40C4FF;color: #FFFFFF; padding: 5px; font-weight:bold; font-size:14px;">NOTE</div>
+<div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; font-family:monospace; font-size:14px;">
+When using torchvision VGG on image size smaller than 224 x 224, we make the following modifications:
+<p>For 32x32 image size:</p>
+<pre><code class="language-python">model.classifier = nn.Sequential(OrderedDict([
+    ('fc1', nn.Linear(512 * 1 * 1, 4096)),
+    ('relu1', nn.ReLU(True)),
+    ('drop1', nn.Dropout()),
+    ('fc2', nn.Linear(4096, 4096)),
+    ('relu2', nn.ReLU(True)),
+    ('drop2', nn.Dropout()),
+    ('fc3', nn.Linear(4096, num_classes)),
+]))
+</code></pre>
+<p>For 64x64 image size:</p>
+<pre><code class="language-python">model.classifier = nn.Sequential(OrderedDict([
+    ('fc1', nn.Linear(512 * 2 * 2, 4096)),
+    ('relu1', nn.ReLU(True)),
+    ('drop1', nn.Dropout()),
+    ('fc2', nn.Linear(4096, 4096)),
+    ('relu2', nn.ReLU(True)),
+    ('drop2', nn.Dropout()),
+    ('fc3', nn.Linear(4096, num_classes)),
+]))
+</code></pre>
+</div><div style="break-before: page; page-break-before: always;"></div><h2 id="mlp"><a class="header" href="#mlp">MLP</a></h2>
+<p>Our <a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/networks.py">implementation</a> of MLP is based on <a href="https://github.com/VICO-UoE/DatasetCondensation">DC</a>.</p>
+<p>We provide the following interface to initialize a MLP model:</p>
+<div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; border-top:3px solid #FF0000; font-family:monospace; font-size:14px;">
+<p>dd_ranking.utils.get_mlp(model_name: str, im_size: tuple, channel: int, num_classes: int, pretrained: bool, model_path: str)
+<a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/model.py"><strong>[SOURCE]</strong></a></p>
+</div>
+<h3 id="parameters-15"><a class="header" href="#parameters-15">Parameters</a></h3>
+<ul>
+<li><strong>model_name</strong>(<span style="color:#FF6B00;">str</span>): Name of the model. Please navigate to <a href="models/models/overview.html">models</a> for the model naming convention in DD-Ranking.</li>
+<li><strong>im_size</strong>(<span style="color:#FF6B00;">tuple</span>): Image size.</li>
+<li><strong>channel</strong>(<span style="color:#FF6B00;">int</span>): Number of channels of the input image.</li>
+<li><strong>num_classes</strong>(<span style="color:#FF6B00;">int</span>): Number of classes.</li>
+<li><strong>pretrained</strong>(<span style="color:#FF6B00;">bool</span>): Whether to load pretrained weights.</li>
+<li><strong>model_path</strong>(<span style="color:#FF6B00;">str</span>): Path to the pretrained model weights.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="datasets"><a class="header" href="#datasets">Datasets</a></h1>
+<p>DD-Ranking provides a set of commonly used datasets in existing dataset distillation methods. Users can flexibly use these datasets for evaluation. The interface to load datasets is as follows:</p>
+<div style="background-color:#F7F7F7; padding:15px; border:1px solid #E0E0E0; border-top:3px solid #FF0000; font-family:monospace; font-size:14px;">
+<p>dd_ranking.utils.get_dataset(dataset: str, data_path: str, im_size: tuple, use_zca: bool, custom_val_trans: Optional[Callable], device: str)
+<a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/blob/main/dd_ranking/utils/data.py"><strong>[SOURCE]</strong></a></p>
+</div>
+<h3 id="parameters-16"><a class="header" href="#parameters-16">Parameters</a></h3>
+<ul>
+<li><strong>dataset</strong>(<span style="color:#FF6B00;">str</span>): Name of the dataset.</li>
+<li><strong>data_path</strong>(<span style="color:#FF6B00;">str</span>): Path to the dataset.</li>
+<li><strong>im_size</strong>(<span style="color:#FF6B00;">tuple</span>): Image size.</li>
+<li><strong>use_zca</strong>(<span style="color:#FF6B00;">bool</span>): Whether to use ZCA whitening. When set to True, the dataset will <strong>not be</strong> normalized using the mean and standard deviation of the training set.</li>
+<li><strong>custom_val_trans</strong>(<span style="color:#FF6B00;">Optional[Callable]</span>): Custom transformation on the validation set.</li>
+<li><strong>device</strong>(<span style="color:#FF6B00;">str</span>): Device for performing ZCA whitening.</li>
+</ul>
+<p>Currently, we support the following datasets with default settings. We will keep updating this section with more datasets.</p>
+<ul>
+<li><strong>CIFAR10</strong>
+<ul>
+<li><strong>channels</strong>: <code>3</code></li>
+<li><strong>im_size</strong>: <code>(32, 32)</code></li>
+<li><strong>num_classes</strong>: <code>10</code></li>
+<li><strong>mean</strong>: <code>[0.4914, 0.4822, 0.4465]</code></li>
+<li><strong>std</strong>: <code>[0.2023, 0.1994, 0.2010]</code></li>
+</ul>
+</li>
+<li><strong>CIFAR100</strong>
+<ul>
+<li><strong>channels</strong>: <code>3</code></li>
+<li><strong>im_size</strong>: <code>(32, 32)</code></li>
+<li><strong>num_classes</strong>: <code>100</code></li>
+<li><strong>mean</strong>: <code>[0.4914, 0.4822, 0.4465]</code></li>
+<li><strong>std</strong>: <code>[0.2023, 0.1994, 0.2010]</code></li>
+</ul>
+</li>
+<li><strong>TinyImageNet</strong>
+<ul>
+<li><strong>channels</strong>: <code>3</code></li>
+<li><strong>im_size</strong>: <code>(64, 64)</code></li>
+<li><strong>num_classes</strong>: <code>200</code></li>
+<li><strong>mean</strong>: <code>[0.485, 0.456, 0.406]</code></li>
+<li><strong>std</strong>: <code>[0.229, 0.224, 0.225]</code></li>
+</ul>
+</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="config"><a class="header" href="#config">Config</a></h1>
+<p>To ease the usage of DD-Ranking, we allow users to specify the parameters of the evaluator in a config file. The config file is a YAML file that contains the parameters of the evaluator. We illustrate the config file with the following example.</p>
+<pre><code class="language-yaml">dataset: CIFAR100                 # dataset name
+real_data_path: ./dataset/        # path to the real dataset
+ipc: 10                           # image per class
+im_size: [32, 32]                 # image size
+model_name: ResNet-18-BN          # model name
+stu_use_torchvision: true         # whether to use torchvision to load student model
+
+tea_use_torchvision: true         # whether to use torchvision to load teacher model
+
+teacher_dir: ./teacher_models     # path to the pretrained teacher model
+
+data_aug_func: mixup              # data augmentation function
+aug_params:
+    lambda: 0.8                   # data augmentation parameter; please follow this format for other parameters
+
+use_zca: false                    # whether to use ZCA whitening
+
+custom_train_trans:               # custom torchvision-based transformations to process training data; please follow this format for your own transformations
+  - name: RandomCrop
+    args:
+      size: 32
+      padding: 4
+  - name: RandomHorizontalFlip
+    args:
+      p: 0.5
+  - name: ToTensor
+  - name: Normalize
+    args:
+      mean: [0.4914, 0.4822, 0.4465]
+      std: [0.2023, 0.1994, 0.2010]
+
+custom_val_trans: null              # custom torchvision-based transformations to process validation data; please follow the format above for your own transformations
+
+use_aug_for_hard: false             # whether to use data augmentation for hard label evaluation
+
+soft_label_mode: M                  # soft label mode
+soft_label_criterion: kl            # soft label criterion
+temperature: 30.0                   # temperature for soft label
+optimizer: adamw                    # optimizer
+lr_scheduler: cosine                # learning rate scheduler
+weight_decay: 0.01                  # weight decay
+num_eval: 5                         # number of evaluations
+num_epochs: 400                     # number of training epochs
+default_lr: 0.001                   # default learning rate
+num_workers: 4                      # number of workers
+device: cuda                        # device
+syn_batch_size: 256                 # batch size for synthetic data
+real_batch_size: 256                # batch size for real data
+save_path: ./results.csv            # path to save the results
+</code></pre>
+<p>To use config file, you can follow the example below.</p>
+<pre><code class="language-python">from dd_ranking.metrics import SoftLabelEvaluator
+
+config = Config(config_path='./config.yaml')
+evaluator = SoftLabelEvaluator(config)
 </code></pre>
 
                     </main>
