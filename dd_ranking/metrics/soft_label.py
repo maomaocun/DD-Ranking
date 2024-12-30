@@ -23,7 +23,7 @@ class SoftLabelEvaluator:
                  soft_label_criterion: str='kl', data_aug_func: str='cutmix', aug_params: dict={'beta': 1.0}, soft_label_mode: str='S',
                  optimizer: str='sgd', lr_scheduler: str='step', temperature: float=1.0, weight_decay: float=0.0005, 
                  momentum: float=0.9, num_eval: int=5, im_size: tuple=(32, 32), num_epochs: int=300, use_zca: bool=False,
-                 real_batch_size: int=256, syn_batch_size: int=256, default_lr: float=0.01, save_path: str=None, 
+                 real_batch_size: int=256, syn_batch_size: int=256, default_lr: float=0.01, save_path: str=None, use_aug_for_hard: bool=False,
                  stu_use_torchvision: bool=False, tea_use_torchvision: bool=False, num_workers: int=4, teacher_dir: str='./teacher_models', 
                  custom_train_trans: transforms.Compose=None, custom_val_trans: transforms.Compose=None, device: str="cuda"):
 
@@ -60,6 +60,7 @@ class SoftLabelEvaluator:
                                                                                                    real_data_path, 
                                                                                                    im_size, 
                                                                                                    use_zca,
+                                                                                                   custom_train_trans,
                                                                                                    custom_val_trans,
                                                                                                    device)
         self.images_train, self.labels_train, self.class_indices_train = self.load_real_data(dst_train, class_map, num_classes)
@@ -99,6 +100,7 @@ class SoftLabelEvaluator:
             self.aug_func = Cutmix(aug_params)
         else:
             self.aug_func = None
+        self.use_aug_for_hard = use_aug_for_hard
 
         if not save_path:
             save_path = f"./results/{dataset}/{model_name}/ipc{ipc}/obj_scores.csv"
@@ -213,7 +215,7 @@ class SoftLabelEvaluator:
                 loader=train_loader, 
                 loss_fn=loss_fn, 
                 optimizer=optimizer,
-                aug_func=self.aug_func,
+                aug_func=self.aug_func if self.use_aug_for_hard else None,
                 lr_scheduler=lr_scheduler, 
                 tea_model=self.teacher_model, 
                 device=self.device

@@ -48,7 +48,7 @@ class TensorDataset(torch.utils.data.Dataset):
         return len(self.images)
 
 
-def get_dataset(dataset, data_path, im_size, use_zca, custom_val_trans, device):
+def get_dataset(dataset, data_path, im_size, use_zca, custom_train_trans, custom_val_trans, device):
     class_map_inv = None
 
     if dataset == 'CIFAR10':
@@ -68,7 +68,7 @@ def get_dataset(dataset, data_path, im_size, use_zca, custom_val_trans, device):
                 transforms.ToTensor()
             ])
 
-        dst_train = datasets.CIFAR10(data_path, train=True, download=True, transform=transform)
+        dst_train = datasets.CIFAR10(data_path, train=True, download=True, transform=transform if custom_train_trans is None else custom_train_trans)
         dst_test = datasets.CIFAR10(data_path, train=False, download=True, transform=transform if custom_val_trans is None else custom_val_trans)
         class_map = {x: x for x in range(num_classes)}
 
@@ -89,7 +89,7 @@ def get_dataset(dataset, data_path, im_size, use_zca, custom_val_trans, device):
                 transforms.ToTensor()
             ])
 
-        dst_train = datasets.CIFAR100(data_path, train=True, download=True, transform=transform)
+        dst_train = datasets.CIFAR100(data_path, train=True, download=True, transform=transform if custom_train_trans is None else custom_train_trans)
         dst_test = datasets.CIFAR100(data_path, train=False, download=True, transform=transform if custom_val_trans is None else custom_val_trans)
         class_map = {x: x for x in range(num_classes)}
 
@@ -108,7 +108,7 @@ def get_dataset(dataset, data_path, im_size, use_zca, custom_val_trans, device):
             transform = transforms.Compose([
                 transforms.ToTensor()
             ])
-        dst_train = datasets.ImageFolder(os.path.join(data_path, "train"), transform=transform)
+        dst_train = datasets.ImageFolder(os.path.join(data_path, "train"), transform=transform if custom_train_trans is None else custom_train_trans)
         dst_test = datasets.ImageFolder(os.path.join(data_path, "val"), transform=transform if custom_val_trans is None else custom_val_trans)
         class_map = {x: x for x in range(num_classes)}
 
@@ -129,7 +129,7 @@ def get_dataset(dataset, data_path, im_size, use_zca, custom_val_trans, device):
             transforms.CenterCrop(im_size)
         ])
 
-        dst_train = datasets.ImageFolder(os.path.join(data_path, "train"), transform=transform)
+        dst_train = datasets.ImageFolder(os.path.join(data_path, "train"), transform=transform if custom_train_trans is None else custom_train_trans)
         dst_train = torch.utils.data.Subset(dst_train, np.squeeze(np.argwhere(np.isin(dst_train.targets, config.img_net_classes))))
         dst_test = datasets.ImageFolder(os.path.join(data_path, "val"), transform=transform if custom_val_trans is None else custom_val_trans)
         dst_test = torch.utils.data.Subset(dst_test, np.squeeze(np.argwhere(np.isin(dst_test.targets, config.img_net_classes))))
@@ -153,7 +153,7 @@ def get_dataset(dataset, data_path, im_size, use_zca, custom_val_trans, device):
             transforms.CenterCrop(im_size)
         ])
 
-        dst_train = datasets.ImageFolder(os.path.join(data_path, "train"), transform=transform)
+        dst_train = datasets.ImageFolder(os.path.join(data_path, "train"), transform=transform if custom_train_trans is None else custom_train_trans)
         dst_test = datasets.ImageFolder(os.path.join(data_path, "val"), transform=transform if custom_val_trans is None else custom_val_trans)
 
         class_map = {x: i for i, x in enumerate(range(num_classes))}

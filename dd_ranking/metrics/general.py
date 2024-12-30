@@ -94,6 +94,7 @@ class GeneralEvaluator:
         channel, im_size, num_classes, dst_train, dst_test, class_map, class_map_inv = get_dataset(dataset, 
                                                                                                    real_data_path, 
                                                                                                    im_size,
+                                                                                                   custom_train_trans,
                                                                                                    custom_val_trans,
                                                                                                    use_zca)
         self.num_classes = num_classes

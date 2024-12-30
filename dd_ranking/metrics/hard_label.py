@@ -54,6 +54,7 @@ class HardLabelEvaluator:
                                                                                                    real_data_path, 
                                                                                                    im_size, 
                                                                                                    use_zca,
+                                                                                                   custom_train_trans,
                                                                                                    custom_val_trans,
                                                                                                    device)
         self.images_train, self.labels_train, self.class_indices_train = self.load_real_data(dst_train, class_map, num_classes)
