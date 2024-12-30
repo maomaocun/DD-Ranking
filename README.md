@@ -213,7 +213,7 @@ The following results will be returned to you:
 <!-- - `IOR/HLR mean`: The mean of IOR/HLR over `num_eval` runs.
 - `IOR/HLR std`: The standard deviation of IOR/HLR over `num_eval` runs. -->
 
-Check out our <span style="color: #ff0000;">[TODO]：</span>[documentation](https://nus-hpc-ai-lab.github.io/DD-Ranking/) to learn more.
+Check out our <span style="color: #ff0000;">[documentation](https://nus-hpc-ai-lab.github.io/DD-Ranking/)</span> to learn more.
 
 ## Coming Soon
 - [ ] DD-Ranking scores that decouple the impacts from data augmentation.
