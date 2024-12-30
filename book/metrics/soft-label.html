@@ -203,6 +203,7 @@ device: str="cuda"
 <li><strong>temperature</strong>(<span style="color:#FF6B00;">float</span>): Temperature for knowledge distillation.</li>
 <li><strong>data_aug_func</strong>(<span style="color:#FF6B00;">str</span>): Data augmentation function used during training. Currently supports <code>dsa</code>, <code>cutmix</code>, <code>mixup</code>. See <a href="../augmentations/overview.html">augmentations</a> for more details.</li>
 <li><strong>aug_params</strong>(<span style="color:#FF6B00;">dict</span>): Parameters for the data augmentation function.</li>
+<li><strong>use_aug_for_hard</strong>(<span style="color:#FF6B00;">bool</span>): Whether to use the data augmentation specified in <code>data_aug_func</code> for hard label evaluation.</li>
 <li><strong>optimizer</strong>(<span style="color:#FF6B00;">str</span>): Name of the optimizer. Currently supports torch-based optimizers - <code>sgd</code>, <code>adam</code>, and <code>adamw</code>.</li>
 <li><strong>lr_scheduler</strong>(<span style="color:#FF6B00;">str</span>): Name of the learning rate scheduler. Currently supports torch-based schedulers - <code>step</code>, <code>cosine</code>, <code>lambda_step</code>, and <code>lambda_cos</code>.</li>
 <li><strong>weight_decay</strong>(<span style="color:#FF6B00;">float</span>): Weight decay for the optimizer.</li>
@@ -234,7 +235,7 @@ This method computes the HLR, IOR, and DD-Ranking scores for the given image and
 <li>Compute the test accuracy of the surrogate model on the real dataset under the same setting as step 1.</li>
 <li>Compute the test accuracy of the surrogate model on the synthetic dataset under soft labels.</li>
 <li>Compute the test accuracy of the surrogate model on the randomly selected dataset under the same setting as step 3.</li>
-<li>Compute the HLR, IOR, and DD-Ranking scores.</li>
+<li>Compute the HLR and IOR scores.</li>
 </ol>
 <p>The final scores are the average of the scores from <code>num_eval</code> rounds.</p>
 <h4 id="parameters-1"><a class="header" href="#parameters-1">Parameters</a></h4>
@@ -251,9 +252,9 @@ This method computes the HLR, IOR, and DD-Ranking scores for the given image and
 <li><strong>hard_label_recovery_std</strong>: Standard deviation of HLR scores from <code>num_eval</code> rounds.</li>
 <li><strong>improvement_over_random_mean</strong>: Mean of improvement over random scores from <code>num_eval</code> rounds.</li>
 <li><strong>improvement_over_random_std</strong>: Standard deviation of improvement over random scores from <code>num_eval</code> rounds.</li>
-<li><strong>dd_ranking_mean</strong>: Mean of DD-Ranking scores from <code>num_eval</code> rounds.</li>
-<li><strong>dd_ranking_std</strong>: Standard deviation of DD-Ranking scores from <code>num_eval</code> rounds.</li>
 </ul>
+<!-- - **dd_ranking_mean**: Mean of DD-Ranking scores from `num_eval` rounds.
+- **dd_ranking_std**: Standard deviation of DD-Ranking scores from `num_eval` rounds. -->
 </div>
 <h3 id="examples"><a class="header" href="#examples">Examples</a></h3>
 <p>with config file:</p>

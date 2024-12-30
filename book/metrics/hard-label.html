@@ -222,7 +222,7 @@ device: str = "cuda"
 <li>Compute the test accuracy of the surrogate model on the synthetic dataset under hard labels. We tune the learning rate for the best performance if <code>syn_lr</code> is not provided.</li>
 <li>Compute the test accuracy of the surrogate model on the real dataset under the same setting as step 1.</li>
 <li>Compute the test accuracy of the surrogate model on the randomly selected dataset under the same setting as step 1.</li>
-<li>Compute the HLR, IOR, and DD-Ranking scores.</li>
+<li>Compute the HLR and IOR scores.</li>
 </ol>
 <p>The final scores are the average of the scores from <code>num_eval</code> rounds.</p>
 <h4 id="parameters-1"><a class="header" href="#parameters-1">Parameters</a></h4>
@@ -239,8 +239,6 @@ device: str = "cuda"
 <li><strong>hard_label_recovery_std</strong>: Standard deviation of HLR scores from <code>num_eval</code> rounds.</li>
 <li><strong>improvement_over_random_mean</strong>: Mean of improvement over random scores from <code>num_eval</code> rounds.</li>
 <li><strong>improvement_over_random_std</strong>: Standard deviation of improvement over random scores from <code>num_eval</code> rounds.</li>
-<li><strong>dd_ranking_mean</strong>: Mean of DD-Ranking scores from <code>num_eval</code> rounds.</li>
-<li><strong>dd_ranking_std</strong>: Standard deviation of DD-Ranking scores from <code>num_eval</code> rounds.</li>
 </ul>
 <p><strong>Examples:</strong></p>
 <p>with config file:</p>

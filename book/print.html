@@ -207,8 +207,9 @@ Recently, Deng et al., pointed out that "a label is worth a thousand images". Th
 <li>\(\text{syn-any}\): Synthetic dataset with personalized evaluation methods (hard or soft labels);</li>
 <li>\(\text{rdm-any}\): Randomly selected dataset (under the same compression ratio) with the same personalized evaluation methods.</li>
 </ul>
-<p>To rank different methods, we combine the above two metrics as DD-Ranking Score:</p>
-<p>\[\text{DD-Ranking Score} = \frac{\text{IOR}}{\text{HLR}} = \frac{(\text{Acc.} \text{syn-any}-\text{Acc.} \text{rdm-any})}{(\text{Acc.} \text{full-hard}-\text{Acc.} \text{syn-hard})}\]</p>
+<!-- To rank different methods, we combine the above two metrics as DD-Ranking Score:
+
+\\[\text{DD-Ranking Score} = \frac{\text{IOR}}{\text{HLR}} = \frac{(\text{Acc.} \text{syn-any}-\text{Acc.} \text{rdm-any})}{(\text{Acc.} \text{full-hard}-\text{Acc.} \text{syn-hard})}\\] -->
 <div style="break-before: page; page-break-before: always;"></div><h1 id="contributing"><a class="header" href="#contributing">Contributing</a></h1>
 <p>Welcome! We are glad that you by willing to contribute to the field of dataset distillation.</p>
 <ul>
@@ -225,53 +226,7 @@ Recently, Deng et al., pointed out that "a label is worth a thousand images". Th
 <p><strong>Appeal</strong>: If you want to appeal for the score of your method, please submit an issue with your code and a detailed readme file of how to reproduce your results. We tried our best to replicate all methods in the leaderboard based on their papers and open-source code. We are sorry if we miss some details and will be grateful if you can help us improve the leaderboard.</p>
 </li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="community"><a class="header" href="#community">Community</a></h1>
-<p>Meet our Data Intelligence Team!</p>
-<h2 id="developing-team"><a class="header" href="#developing-team">Developing Team</a></h2>
-<div class="team-section" id="developing-team">
-    <div class="team-row">
-        <div class="team-member">
-            <a href="https://lizekai-richard.github.io/"><h3 id="zekai-li"><a class="header" href="#zekai-li">Zekai Li</a></h3></a>
-            <p>Project Lead</p>
-        </div>
-        <div class="team-member">
-            <a href="https://ndhg1213.github.io/"><h3 id="xinhao-zhong"><a class="header" href="#xinhao-zhong">Xinhao Zhong</a></h3></a>
-            <p>Baseline Reproducer</p>
-        </div>
-        <div class="team-member">
-            <a href="https://yuhaozhou.github.io/"><h3 id="yuhao-zhou"><a class="header" href="#yuhao-zhou">Yuhao Zhou</a></h3></a>
-            <p>Leaderboard Developer</p>
-        </div>
-    </div>
-    <div class="team-row">
-        <div class="team-member">
-            <a href="https://bdemo.github.io/homepage/"><h3 id="mingjia-shi"><a class="header" href="#mingjia-shi">Mingjia Shi</a></h3></a>
-            <p>Repository Developer</p>
-        </div>
-        <div class="team-member">
-            <a href="https://jerryliang24.github.io/"><h3 id="zhiyuan-liang"><a class="header" href="#zhiyuan-liang">Zhiyuan Liang</a></h3></a>
-            <p>Code Developer</p>
-        </div>
-    </div>
-</div>
-<hr />
-<h2 id="advising-team"><a class="header" href="#advising-team">Advising Team</a></h2>
-<div class="team-section" id="advising-team">
-    <div class="team-row">
-        <div class="team-member">
-            <h3 id="kai-wang"><a class="header" href="#kai-wang">Kai Wang</a></h3>
-            <p>Chief Advisor</p>
-        </div>
-        <div class="team-member">
-            <h3 id="xuanlei-zhao"><a class="header" href="#xuanlei-zhao">Xuanlei Zhao</a></h3>
-            <p>Technical Advisor</p>
-        </div>
-        <div class="team-member">
-            <h3 id="wangbo-zhao"><a class="header" href="#wangbo-zhao">Wangbo Zhao</a></h3>
-            <p>Technical Advisor</p>
-        </div>
-    </div>
-</div><div style="break-before: page; page-break-before: always;"></div><h2 id="installation"><a class="header" href="#installation">Installation</a></h2>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="installation"><a class="header" href="#installation">Installation</a></h2>
 <p>From pip</p>
 <pre><code class="language-bash">pip install dd_ranking
 </code></pre>
@@ -345,9 +300,9 @@ soft_label_metric_calc = SoftLabelEvaluator(
 <li><code>hard_label_recovery std</code>: The standard deviation of hard label recovery scores.</li>
 <li><code>improvement_over_random mean</code>: The mean of improvement over random scores.</li>
 <li><code>improvement_over_random std</code>: The standard deviation of improvement over random scores.</li>
-<li><code>dd_ranking_score mean</code>: The mean of dd ranking scores.</li>
-<li><code>dd_ranking_score std</code>: The standard deviation of dd ranking scores.</li>
 </ul>
+<!-- - `dd_ranking_score mean`: The mean of dd ranking scores.
+- `dd_ranking_score std`: The standard deviation of dd ranking scores. -->
 <div style="break-before: page; page-break-before: always;"></div><h1 id="dd-ranking-metrics"><a class="header" href="#dd-ranking-metrics">DD-Ranking Metrics</a></h1>
 <p>DD-Ranking provides a set of metrics to evaluate the real informativeness of datasets distilled by different methods. We categorize dataset distillation methods by the type of labels they use: hard label and soft label. For each label type, we provide a evaluation class that computes hard label recovery (HLR), improvement over random (IOR), and the DD-Ranking score. Additionally, we provide a general evaluation class, integrating most of exisiting evaluation methods, that computes the traditional test accuracy.</p>
 <ul>
@@ -422,7 +377,7 @@ device: str = "cuda"
 <li>Compute the test accuracy of the surrogate model on the synthetic dataset under hard labels. We tune the learning rate for the best performance if <code>syn_lr</code> is not provided.</li>
 <li>Compute the test accuracy of the surrogate model on the real dataset under the same setting as step 1.</li>
 <li>Compute the test accuracy of the surrogate model on the randomly selected dataset under the same setting as step 1.</li>
-<li>Compute the HLR, IOR, and DD-Ranking scores.</li>
+<li>Compute the HLR and IOR scores.</li>
 </ol>
 <p>The final scores are the average of the scores from <code>num_eval</code> rounds.</p>
 <h4 id="parameters-1"><a class="header" href="#parameters-1">Parameters</a></h4>
@@ -439,8 +394,6 @@ device: str = "cuda"
 <li><strong>hard_label_recovery_std</strong>: Standard deviation of HLR scores from <code>num_eval</code> rounds.</li>
 <li><strong>improvement_over_random_mean</strong>: Mean of improvement over random scores from <code>num_eval</code> rounds.</li>
 <li><strong>improvement_over_random_std</strong>: Standard deviation of improvement over random scores from <code>num_eval</code> rounds.</li>
-<li><strong>dd_ranking_mean</strong>: Mean of DD-Ranking scores from <code>num_eval</code> rounds.</li>
-<li><strong>dd_ranking_std</strong>: Standard deviation of DD-Ranking scores from <code>num_eval</code> rounds.</li>
 </ul>
 <p><strong>Examples:</strong></p>
 <p>with config file:</p>
@@ -531,6 +484,7 @@ device: str="cuda"
 <li><strong>temperature</strong>(<span style="color:#FF6B00;">float</span>): Temperature for knowledge distillation.</li>
 <li><strong>data_aug_func</strong>(<span style="color:#FF6B00;">str</span>): Data augmentation function used during training. Currently supports <code>dsa</code>, <code>cutmix</code>, <code>mixup</code>. See <a href="metrics/../augmentations/overview.html">augmentations</a> for more details.</li>
 <li><strong>aug_params</strong>(<span style="color:#FF6B00;">dict</span>): Parameters for the data augmentation function.</li>
+<li><strong>use_aug_for_hard</strong>(<span style="color:#FF6B00;">bool</span>): Whether to use the data augmentation specified in <code>data_aug_func</code> for hard label evaluation.</li>
 <li><strong>optimizer</strong>(<span style="color:#FF6B00;">str</span>): Name of the optimizer. Currently supports torch-based optimizers - <code>sgd</code>, <code>adam</code>, and <code>adamw</code>.</li>
 <li><strong>lr_scheduler</strong>(<span style="color:#FF6B00;">str</span>): Name of the learning rate scheduler. Currently supports torch-based schedulers - <code>step</code>, <code>cosine</code>, <code>lambda_step</code>, and <code>lambda_cos</code>.</li>
 <li><strong>weight_decay</strong>(<span style="color:#FF6B00;">float</span>): Weight decay for the optimizer.</li>
@@ -562,7 +516,7 @@ This method computes the HLR, IOR, and DD-Ranking scores for the given image and
 <li>Compute the test accuracy of the surrogate model on the real dataset under the same setting as step 1.</li>
 <li>Compute the test accuracy of the surrogate model on the synthetic dataset under soft labels.</li>
 <li>Compute the test accuracy of the surrogate model on the randomly selected dataset under the same setting as step 3.</li>
-<li>Compute the HLR, IOR, and DD-Ranking scores.</li>
+<li>Compute the HLR and IOR scores.</li>
 </ol>
 <p>The final scores are the average of the scores from <code>num_eval</code> rounds.</p>
 <h4 id="parameters-3"><a class="header" href="#parameters-3">Parameters</a></h4>
@@ -579,9 +533,9 @@ This method computes the HLR, IOR, and DD-Ranking scores for the given image and
 <li><strong>hard_label_recovery_std</strong>: Standard deviation of HLR scores from <code>num_eval</code> rounds.</li>
 <li><strong>improvement_over_random_mean</strong>: Mean of improvement over random scores from <code>num_eval</code> rounds.</li>
 <li><strong>improvement_over_random_std</strong>: Standard deviation of improvement over random scores from <code>num_eval</code> rounds.</li>
-<li><strong>dd_ranking_mean</strong>: Mean of DD-Ranking scores from <code>num_eval</code> rounds.</li>
-<li><strong>dd_ranking_std</strong>: Standard deviation of DD-Ranking scores from <code>num_eval</code> rounds.</li>
 </ul>
+<!-- - **dd_ranking_mean**: Mean of DD-Ranking scores from `num_eval` rounds.
+- **dd_ranking_std**: Standard deviation of DD-Ranking scores from `num_eval` rounds. -->
 </div>
 <h3 id="examples"><a class="header" href="#examples">Examples</a></h3>
 <p>with config file:</p>
