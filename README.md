@@ -210,14 +210,10 @@ The following results will be returned to you:
 - `HLR std`: The standard deviation of hard label recovery over `num_eval` runs.
 - `IOR mean`: The mean of improvement over random over `num_eval` runs.
 - `IOR std`: The standard deviation of improvement over random over `num_eval` runs.
-- `IOR/HLR mean`: The mean of IOR/HLR over `num_eval` runs.
-- `IOR/HLR std`: The standard deviation of IOR/HLR over `num_eval` runs.
+<!-- - `IOR/HLR mean`: The mean of IOR/HLR over `num_eval` runs.
+- `IOR/HLR std`: The standard deviation of IOR/HLR over `num_eval` runs. -->
 
-<!-- Our <span style="color: #ff0000;">[TODO]：</span>[documentation]() to learn more.
-
-- [Installation]()
-- [Quickstart]()
-- [Supported Models]() -->
+Check out our <span style="color: #ff0000;">[TODO]：</span>[documentation](https://nus-hpc-ai-lab.github.io/DD-Ranking/) to learn more.
 
 ## Coming Soon
 - [ ] DD-Ranking scores that decouple the impacts from data augmentation.
