@@ -71,7 +71,7 @@ This method computes the HLR, IOR, and DD-Ranking scores for the given image and
 1. Compute the test accuracy of the surrogate model on the synthetic dataset under hard labels. We tune the learning rate for the best performance if `syn_lr` is not provided.
 2. Compute the test accuracy of the surrogate model on the real dataset under the same setting as step 1.
 3. Compute the test accuracy of the surrogate model on the randomly selected dataset under the same setting as step 1.
-4. Compute the HLR, IOR, and DD-Ranking scores.
+4. Compute the HLR and IOR scores.
 
 The final scores are the average of the scores from `num_eval` rounds.
 
@@ -90,8 +90,6 @@ A dictionary with the following keys:
 - **hard_label_recovery_std**: Standard deviation of HLR scores from `num_eval` rounds.
 - **improvement_over_random_mean**: Mean of improvement over random scores from `num_eval` rounds.
 - **improvement_over_random_std**: Standard deviation of improvement over random scores from `num_eval` rounds.
-- **dd_ranking_mean**: Mean of DD-Ranking scores from `num_eval` rounds.
-- **dd_ranking_std**: Standard deviation of DD-Ranking scores from `num_eval` rounds.
 
 **Examples:**
 

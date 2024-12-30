@@ -56,7 +56,7 @@ The evaluation method for DD-Ranking is grounded in the essence of dataset disti
 - \\(\text{syn-any}\\): Synthetic dataset with personalized evaluation methods (hard or soft labels);
 - \\(\text{rdm-any}\\): Randomly selected dataset (under the same compression ratio) with the same personalized evaluation methods.
 
-To rank different methods, we combine the above two metrics as DD-Ranking Score:
+<!-- To rank different methods, we combine the above two metrics as DD-Ranking Score:
 
-\\[\text{DD-Ranking Score} = \frac{\text{IOR}}{\text{HLR}} = \frac{(\text{Acc.} \text{syn-any}-\text{Acc.} \text{rdm-any})}{(\text{Acc.} \text{full-hard}-\text{Acc.} \text{syn-hard})}\\]
+\\[\text{DD-Ranking Score} = \frac{\text{IOR}}{\text{HLR}} = \frac{(\text{Acc.} \text{syn-any}-\text{Acc.} \text{rdm-any})}{(\text{Acc.} \text{full-hard}-\text{Acc.} \text{syn-hard})}\\] -->
 

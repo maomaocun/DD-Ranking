@@ -50,6 +50,7 @@ A class for evaluating the performance of a dataset distillation method with sof
 - **temperature**(<span style="color:#FF6B00;">float</span>): Temperature for knowledge distillation.
 - **data_aug_func**(<span style="color:#FF6B00;">str</span>): Data augmentation function used during training. Currently supports `dsa`, `cutmix`, `mixup`. See [augmentations](../augmentations/overview.md) for more details.
 - **aug_params**(<span style="color:#FF6B00;">dict</span>): Parameters for the data augmentation function.
+- **use_aug_for_hard**(<span style="color:#FF6B00;">bool</span>): Whether to use the data augmentation specified in `data_aug_func` for hard label evaluation.
 - **optimizer**(<span style="color:#FF6B00;">str</span>): Name of the optimizer. Currently supports torch-based optimizers - `sgd`, `adam`, and `adamw`.
 - **lr_scheduler**(<span style="color:#FF6B00;">str</span>): Name of the learning rate scheduler. Currently supports torch-based schedulers - `step`, `cosine`, `lambda_step`, and `lambda_cos`.
 - **weight_decay**(<span style="color:#FF6B00;">float</span>): Weight decay for the optimizer.
@@ -83,7 +84,7 @@ This method computes the HLR, IOR, and DD-Ranking scores for the given image and
 2. Compute the test accuracy of the surrogate model on the real dataset under the same setting as step 1.
 3. Compute the test accuracy of the surrogate model on the synthetic dataset under soft labels.
 4. Compute the test accuracy of the surrogate model on the randomly selected dataset under the same setting as step 3.
-5. Compute the HLR, IOR, and DD-Ranking scores.
+5. Compute the HLR and IOR scores.
 
 The final scores are the average of the scores from `num_eval` rounds.
 
@@ -102,8 +103,8 @@ A dictionary with the following keys:
 - **hard_label_recovery_std**: Standard deviation of HLR scores from `num_eval` rounds.
 - **improvement_over_random_mean**: Mean of improvement over random scores from `num_eval` rounds.
 - **improvement_over_random_std**: Standard deviation of improvement over random scores from `num_eval` rounds.
-- **dd_ranking_mean**: Mean of DD-Ranking scores from `num_eval` rounds.
-- **dd_ranking_std**: Standard deviation of DD-Ranking scores from `num_eval` rounds.
+<!-- - **dd_ranking_mean**: Mean of DD-Ranking scores from `num_eval` rounds.
+- **dd_ranking_std**: Standard deviation of DD-Ranking scores from `num_eval` rounds. -->
 
 </div>
 

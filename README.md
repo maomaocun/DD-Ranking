@@ -65,13 +65,13 @@ DD-Ranking (DD, *i.e.*, Dataset Distillation) is an integrated and easy-to-use b
 
 <!-- Hard label is tested -->
 <!-- Keep the same compression ratio, comparing with random selection -->
-**Performance benchmark**
+### Benchmark
 
 Revisit the original goal of dataset distillation: 
-> The idea is to synthesize a small number of data points that do not need to come from the correct data distribution, but will, when given to the learning algorithm as training data, approximate the model trained on the original data.
+> The idea is to synthesize a small number of data points that do not need to come from the correct data distribution, but will, when given to the learning algorithm as training data, approximate the model trained on the original data. (Wang et al., 2020)
 >
 
-The evaluation method for DD-Ranking is grounded in the essence of dataset distillation, aiming to better reflect the information content of the synthesized data by assessing the following two aspects:  
+The evaluation method for DD-Ranking is grounded in the essence of dataset distillation, aiming to better reflect the informativeness of the synthesized data by assessing the following two aspects:  
 1. The degree to which the original dataset is recovered under hard labels (hard label recovery): $\text{HLR}=\text{Acc.}{\text{full-hard}}-\text{Acc.}{\text{syn-hard}}$.  
 
 2. The improvement over random selection when using personalized evaluation methods (improvement over random): $\text{IOR}=\text{Acc.}{\text{syn-any}}-\text{Acc.}{\text{rdm-any}}$.
@@ -81,9 +81,13 @@ $\text{Acc.}$ is the accuracy of models trained on different samples. Samples' m
 - $\text{syn-any}$: Synthetic dataset with personalized evaluation methods (hard or soft labels);
 - $\text{rdm-any}$: Randomly selected dataset (under the same compression ratio) with the same personalized evaluation methods.
 
-To rank different methods, we combine the above two metrics as follows:
+<!-- To rank different methods, we combine the above two metrics as follows:
 
-$$\text{IOR}/\text{HLR} = \frac{(\text{Acc.}{\text{syn-any}}-\text{Acc.}{\text{rdm-any}})}{(\text{Acc.}{\text{full-hard}}-\text{Acc.}{\text{syn-hard}})}$$
+$$\text{IOR}/\text{HLR} = \frac{(\text{Acc.}{\text{syn-any}}-\text{Acc.}{\text{rdm-any}})}{(\text{Acc.}{\text{full-hard}}-\text{Acc.}{\text{syn-hard}})}$$ -->
+
+</details>
+
+## Overview
 
 DD-Ranking is integrated with:
 <!-- Uniform Fair Labels: loss on soft label -->
@@ -98,10 +102,7 @@ DD-Ranking has the following features:
 - **Extensible**: DD-Ranking supports various datasets and models.
 - **Customizable**: DD-Ranking supports various data augmentations and soft label strategies.
 
-</details>
-
-## Overview
-Included datasets and methods (categorized by hard/soft label).
+DD-Ranking currently includes the following datasets and methods (categorized by hard/soft label). Evaluation results can be found in the [leaderboard](https://huggingface.co/spaces/Soptq/DD-Ranking).
 |Supported Dataset|Evaluated Hard Label Methods|Evaluated Soft Label Methods|
 |:-|:-|:-|
 |CIFAR-10|DC|DATM|
@@ -109,7 +110,7 @@ Included datasets and methods (categorized by hard/soft label).
 |TinyImageNet|DM|RDED|
 ||MTT|D4M|
 
-Evaluation results can be found in the [leaderboard](https://huggingface.co/spaces/Soptq/DD-Ranking).
+
 
 ## Tutorial
 
@@ -221,6 +222,7 @@ The following results will be returned to you:
 ## Coming Soon
 - [ ] DD-Ranking scores that decouple the impacts from data augmentation.
 - [ ] Evaluation results on ImageNet subsets.
+- [ ] More baseline methods.
 
 ## Contributing
 

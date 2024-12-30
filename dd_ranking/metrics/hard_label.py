@@ -186,7 +186,6 @@ class HardLabelEvaluator:
         if not hard_labels:
             hard_labels = torch.tensor(np.array([np.ones(self.ipc) * i for i in range(self.num_classes)]), dtype=torch.long, requires_grad=False).view(-1)
 
-        dd_ranking_scores = []
         hard_label_recovery = []
         improvement_over_random = []
         for i in range(self.num_eval):
@@ -256,12 +255,10 @@ class HardLabelEvaluator:
 
             hard_label_recovery.append(hlr)
             improvement_over_random.append(ior)
-            dd_ranking_scores.append(ior / hlr)
         
         results_to_save = {
             "hard_label_recovery": hard_label_recovery,
-            "improvement_over_random": improvement_over_random,
-            "dd_ranking_score": dd_ranking_scores
+            "improvement_over_random": improvement_over_random
         }
         save_results(results_to_save, self.save_path)
 
@@ -269,17 +266,12 @@ class HardLabelEvaluator:
         hard_label_recovery_std = np.std(hard_label_recovery)
         improvement_over_random_mean = np.mean(improvement_over_random)
         improvement_over_random_std = np.std(improvement_over_random)
-        dd_ranking_score_mean = np.mean(dd_ranking_scores)
-        dd_ranking_score_std = np.std(dd_ranking_scores)
 
         print(f"Hard Label Recovery Mean: {hard_label_recovery_mean:.2f}%  Std: {hard_label_recovery_std:.2f}")
         print(f"Improvement Over Random Mean: {improvement_over_random_mean:.2f}%  Std: {improvement_over_random_std:.2f}")
-        print(f"DD-Ranking Score Mean: {dd_ranking_score_mean:.2f}  Std: {dd_ranking_score_std:.2f}")
         return {
             "hard_label_recovery_mean": hard_label_recovery_mean,
             "hard_label_recovery_std": hard_label_recovery_std,
             "improvement_over_random_mean": improvement_over_random_mean,
-            "improvement_over_random_std": improvement_over_random_std,
-            "dd_ranking_score_mean": dd_ranking_score_mean,
-            "dd_ranking_score_std": dd_ranking_score_std
+            "improvement_over_random_std": improvement_over_random_std
         }

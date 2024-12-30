@@ -79,5 +79,5 @@ The following results will be returned to you:
 - `hard_label_recovery std`: The standard deviation of hard label recovery scores.
 - `improvement_over_random mean`: The mean of improvement over random scores.
 - `improvement_over_random std`: The standard deviation of improvement over random scores.
-- `dd_ranking_score mean`: The mean of dd ranking scores.
-- `dd_ranking_score std`: The standard deviation of dd ranking scores.
+<!-- - `dd_ranking_score mean`: The mean of dd ranking scores.
+- `dd_ranking_score std`: The standard deviation of dd ranking scores. -->
