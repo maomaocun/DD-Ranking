@@ -15,15 +15,9 @@ requires-python = ">=3.8"
 dependencies = [
     "torch",
     "numpy",
-    "optuna",
     "torchvision",
     "tqdm",
     "scipy",
     "kornia",
     "timm"
 ]
-
-[project.urls]
-leaderboard = "https://huggingface.co/spaces/Soptq/DD-Ranking"
-repository = "https://github.com/NUS-HPC-AI-Lab/DD-Ranking"
-documentation = "https://nus-hpc-ai-lab.github.io/DD-Ranking/"
