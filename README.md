@@ -26,7 +26,9 @@ Fair and benchmark for dataset distillation.
 <details>
 <summary>Unfold to see more details.</summary>
 <br>
+
 - [2025/01] Our PyPI package is officially released! Users can now install DD-Ranking via `pip install dd_ranking`.
+
 - [2024/12] We officially released DD-Ranking! DD-Ranking provides us a new benchmark decoupling the impacts from knowledge distillation and data augmentation.
 </details>
 
