@@ -241,7 +241,7 @@ class SoftLabelEvaluator:
         if image_tensor is None:
             soft_label_dataset = datasets.ImageFolder(root=image_path, transform=self.custom_train_trans)
         else:
-            soft_label_dataset = TensorDataset(image_tensor, labels, transform=self.custom_train_trans)
+            soft_label_dataset = TensorDataset(image_tensor, labels)
         train_loader = DataLoader(soft_label_dataset, batch_size=self.syn_batch_size, num_workers=self.num_workers, shuffle=True)
 
         if self.soft_label_criterion == 'sce':
