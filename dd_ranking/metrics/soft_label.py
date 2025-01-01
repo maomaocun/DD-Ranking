@@ -215,7 +215,7 @@ class SoftLabelEvaluator:
                 loader=train_loader, 
                 loss_fn=loss_fn, 
                 optimizer=optimizer,
-                aug_func=self.aug_func if self.use_aug_for_hard else None,
+                aug_func=self.aug_func,
                 lr_scheduler=lr_scheduler, 
                 tea_model=self.teacher_model, 
                 device=self.device
