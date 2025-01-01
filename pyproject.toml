@@ -9,7 +9,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "dd_ranking"
 version = "0.1.0"
-description = "DD-Ranking: A unified benchmark for dataset distillation method evaluation"
+description = "DD-Ranking: Rethinking the Evaluation of Dataset Distillation"
 readme = "README.md"
 requires-python = ">=3.8"
 dependencies = [
@@ -22,3 +22,8 @@ dependencies = [
     "kornia",
     "timm"
 ]
+
+[project.urls]
+leaderboard = "https://huggingface.co/spaces/Soptq/DD-Ranking"
+repository = "https://github.com/NUS-HPC-AI-Lab/DD-Ranking"
+documentation = "https://nus-hpc-ai-lab.github.io/DD-Ranking/"

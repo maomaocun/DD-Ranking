@@ -1,0 +1,6 @@
+include LICENSE
+include README.md
+recursive-include config *
+recursive-include dd_ranking *
+recursive-exclude __pycache__ *
+recursive-exclude *.log *

@@ -11,9 +11,9 @@ setup(
     author='DD-Ranking Team',
     author_email='lizekai@u.nus.edu',
     url={
-        'homepage': 'https://github.com/NUS-HPC-AI-Lab/DD-Ranking',
+        'leaderboard': 'https://huggingface.co/spaces/Soptq/DD-Ranking',
         'repository': 'https://github.com/NUS-HPC-AI-Lab/DD-Ranking',
-        'documentation': 'https://github.com/NUS-HPC-AI-Lab/DD-Ranking'
+        'documentation': 'https://nus-hpc-ai-lab.github.io/DD-Ranking/'
     },
     # license='MIT',  # License type
     include_dirs=['dd_ranking', 'configs'],
