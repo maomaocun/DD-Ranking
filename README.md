@@ -84,9 +84,11 @@ $\text{Acc.}$ is the accuracy of models trained on different samples. Samples' m
 - $\text{syn-any}$: Synthetic dataset with personalized evaluation methods (hard or soft labels);
 - $\text{rdm-any}$: Randomly selected dataset (under the same compression ratio) with the same personalized evaluation methods.
 
-<!-- To rank different methods, we combine the above two metrics as follows:
-
-$$\text{IOR}/\text{HLR} = \frac{(\text{Acc.}{\text{syn-any}}-\text{Acc.}{\text{rdm-any}})}{(\text{Acc.}{\text{full-hard}}-\text{Acc.}{\text{syn-hard}})}$$ -->
+DD-Ranking uses a weight sum of $-\text{IOR}$ and $\text{HLR}$ to rank different methods:
+$$
+\text{Rank\_Score} = w_1 (-\text{IOR}) + w_2 \text{HLR}, \quad w_1 + w_2 = 1
+$$
+By default, we set $w_1 = w_2 = 0.5$ on the leaderboard, meaning that both $\text{IOR}$ and $\text{HLR}$ are equally important. Users can adjust the weights to emphasize one aspect on the leaderboard.
 
 </details>
 
