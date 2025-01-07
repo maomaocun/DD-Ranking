@@ -145,7 +145,7 @@ from dd_ranking.metrics import SoftLabelEvaluator
 from dd_ranking.config import Config
 
 config = Config.from_file("./configs/Demo_Soft_Label.yaml")
-soft_obj = SoftLabelEvaluator(config)
+soft_label_metric_calc = SoftLabelEvaluator(config)
 ```
 
 <details>
