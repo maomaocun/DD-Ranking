@@ -85,15 +85,13 @@ $\text{Acc.}$ is the accuracy of models trained on different samples. Samples' m
 - $\text{rdm-any}$: Randomly selected dataset (under the same compression ratio) with the same personalized evaluation methods.
 
 DD-Ranking uses a weight sum of $\text{IOR}$ and $-\text{HLR}$ to rank different methods:
-
-$$ 
-\alpha = w\text{IOR}-(1-w)\text{HLR}, \quad w \in [0, 1] 
+$$
+\alpha = w\text{IOR}-(1-w)\text{HLR}, \quad w \in [0, 1]
 $$
 
 Formally, the **DD-Ranking Score (DDRS)** is defined as:
-
-$$ 
-DDRS = \frac{e^{\alpha}-e^{-1}}{e - e^{-1}} 
+$$
+DDRS = \frac{e^{\alpha}-e^{-1}}{e - e^{-1}}
 $$
 
 By default, we set $w = 0.5$ on the leaderboard, meaning that both $\text{IOR}$ and $\text{HLR}$ are equally important. Users can adjust the weights to emphasize one aspect on the leaderboard.
