@@ -86,8 +86,14 @@ $\text{Acc.}$ is the accuracy of models trained on different samples. Samples' m
 
 DD-Ranking uses a weight sum of $\text{IOR}$ and $-\text{HLR}$ to rank different methods:
 $$
-\text{Rank\_Score} = \frac{e^{w \text{IOR} - (1-w) \text{HLR}} - e^{-1}}{e - e^{-1}}, \quad w \in [0, 1]
+\alpha = w\text{IOR}-(1-w)\text{HLR}, \quad w \in [0, 1]
 $$
+
+Formally, the **DD-Ranking Score (DDRS)** is defined as:
+$$
+\text{DDRS} = \frac{e^{\alpha}-e^{-1}}{e - e^{-1}}
+$$
+
 By default, we set $w = 0.5$ on the leaderboard, meaning that both $\text{IOR}$ and $\text{HLR}$ are equally important. Users can adjust the weights to emphasize one aspect on the leaderboard.
 
 </details>

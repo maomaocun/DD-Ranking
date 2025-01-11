@@ -162,7 +162,7 @@
 from dd_ranking.config import Config
 
 &gt;&gt;&gt; config = Config.from_file("./configs/Demo_Soft_Label.yaml")
-&gt;&gt;&gt; soft_obj = SoftLabelEvaluator(config)
+&gt;&gt;&gt; soft_label_metric_calc = SoftLabelEvaluator(config)
 </code></pre>
 <details>
 <summary>You can also pass keyword arguments.</summary>
@@ -185,7 +185,7 @@ dsa_params = {                          # Specify your data augmentation paramet
     "ratio_crop_pad": 0.125,
     "ratio_cutout": 0.5
 }
-save_path = f"./results/{dataset}/{model_name}/IPC{ipc}/dm_hard_scores.csv"
+save_path = f"./results/{dataset}/{model_name}/IPC{ipc}/datm_ranking_scores.csv"
 
 """ We only list arguments that usually need specifying"""
 soft_label_metric_calc = SoftLabelEvaluator(
@@ -213,7 +213,7 @@ soft_label_metric_calc = SoftLabelEvaluator(
 &gt;&gt;&gt; soft_labels = torch.load('/your/path/to/syn/labels.pt')
 &gt;&gt;&gt; syn_lr = torch.load('/your/path/to/syn/lr.pt')
 </code></pre>
-<p><strong>Step 3:</strong> Compute the xxx metric.</p>
+<p><strong>Step 3:</strong> Compute the metric.</p>
 <pre><code class="language-python">&gt;&gt;&gt; metric = soft_label_metric_calc.compute_metrics(image_tensor=syn_images, soft_labels=soft_labels, syn_lr=syn_lr)
 </code></pre>
 <p>The following results will be returned to you:</p>
