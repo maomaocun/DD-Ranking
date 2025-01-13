@@ -243,7 +243,7 @@ class HardLabelEvaluator:
             print("Caculating random data hard label metrics...")
             random_images, random_data_hard_labels = get_random_images(self.images_train, self.labels_train, self.class_indices_train, self.ipc)
             random_data_hard_label_acc, best_lr = self.hyper_param_search_for_hard_label(
-                image_tensor=image_tensor,
+                image_tensor=random_images,
                 image_path=None,
                 hard_labels=random_data_hard_labels,
                 mode='syn'

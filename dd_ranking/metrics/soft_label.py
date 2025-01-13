@@ -368,7 +368,7 @@ class SoftLabelEvaluator:
             else:
                 random_data_soft_labels = None
             random_data_soft_label_acc, best_lr = self.hyper_param_search_for_soft_label(
-                image_tensor=image_tensor,
+                image_tensor=random_images,
                 image_path=None,
                 soft_labels=random_data_soft_labels
             )
