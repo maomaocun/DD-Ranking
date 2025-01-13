@@ -223,15 +223,47 @@ The following results will be returned to you:
 Check out our <span style="color: #ff0000;">[documentation](https://nus-hpc-ai-lab.github.io/DD-Ranking/)</span> to learn more.
 
 ## Coming Soon
-- [ ] DD-Ranking scores that decouple the impacts from data augmentation.
+
 - [ ] Evaluation results on ImageNet subsets.
 - [ ] More baseline methods.
+- [ ] DD-Ranking scores that decouple the impacts from data augmentation.
 
 ## Contributing
 
 <!-- Only PR for the 1st version of DD-Ranking -->
 Feel free to submit grades to update the DD-Ranking list. We welcome and value any contributions and collaborations.
 Please check out [CONTRIBUTING.md](./CONTRIBUTING.md) for how to get involved.
+
+
+<!-- ## Team
+
+### Developers:
+
+<div style="column-count: 2;">
+
+- [Zekai Li](https://lizekai-richard.github.io/) (Project Lead)
+- [Xinhao Zhong](https://ndhg1213.github.io/)
+- [Zhiyuan Liang](https://jerryliang24.github.io/)
+- [Yuhao Zhou](https://github.com/Soptq)
+- [Mingjia Shi](https://bdemo.github.io/homepage/)
+- Ziqiao Wang
+- [Wangbo Zhao](https://wangbo-zhao.github.io/)
+- [Xuanlei Zhao](https://oahzxl.github.io/)
+- [Haonan Wang](https://charles-haonan-wang.me/)
+</div>
+
+### Advisors:
+<div style="column-count: 2;">
+
+- [Dai Liu](https://scholar.google.com/citations?user=3aWKpkQAAAAJ&hl=en)
+- [Ziheng Qin](https://henryqin1997.github.io/ziheng_qin/)
+- [Kaipeng Zhang](https://kpzhang93.github.io/)
+- [Zhangyang Wang](https://vita-group.github.io/)
+- [Bo Zhao](https://www.bozhao.me/)
+- [Yang You](https://www.comp.nus.edu.sg/~youy/)
+- [Kai Wang](https://kaiwang960112.github.io/)
+
+</div> -->
 
 ## License
 
