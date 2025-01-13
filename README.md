@@ -21,7 +21,7 @@ Fair and benchmark for dataset distillation.
 
 *Latest News* 🔥
 
-[Latest] Our PyPI package is officially released! Users can now install DD-Ranking via `pip install dd_ranking`.
+[Latest] Our PyPI package is officially released! Users can now install DD-Ranking via `pip install ddranking`.
 
 <details>
 <summary>Unfold to see more details.</summary>
