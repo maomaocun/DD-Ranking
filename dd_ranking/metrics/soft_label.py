@@ -23,9 +23,9 @@ class SoftLabelEvaluator:
                  soft_label_criterion: str='kl', data_aug_func: str='cutmix', aug_params: dict={'beta': 1.0}, soft_label_mode: str='S',
                  optimizer: str='sgd', lr_scheduler: str='step', temperature: float=1.0, weight_decay: float=0.0005, 
                  momentum: float=0.9, num_eval: int=5, im_size: tuple=(32, 32), num_epochs: int=300, use_zca: bool=False,
-                 real_batch_size: int=256, syn_batch_size: int=256, default_lr: float=0.01, save_path: str=None, use_aug_for_hard: bool=False,
-                 stu_use_torchvision: bool=False, tea_use_torchvision: bool=False, num_workers: int=4, teacher_dir: str='./teacher_models', 
-                 custom_train_trans: transforms.Compose=None, custom_val_trans: transforms.Compose=None, device: str="cuda"):
+                 real_batch_size: int=256, syn_batch_size: int=256, default_lr: float=0.01, save_path: str=None, stu_use_torchvision: bool=False, 
+                 tea_use_torchvision: bool=False, num_workers: int=4, teacher_dir: str='./teacher_models', custom_train_trans: transforms.Compose=None, 
+                 custom_val_trans: transforms.Compose=None, device: str="cuda"):
 
         if config is not None:
             self.config = config
@@ -45,12 +45,14 @@ class SoftLabelEvaluator:
             num_eval = self.config.get('num_eval')
             im_size = self.config.get('im_size')
             num_epochs = self.config.get('num_epochs')
+            use_zca = self.config.get('use_zca')
             real_batch_size = self.config.get('real_batch_size')
             syn_batch_size = self.config.get('syn_batch_size')
             default_lr = self.config.get('default_lr')
             save_path = self.config.get('save_path')
             num_workers = self.config.get('num_workers')
-            use_torchvision = self.config.get('use_torchvision')
+            stu_use_torchvision = self.config.get('stu_use_torchvision')
+            tea_use_torchvision = self.config.get('tea_use_torchvision')
             custom_train_trans = self.config.get('custom_train_trans')
             custom_val_trans = self.config.get('custom_val_trans')
             teacher_dir = self.config.get('teacher_dir')
@@ -100,7 +102,6 @@ class SoftLabelEvaluator:
             self.aug_func = Cutmix(aug_params)
         else:
             self.aug_func = None
-        self.use_aug_for_hard = use_aug_for_hard
 
         if not save_path:
             save_path = f"./results/{dataset}/{model_name}/ipc{ipc}/obj_scores.csv"

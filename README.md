@@ -258,6 +258,7 @@ Please check out [CONTRIBUTING.md](./CONTRIBUTING.md) for how to get involved.
 - [Dai Liu](https://scholar.google.com/citations?user=3aWKpkQAAAAJ&hl=en)
 - [Ziheng Qin](https://henryqin1997.github.io/ziheng_qin/)
 - [Kaipeng Zhang](https://kpzhang93.github.io/)
+- [Zheng Zhu](http://www.zhengzhu.net/)
 - [Zhangyang Wang](https://vita-group.github.io/)
 - [Bo Zhao](https://www.bozhao.me/)
 - [Yang You](https://www.comp.nus.edu.sg/~youy/)
