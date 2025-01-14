@@ -295,6 +295,8 @@ soft_label_metric_calc = SoftLabelEvaluator(
 </code></pre>
 <p><strong>Step 3:</strong> Compute the metric.</p>
 <pre><code class="language-python">&gt;&gt;&gt; metric = soft_label_metric_calc.compute_metrics(image_tensor=syn_images, soft_labels=soft_labels, syn_lr=syn_lr)
+# alternatively, you can specify the image folder path to compute the metric
+&gt;&gt;&gt; metric = soft_label_metric_calc.compute_metrics(image_path='./your/path/to/syn/images', soft_labels=soft_labels, syn_lr=syn_lr)
 </code></pre>
 <p>The following results will be returned to you:</p>
 <ul>
