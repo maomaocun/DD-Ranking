@@ -13,7 +13,7 @@
 Fair and benchmark for dataset distillation.
 </h3> -->
 <p align="center">
-| <a href="https://nus-hpc-ai-lab.github.io/DD-Ranking/"><b>Documentation</b></a> | <a href="https://huggingface.co/spaces/Soptq/DD-Ranking"><b>Leaderboard</b></a> | <a href=""><b>Paper </b> (Coming Soon)</a> | <a href=""><b>Twitter/X</b> (Coming Soon)</a> | <a href=""><b>Developer Slack</b> (Coming Soon)</a> |
+| <a href="https://nus-hpc-ai-lab.github.io/DD-Ranking/"><b>Documentation</b></a> | <a href="https://huggingface.co/spaces/Soptq/DD-Ranking"><b>Leaderboard</b></a> | <a href=""><b>Paper </b> (Coming Soon)</a> | <a href=""><b>Twitter/X</b> (Coming Soon)</a> | <a href="https://join.slack.com/t/dd-ranking/shared_invite/zt-2xlcuq1mf-hmVcfrtqrIB3qXRjwgB03A"><b>Developer Slack</b></a> |
 </p>
 
 
@@ -206,10 +206,12 @@ soft_labels = torch.load('/your/path/to/syn/labels.pt')
 syn_lr = torch.load('/your/path/to/syn/lr.pt')
 ```
 
-**Step 3:** Compute the xxx metric.
+**Step 3:** Compute the metric.
 
 ```python
-metric = soft_label_metric_calc.compute_metrics(syn_images, soft_labels=soft_labels, syn_lr=syn_lr)
+metric = soft_label_metric_calc.compute_metrics(image_tensor=syn_images, soft_labels=soft_labels, syn_lr=syn_lr)
+# alternatively, you can specify the image folder path to compute the metric
+metric = soft_label_metric_calc.compute_metrics(image_path='./your/path/to/syn/images', soft_labels=soft_labels, syn_lr=syn_lr)
 ```
 
 The following results will be returned to you:

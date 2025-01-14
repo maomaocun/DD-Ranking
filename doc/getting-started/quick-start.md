@@ -72,6 +72,8 @@ For detailed explanation for hyper-parameters, please refer to our <a href="">do
 
 ```python
 >>> metric = soft_label_metric_calc.compute_metrics(image_tensor=syn_images, soft_labels=soft_labels, syn_lr=syn_lr)
+# alternatively, you can specify the image folder path to compute the metric
+>>> metric = soft_label_metric_calc.compute_metrics(image_path='./your/path/to/syn/images', soft_labels=soft_labels, syn_lr=syn_lr)
 ```
 
 The following results will be returned to you:
