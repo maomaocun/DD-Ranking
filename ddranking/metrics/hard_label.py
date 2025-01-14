@@ -9,11 +9,11 @@ from torch import Tensor
 from tqdm import tqdm
 from torch.utils.data import DataLoader
 from torchvision import transforms, datasets
-from dd_ranking.utils import build_model, get_pretrained_model_path
-from dd_ranking.utils import TensorDataset, get_random_images, get_dataset, save_results
-from dd_ranking.utils import set_seed, train_one_epoch, validate, get_optimizer, get_lr_scheduler
-from dd_ranking.aug import DSA, Mixup, Cutmix, ZCAWhitening
-from dd_ranking.config import Config
+from ddranking.utils import build_model, get_pretrained_model_path
+from ddranking.utils import TensorDataset, get_random_images, get_dataset, save_results
+from ddranking.utils import set_seed, train_one_epoch, validate, get_optimizer, get_lr_scheduler
+from ddranking.aug import DSA, Mixup, Cutmix, ZCAWhitening
+from ddranking.config import Config
 
 
 class HardLabelEvaluator:

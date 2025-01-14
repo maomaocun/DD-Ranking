@@ -128,7 +128,7 @@ Install DD-Ranking with `pip` or from [source](https://github.com/NUS-HPC-AI-Lab
 From pip
 
 ```bash
-pip install dd_ranking
+pip install ddranking
 ```
 
 From source
@@ -143,8 +143,8 @@ Below is a step-by-step guide on how to use our `dd_ranking`. This demo is based
 **Step1**: Intialize a soft-label metric evaluator object. Config files are recommended for users to specify hyper-parameters. Sample config files are provided [here](https://github.com/NUS-HPC-AI-Lab/DD-Ranking/tree/main/configs).
 
 ```python
-from dd_ranking.metrics import SoftLabelEvaluator
-from dd_ranking.config import Config
+from ddranking.metrics import SoftLabelEvaluator
+from ddranking.config import Config
 
 config = Config.from_file("./configs/Demo_Soft_Label.yaml")
 soft_label_metric_calc = SoftLabelEvaluator(config)

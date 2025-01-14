@@ -158,8 +158,8 @@
                         <h2 id="quick-start"><a class="header" href="#quick-start">Quick Start</a></h2>
 <p>Below is a step-by-step guide on how to use our <code>dd_ranking</code>. This demo is based on soft labels (source code can be found in <code>demo_soft.py</code>). You can find hard label demo in <code>demo_hard.py</code>.</p>
 <p><strong>Step1</strong>: Intialize a soft-label metric evaluator object. Config files are recommended for users to specify hyper-parameters. Sample config files are provided <a href="https://github.com/NUS-HPC-AI-Lab/DD-Ranking/tree/main/configs">here</a>.</p>
-<pre><code class="language-python">from dd_ranking.metrics import SoftLabelEvaluator
-from dd_ranking.config import Config
+<pre><code class="language-python">from ddranking.metrics import SoftLabelEvaluator
+from ddranking.config import Config
 
 &gt;&gt;&gt; config = Config.from_file("./configs/Demo_Soft_Label.yaml")
 &gt;&gt;&gt; soft_label_metric_calc = SoftLabelEvaluator(config)
