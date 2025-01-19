@@ -239,7 +239,7 @@ Please check out [CONTRIBUTING.md](./CONTRIBUTING.md) for how to get involved.
 ## Team
 
 ### Developers:
-
+<!-- 
 <div style="display: flex;">
   <div style="flex: 50%;">
     <ul>
@@ -258,8 +258,33 @@ Please check out [CONTRIBUTING.md](./CONTRIBUTING.md) for how to get involved.
       <li><a href="https://charles-haonan-wang.me/">Haonan Wang</a></li>
     </ul>
   </div>
-</div>
+</div> -->
 
+<table>
+  <tr>
+    <td>
+      <ul>
+        <li><a href="https://lizekai-richard.github.io/">Zekai Li</a> (Project Lead)</li>
+        <li><a href="https://ndhg1213.github.io/">Xinhao Zhong</a></li>
+        <li><a href="https://jerryliang24.github.io/">Zhiyuan Liang</a></li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li><a href="https://github.com/Soptq">Yuhao Zhou</a></li>
+        <li><a href="https://bdemo.github.io/homepage/">Mingjia Shi</a></li>
+        <li><a href="https://github.com/wangzq1998">Ziqiao Wang</a></li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li><a href="https://wangbo-zhao.github.io/">Wangbo Zhao</a></li>
+        <li><a href="https://oahzxl.github.io/">Xuanlei Zhao</a></li>
+        <li><a href="https://charles-haonan-wang.me/">Haonan Wang</a></li>
+      </ul>
+    </td>
+  </tr>
+</table>
 <!-- <div style="column-count: 2;">
 
 - [Zekai Li](https://lizekai-richard.github.io/) (Project Lead)
