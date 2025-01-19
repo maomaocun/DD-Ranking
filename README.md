@@ -239,67 +239,19 @@ Please check out [CONTRIBUTING.md](./CONTRIBUTING.md) for how to get involved.
 ## Team
 
 ### Developers:
-<!-- 
-<div style="display: flex;">
-  <div style="flex: 50%;">
-    <ul>
-      <li><a href="https://lizekai-richard.github.io/">Zekai Li</a> (Project Lead)</li>
-      <li><a href="https://ndhg1213.github.io/">Xinhao Zhong</a></li>
-      <li><a href="https://jerryliang24.github.io/">Zhiyuan Liang</a></li>
-      <li><a href="https://github.com/Soptq">Yuhao Zhou</a></li>
-      <li><a href="https://bdemo.github.io/homepage/">Mingjia Shi</a></li>
-    </ul>
-  </div>
-  <div style="flex: 50%;">
-    <ul>
-      <li><a href="https://github.com/wangzq1998">Ziqiao Wang</a></li>
-      <li><a href="https://wangbo-zhao.github.io/">Wangbo Zhao</a></li>
-      <li><a href="https://oahzxl.github.io/">Xuanlei Zhao</a></li>
-      <li><a href="https://charles-haonan-wang.me/">Haonan Wang</a></li>
-    </ul>
-  </div>
-</div> -->
+*\* project lead*
 
-<table>
-  <tr>
-    <td>
-      <ul>
-        <li><a href="https://lizekai-richard.github.io/">Zekai Li</a> (Project Lead)</li>
-        <li><a href="https://ndhg1213.github.io/">Xinhao Zhong</a></li>
-        <li><a href="https://jerryliang24.github.io/">Zhiyuan Liang</a></li>
-      </ul>
-    </td>
-    <td>
-      <ul>
-        <li><a href="https://github.com/Soptq">Yuhao Zhou</a></li>
-        <li><a href="https://bdemo.github.io/homepage/">Mingjia Shi</a></li>
-        <li><a href="https://github.com/wangzq1998">Ziqiao Wang</a></li>
-      </ul>
-    </td>
-    <td>
-      <ul>
-        <li><a href="https://wangbo-zhao.github.io/">Wangbo Zhao</a></li>
-        <li><a href="https://oahzxl.github.io/">Xuanlei Zhao</a></li>
-        <li><a href="https://charles-haonan-wang.me/">Haonan Wang</a></li>
-      </ul>
-    </td>
-  </tr>
-</table>
-<!-- <div style="column-count: 2;">
-
-- [Zekai Li](https://lizekai-richard.github.io/) (Project Lead)
-- [Xinhao Zhong](https://ndhg1213.github.io/)
-- [Zhiyuan Liang](https://jerryliang24.github.io/)
-- [Yuhao Zhou](https://github.com/Soptq)
-- [Mingjia Shi](https://bdemo.github.io/homepage/)
-- Ziqiao Wang
-- [Wangbo Zhao](https://wangbo-zhao.github.io/)
-- [Xuanlei Zhao](https://oahzxl.github.io/)
-- [Haonan Wang](https://charles-haonan-wang.me/)
-</div> -->
+- [Zekai Li*](https://lizekai-richard.github.io/) (National University of Singapore)
+- [Xinhao Zhong](https://ndhg1213.github.io/) (National University of Singapore)
+- [Zhiyuan Liang](https://jerryliang24.github.io/) (University of Science and Technology of China)
+- [Yuhao Zhou](https://github.com/Soptq) (Sichuan University)
+- [Mingjia Shi](https://bdemo.github.io/homepage/) (Sichuan University)
+- [Ziqiao Wang](https://github.com/wangzq1998) (National University of Singapore)
+- [Wangbo Zhao](https://wangbo-zhao.github.io/) (National University of Singapore)
+- [Xuanlei Zhao](https://oahzxl.github.io/) (National University of Singapore)
+- [Haonan Wang](https://charles-haonan-wang.me/) (National University of Singapore)
 
 ### Advisors:
-<div style="column-count: 2;">
 
 - [Dai Liu](https://scholar.google.com/citations?user=3aWKpkQAAAAJ&hl=en) (Munich Technology University)
 - [Ziheng Qin](https://henryqin1997.github.io/ziheng_qin/) (National University of Singapore)
@@ -328,8 +280,6 @@ Please check out [CONTRIBUTING.md](./CONTRIBUTING.md) for how to get involved.
 - [Manolis Kellis](https://web.mit.edu/manoli/) (Massachusetts Institute of Technology)
 - [Yang You](https://www.comp.nus.edu.sg/~youy/) (National University of Singapore)
 - [Kai Wang](https://kaiwang960112.github.io/) (National University of Singapore)
-
-</div>
 
 ## License
 
