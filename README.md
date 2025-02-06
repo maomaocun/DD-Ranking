@@ -267,6 +267,8 @@ Please check out [CONTRIBUTING.md](./CONTRIBUTING.md) for how to get involved.
 - [Lingjuan Lyu](https://sites.google.com/view/lingjuan-lyu) (Sony)
 - [Jiancheng Lv](https://scholar.google.com/citations?user=0TCaWKwAAAAJ&hl=en) (Sichuan University)
 - [Yaochu Jin](https://en.westlake.edu.cn/faculty/yaochu-jin.html) (Westlake University)
+- [Yiran Huang](https://www.eml-munich.de/people/yiran-huang) (Technical University of Munich)
+- [Zeynep Akata](https://www.eml-munich.de/people/zeynep-akata) (Technical University of Munich)
 - [Jindong Gu](https://jindonggu.github.io/) (Oxford University)
 - [Mike Shou](https://sites.google.com/view/showlab) (National University of Singapore)
 - [Angela Yao](https://www.comp.nus.edu.sg/~ayao/) (National University of Singapore)
