@@ -272,8 +272,6 @@ Please check out [CONTRIBUTING.md](./CONTRIBUTING.md) for how to get involved.
 - [Jindong Gu](https://jindonggu.github.io/) (Oxford University)
 - [Mike Shou](https://sites.google.com/view/showlab) (National University of Singapore)
 - [Angela Yao](https://www.comp.nus.edu.sg/~ayao/) (National University of Singapore)
-<!-- - [Xavier Bresson](https://graphdeeplearning.github.io/authors/xavier-bresson/) (National University of Singapore)
-- [Tat-Seng Chua](https://www.chuatatseng.com/) (National University of Singapore) -->
 - [Xindi Wu](https://xindiwu.github.io/) (Princeton University)
 - [Zhiwei Deng](https://lucas2012.github.io/) (Google DeepMind)
 - [Justin Cui](https://scholar.google.com/citations?user=zel3jUcAAAAJ&hl=en) (UC Los Angeles)
