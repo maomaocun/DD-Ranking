@@ -38,12 +38,14 @@ config = Config()
 class TensorDataset(torch.utils.data.Dataset):
     
     def __init__(self, images: Tensor, labels: Tensor):
+        super(TensorDataset, self).__init__()
         self.images = images
-        self.labels = labels
+        self.targets = labels
+        self.imgs = [(image, label) for image, label in zip(images, labels)]
 
     def __getitem__(self, index: int):
         image = self.images[index]
-        label = self.labels[index]
+        label = self.targets[index]
         return image, label
     
     def __len__(self):
