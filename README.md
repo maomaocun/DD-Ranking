@@ -237,13 +237,12 @@ Please check out [CONTRIBUTING.md](./CONTRIBUTING.md) for how to get involved.
 
 
 ## Technical Members:
-
-- [Zekai Li](https://lizekai-richard.github.io/) (National University of Singapore)
-- [Xinhao Zhong](https://ndhg1213.github.io/) (National University of Singapore)
+- [Zekai Li*](https://lizekai-richard.github.io/) (National University of Singapore)
+- [Xinhao Zhong*](https://ndhg1213.github.io/) (National University of Singapore)
 - [Zhiyuan Liang](https://jerryliang24.github.io/) (University of Science and Technology of China)
 - [Yuhao Zhou](https://github.com/Soptq) (Sichuan University)
 - [Mingjia Shi](https://bdemo.github.io/homepage/) (Sichuan University)
-- [Ziqiao Wang](https://github.com/wangzq1998) (National University of Singapore)
+- [Ziqiao Wang](https://www.linkedin.com/in/ziqiao-wang-95a4b232b?trk=contact-info) (National University of Singapore)
 - [Wangbo Zhao](https://wangbo-zhao.github.io/) (National University of Singapore)
 - [Xuanlei Zhao](https://oahzxl.github.io/) (National University of Singapore)
 - [Haonan Wang](https://charles-haonan-wang.me/) (National University of Singapore)
@@ -262,21 +261,24 @@ Please check out [CONTRIBUTING.md](./CONTRIBUTING.md) for how to get involved.
 - [Yaochu Jin](https://en.westlake.edu.cn/faculty/yaochu-jin.html) (Westlake University)
 - [Zeynep Akata](https://www.eml-munich.de/people/zeynep-akata) (Technical University of Munich)
 - [Jindong Gu](https://jindonggu.github.io/) (Oxford University)
+- [Rama Vedantam](https://ramavedantam.com/) (Google DeepMind)
 - [Mike Shou](https://sites.google.com/view/showlab) (National University of Singapore)
-- [Xindi Wu](https://xindiwu.github.io/) (Princeton University)
 - [Zhiwei Deng](https://lucas2012.github.io/) (Google DeepMind)
 - [Yan Yan](https://tomyan555.github.io/) (University of Illinois at Chicago)
 - [Yuzhang Shang](https://42shawn.github.io/) (University of Illinois at Chicago)
 - [George Cazenavette](https://georgecazenavette.github.io/) (Massachusetts Institute of Technology)
+- [Xindi Wu](https://xindiwu.github.io/) (Princeton University)
 - [Justin Cui](https://scholar.google.com/citations?user=zel3jUcAAAAJ&hl=en) (UC Los Angeles)
 - [Tianlong Chen](https://tianlong-chen.github.io/) (UNC Chapel Hill)
 - [Angela Yao](https://www.comp.nus.edu.sg/~ayao/) (National University of Singapore)
 - [Manolis Kellis](https://web.mit.edu/manoli/) (Massachusetts Institute of Technology)
-- [Zhangyang Wang](https://vita-group.github.io/) (UT Austin)
 - [Konstantinos N. Plataniotis](https://www.comm.utoronto.ca/~kostas/) (University of Toronto)
 - [Bo Zhao](https://www.bozhao.me/) (Shanghai Jiao Tong University)
+- [Zhangyang Wang](https://vita-group.github.io/) (UT Austin)
 - [Yang You](https://www.comp.nus.edu.sg/~youy/) (National University of Singapore)
 - [Kai Wang](https://kaiwang960112.github.io/) (National University of Singapore)
+
+\* *equal contribution*
 
 ## License
 
