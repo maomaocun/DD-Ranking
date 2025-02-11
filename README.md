@@ -261,7 +261,7 @@ Please check out [CONTRIBUTING.md](./CONTRIBUTING.md) for how to get involved.
 - [Yaochu Jin](https://en.westlake.edu.cn/faculty/yaochu-jin.html) (Westlake University)
 - [Zeynep Akata](https://www.eml-munich.de/people/zeynep-akata) (Technical University of Munich)
 - [Jindong Gu](https://jindonggu.github.io/) (Oxford University)
-- [Rama Vedantam](https://ramavedantam.com/) (Google DeepMind)
+- [Rama Vedantam](https://ramavedantam.com/) (Independent Researcher)
 - [Mike Shou](https://sites.google.com/view/showlab) (National University of Singapore)
 - [Zhiwei Deng](https://lucas2012.github.io/) (Google DeepMind)
 - [Yan Yan](https://tomyan555.github.io/) (University of Illinois at Chicago)
