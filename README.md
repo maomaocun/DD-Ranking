@@ -236,12 +236,9 @@ Feel free to submit grades to update the DD-Ranking list. We welcome and value a
 Please check out [CONTRIBUTING.md](./CONTRIBUTING.md) for how to get involved.
 
 
-## Team
+## Technical Members:
 
-### Developers:
-*\* Project lead*, *† Corresponding*
-
-- [Zekai Li*](https://lizekai-richard.github.io/) (National University of Singapore)
+- [Zekai Li](https://lizekai-richard.github.io/) (National University of Singapore)
 - [Xinhao Zhong](https://ndhg1213.github.io/) (National University of Singapore)
 - [Zhiyuan Liang](https://jerryliang24.github.io/) (University of Science and Technology of China)
 - [Yuhao Zhou](https://github.com/Soptq) (Sichuan University)
@@ -251,39 +248,35 @@ Please check out [CONTRIBUTING.md](./CONTRIBUTING.md) for how to get involved.
 - [Xuanlei Zhao](https://oahzxl.github.io/) (National University of Singapore)
 - [Haonan Wang](https://charles-haonan-wang.me/) (National University of Singapore)
 - [Ziheng Qin](https://henryqin1997.github.io/ziheng_qin/) (National University of Singapore)
-- [Kai Wang†](https://kaiwang960112.github.io/) (National University of Singapore)
-
-### Committee:
-
 - [Dai Liu](https://scholar.google.com/citations?user=3aWKpkQAAAAJ&hl=en) (Munich Technology University)
 - [Kaipeng Zhang](https://kpzhang93.github.io/) (Shanghai AI Lab)
-- [Yuzhang Shang](https://42shawn.github.io/) (University of Illinois at Chicago)
 - [Tianyi Zhou](https://joeyzhouty.github.io/) (A*STAR)
 - [Zheng Zhu](http://www.zhengzhu.net/) (GigaAI)
 - [Kun Wang](https://www.kunwang.net/) (University of Science and Technology of China)
 - [Guang Li](https://www-lmd.ist.hokudai.ac.jp/member/guang-li/) (Hokkaido University)
 - [Junhao Zhang](https://junhaozhang98.github.io/) (National University of Singapore)
 - [Jiawei Liu](https://jia-wei-liu.github.io/) (National University of Singapore)
+- [Yiran Huang](https://www.eml-munich.de/people/yiran-huang) (Technical University of Munich)
 - [Lingjuan Lyu](https://sites.google.com/view/lingjuan-lyu) (Sony)
 - [Jiancheng Lv](https://scholar.google.com/citations?user=0TCaWKwAAAAJ&hl=en) (Sichuan University)
 - [Yaochu Jin](https://en.westlake.edu.cn/faculty/yaochu-jin.html) (Westlake University)
-- [Yiran Huang](https://www.eml-munich.de/people/yiran-huang) (Technical University of Munich)
 - [Zeynep Akata](https://www.eml-munich.de/people/zeynep-akata) (Technical University of Munich)
 - [Jindong Gu](https://jindonggu.github.io/) (Oxford University)
 - [Mike Shou](https://sites.google.com/view/showlab) (National University of Singapore)
-- [Angela Yao](https://www.comp.nus.edu.sg/~ayao/) (National University of Singapore)
 - [Xindi Wu](https://xindiwu.github.io/) (Princeton University)
 - [Zhiwei Deng](https://lucas2012.github.io/) (Google DeepMind)
-- [Justin Cui](https://scholar.google.com/citations?user=zel3jUcAAAAJ&hl=en) (UC Los Angeles)
-- [George Cazenavette](https://georgecazenavette.github.io/) (Massachusetts Institute of Technology)
 - [Yan Yan](https://tomyan555.github.io/) (University of Illinois at Chicago)
+- [Yuzhang Shang](https://42shawn.github.io/) (University of Illinois at Chicago)
+- [George Cazenavette](https://georgecazenavette.github.io/) (Massachusetts Institute of Technology)
+- [Justin Cui](https://scholar.google.com/citations?user=zel3jUcAAAAJ&hl=en) (UC Los Angeles)
 - [Tianlong Chen](https://tianlong-chen.github.io/) (UNC Chapel Hill)
+- [Angela Yao](https://www.comp.nus.edu.sg/~ayao/) (National University of Singapore)
+- [Manolis Kellis](https://web.mit.edu/manoli/) (Massachusetts Institute of Technology)
 - [Zhangyang Wang](https://vita-group.github.io/) (UT Austin)
 - [Konstantinos N. Plataniotis](https://www.comm.utoronto.ca/~kostas/) (University of Toronto)
 - [Bo Zhao](https://www.bozhao.me/) (Shanghai Jiao Tong University)
-- [Manolis Kellis](https://web.mit.edu/manoli/) (Massachusetts Institute of Technology)
 - [Yang You](https://www.comp.nus.edu.sg/~youy/) (National University of Singapore)
-
+- [Kai Wang](https://kaiwang960112.github.io/) (National University of Singapore)
 
 ## License
 
