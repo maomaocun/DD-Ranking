@@ -31,7 +31,7 @@ Fair and benchmark for dataset distillation.
 
 - [2025/01] Our PyPI package is officially released! Users can now install DD-Ranking via `pip install ddranking`.
 
-- [2024/12] We officially released DD-Ranking! DD-Ranking provides us a new benchmark decoupling the impacts from knowledge distillation and data augmentation.
+- [2024/12/28] We officially released DD-Ranking! DD-Ranking provides us a new benchmark decoupling the impacts from knowledge distillation and data augmentation.
 </details>
 
 ---
@@ -284,40 +284,29 @@ Please check out [CONTRIBUTING.md](./CONTRIBUTING.md) for how to get involved.
 
 DD-Ranking is released under the MIT License. See [LICENSE](./LICENSE) for more details.
 
-<!-- ## Acknowledgement
+## Related Works
 
-DD-Ranking is a community project. The compute resources for development and testing are supported by the following organizations. Thanks for your support! -->
+- [Dataset Distillation](https://arxiv.org/abs/1811.10959), Wang et al., in arXiv 2018.
+- [Dataset Condensation with Gradient Matching](https://arxiv.org/abs/2006.05929), Zhao et al., in ICLR 2020.
+- [Dataset Condensation with Differentiable Siamese Augmentation](https://arxiv.org/abs/2102.08259), Zhao \& Bilen, in ICML 2021.
+- [Dataset Distillation via Matching Training Trajectories](https://arxiv.org/abs/2203.11932), Cazenavette et al., in CVPR 2022.
+- [Dataset Distillation with Distribution Matching](https://arxiv.org/abs/2110.04181), Zhao \& Bilen, in WACV 2023.
+- [Squeeze, Recover and Relabel: Dataset Condensation at ImageNet Scale From A New Perspective](https://arxiv.org/abs/2306.13092), Yin et al., in NeurIPS 2023.
+- [Towards Lossless Dataset Distillation via Difficulty-Aligned Trajectory Matching](https://arxiv.org/abs/2310.05773), Guo et al., in ICLR 2024.
+- [On the Diversity and Realism of Distilled Dataset: An Efficient Dataset Distillation Paradigm](https://arxiv.org/abs/2312.03526), Sun et al., in CVPR 2024.
+- [D4M: Dataset Distillation via Disentangled Diffusion Model](https://arxiv.org/abs/2407.15138), Su et al., in CVPR 2024.
 
-<!-- Note: Please sort them in alphabetical order. -->
-<!-- Note: Please keep these consistent with docs/source/community/sponsors.md -->
 
-<!-- - First Org.
+## Reference
 
-We also have an official fundraising venue through <span style="color: #ff0000;">[TODO]：</span>[the collection website](). We plan to use the fund to support the development, maintenance, and adoption of DD-Ranking. -->
+If you find DD-Ranking useful in your research, please consider citing the following paper:
 
-<!-- Paper to be added -->
-<!-- If a pre-print is wanted, a digital asset could be released first. -->
-
-<!-- ## Citation
-
-If you use DD-Ranking for your research, please cite our [paper]():
 ```bibtex
-@inproceedings{,
-  title={DD-Ranking: },
-  author={},
-  booktitle={},
-  year={2024}
+@misc{li2024ddranking,
+  title = {DD-Ranking: Rethinking the Evaluation of Dataset Distillation},
+  author = {Li, Zekai and Zhong, Xinhao and Liang, Zhiyuan and Zhou, Yuhao and Shi, Mingjia and Wang, Ziqiao and Zhao, Wangbo and Zhao, Xuanlei and Wang, Haonan and Qin, Ziheng and Liu, Dai and Zhang, Kaipeng and Zhou, Tianyi and Zhu, Zheng and Wang, Kun and Li, Guang and Zhang, Junhao and Liu, Jiawei and Huang, Yiran and Lyu, Lingjuan and Lv, Jiancheng and Jin, Yaochu and Akata, Zeynep and Gu, Jindong and Vedantam, Rama and Shou, Mike and Deng, Zhiwei and Yan, Yan and Shang, Yuzhang and Cazenavette, George and Wu, Xindi and Cui, Justin and Chen, Tianlong and Yao, Angela and Kellis, Manolis and Plataniotis, Konstantinos N. and Zhao, Bo and Wang, Zhangyang and You, Yang and Wang, Kai},
+  year = {2024},
+  howpublished = {GitHub repository},
+  url = {https://github.com/NUS-HPC-AI-Lab/DD-Ranking}
 }
 ```
-
-<!-- ## Contact Us
-
-**Community Discussions**: Engage with other users on <span style="color: #ff0000;">[TODO]：</span>[Discord]() for discussions.
-
-**Coordination of Contributions and Development**: Use <span style="color: #ff0000;">[TODO]：</span>[Slack]() for coordinating contributions and managing development efforts.
-
-**Collaborations and Partnerships**: For exploring collaborations or partnerships, reach out via <span style="color: #ff0000;">[TODO]：</span>[email]().
-
-**Technical Queries and Feature Requests**: Utilize GitHub issues or discussions for addressing technical questions and proposing new features.
-
-**Security Disclosures**: Report security vulnerabilities through GitHub's security advisory feature. -->
