@@ -271,6 +271,7 @@ Please check out [CONTRIBUTING.md](./CONTRIBUTING.md) for how to get involved.
 - [Justin Cui](https://scholar.google.com/citations?user=zel3jUcAAAAJ&hl=en) (UC Los Angeles)
 - [Tianlong Chen](https://tianlong-chen.github.io/) (UNC Chapel Hill)
 - [Angela Yao](https://www.comp.nus.edu.sg/~ayao/) (National University of Singapore)
+- [Baharan Mirzasoleiman](https://baharanm.github.io/) (UC Los Angeles)
 - [Manolis Kellis](https://web.mit.edu/manoli/) (Massachusetts Institute of Technology)
 - [Konstantinos N. Plataniotis](https://www.comm.utoronto.ca/~kostas/) (University of Toronto)
 - [Bo Zhao](https://www.bozhao.me/) (Shanghai Jiao Tong University)
