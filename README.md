@@ -242,6 +242,7 @@ Please check out [CONTRIBUTING.md](./CONTRIBUTING.md) for how to get involved.
 - [Zhiyuan Liang](https://jerryliang24.github.io/) (University of Science and Technology of China)
 - [Yuhao Zhou](https://github.com/Soptq) (Sichuan University)
 - [Mingjia Shi](https://bdemo.github.io/homepage/) (Sichuan University)
+- [Dongwen Tang](https://scholar.google.com/citations?user=9lKm_5IAAAAJ) (Xidian University)
 - [Ziqiao Wang](https://www.linkedin.com/in/ziqiao-wang-95a4b232b?trk=contact-info) (National University of Singapore)
 - [Wangbo Zhao](https://wangbo-zhao.github.io/) (National University of Singapore)
 - [Xuanlei Zhao](https://oahzxl.github.io/) (National University of Singapore)
