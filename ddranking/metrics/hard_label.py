@@ -208,8 +208,8 @@ class HardLabelEvaluator:
         if image_tensor is None and image_path is None:
             raise ValueError("Either image_tensor or image_path must be provided")
 
-        if not hard_labels:
-            hard_labels = torch.tensor(np.array([np.ones(self.ipc) * i for i in range(self.num_classes)]), dtype=torch.long, requires_grad=False).view(-1)
+        # if not hard_labels:
+        #     hard_labels = torch.tensor(np.array([np.ones(self.ipc) * i for i in range(self.num_classes)]), dtype=torch.long, requires_grad=False).view(-1)
 
         hard_label_recovery = []
         improvement_over_random = []
@@ -294,9 +294,11 @@ class HardLabelEvaluator:
 
         print(f"Hard Label Recovery Mean: {hard_label_recovery_mean:.2f}%  Std: {hard_label_recovery_std:.2f}")
         print(f"Improvement Over Random Mean: {improvement_over_random_mean:.2f}%  Std: {improvement_over_random_std:.2f}")
-        return {
+        result = {
             "hard_label_recovery_mean": hard_label_recovery_mean,
             "hard_label_recovery_std": hard_label_recovery_std,
             "improvement_over_random_mean": improvement_over_random_mean,
             "improvement_over_random_std": improvement_over_random_std
         }
+        print(result)
+        return result
