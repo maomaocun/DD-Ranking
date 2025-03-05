@@ -39,7 +39,6 @@ dsa_params = {                          # Specify your data augmentation paramet
 
 syn_images = torch.load(os.path.join(syn_data_dir, f"images.pt"), map_location='cpu')
 soft_labels = torch.load(os.path.join(syn_data_dir, f"labels.pt"), map_location='cpu')
-print(soft_labels)
 syn_lr = torch.load(os.path.join(syn_data_dir, f"lr.pt"), map_location='cpu')
 save_path = f"./results/{dataset}/{model_name}/IPC{ipc}/dm_hard_scores.csv"
 soft_label_evaluator = SoftLabelEvaluator(
