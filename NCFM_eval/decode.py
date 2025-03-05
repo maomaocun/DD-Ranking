@@ -3,9 +3,9 @@ import numpy as np
 import torch
 from math import ceil
 import torch .nn as nn
-
+import os
 # 加载合成数据
-def load_synthetic_data(data_dir, params):
+def load_synthetic_data(data_dir, config):
     """加载合成数据并解码"""
     data = torch.load(data_dir, map_location='cpu')
     syn_images = data[0]
@@ -15,18 +15,17 @@ def load_synthetic_data(data_dir, params):
     target_dec = []
 
     # 按类别分离数据并解码
-    for c in range(0, params["nclass"]):
+    for c in range(0, config.get('nclass')):
         target_mask = syn_labels == c
         data = syn_images[target_mask].detach()
         target = syn_labels[target_mask].detach()
-        data, target = decode(data, target)
+        data, target = decode(data, target,size=config.get('im_size'))
         data_dec.append(data)
         target_dec.append(target)
 
     data_dec = torch.cat(data_dec)
     target_dec = torch.cat(target_dec)
-
-    print(f"Decode condensed data: {data_dec.shape},label: {target_dec}")
+    print(f"Decode condensed data: {data_dec.shape},label: {target_dec.shape}")
 
     return data_dec, target_dec
 
