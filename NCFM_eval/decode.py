@@ -6,8 +6,17 @@ import torch .nn as nn
 import os
 # 加载合成数据
 from models import define_model
-def load_synthetic_data(data_dir, config,use_softlabel=False):
-    config.config["ipc"]= config.config["ipc"] *4
+from collections import OrderedDict
+def load_state_dict(state_dict_path, model):
+    state_dict = torch.load(state_dict_path, map_location='cpu')
+    # Remove `module.` prefix from keys if it exists
+    new_state_dict = OrderedDict()
+    for key, value in state_dict.items():
+        new_key = key.replace("module.", "")  # Remove 'module.' prefix
+        new_state_dict[new_key] = value
+    model.load_state_dict(new_state_dict)
+def load_synthetic_data(data_dir, config, use_softlabel=False):
+    config.config["ipc"] = config.config["ipc"] * 4  # 更新 ipc 参数
     """加载合成数据并解码"""
     data = torch.load(data_dir, map_location='cpu')
     syn_images = data[0]
@@ -20,17 +29,31 @@ def load_synthetic_data(data_dir, config,use_softlabel=False):
         target_mask = syn_labels == c
         data = syn_images[target_mask].detach()
         target = syn_labels[target_mask].detach()
-        data, target = decode(data, target,size=config.get('im_size'))
+        data, target = decode(data, target, size=config.get('im_size'))
         data_dec.append(data)
         target_dec.append(target)
 
     data_dec = torch.cat(data_dec)
     target_dec = torch.cat(target_dec)
-    if use_softlabel:
-        tearcher_model = define_model(config.get("dataset"),config.get('model_name'),config.get('nclass'), config.get('im_size')[0])
-    print(f"Decode condensed data: {data_dec.shape},label: {target_dec.shape}")
 
-    return data_dec, target_dec
+    teacher_model = None
+    if use_softlabel:
+        # 加载教师模型并生成软标签
+        teacher_model = define_model(config.get("dataset"), config.get('model_name'), config.get('nclass'), config.get('im_size')[0])
+        teacher_path = os.path.join(config.get('pretrained_models_flod'), f'premodel0_epoch_{config.get("teacher_model_epoch")}.pth.tar')
+        
+        # 加载教师模型的状态字典
+        load_state_dict(teacher_path, teacher_model)
+
+        # 生成软标签
+        teacher_model.eval()  # 设置教师模型为评估模式
+        with torch.no_grad():
+            soft_labels = teacher_model(data_dec)  # 假设教师模型输出的是软标签
+            target_dec = soft_labels  # 使用教师模型输出的软标签代替硬标签
+
+    print(f"Decode condensed data: {data_dec.shape}, label: {target_dec.shape}")
+
+    return data_dec, target_dec, teacher_model
 
 def decode(data,target,decode_type="single",size=(32,32),factor=2, bound=10000):
 

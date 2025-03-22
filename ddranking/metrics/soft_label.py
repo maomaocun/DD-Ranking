@@ -120,15 +120,15 @@ class SoftLabelEvaluator:
         self.tea_use_torchvision = tea_use_torchvision
         self.stu_use_torchvision = stu_use_torchvision
 
-        pretrained_model_path = get_pretrained_model_path(teacher_dir, model_name, dataset, ipc)
-        self.teacher_model = build_model(model_name, 
-                                         num_classes=self.num_classes, 
-                                         im_size=self.im_size,
-                                         pretrained=True, 
-                                         device=self.device, 
-                                         model_path=pretrained_model_path,
-                                         use_torchvision=tea_use_torchvision)
-        self.teacher_model.eval()
+        # pretrained_model_path = get_pretrained_model_path(teacher_dir, model_name, dataset, ipc)
+        # self.teacher_model = build_model(model_name, 
+        #                                  num_classes=self.num_classes, 
+        #                                  im_size=self.im_size,
+        #                                  pretrained=True, 
+        #                                  device=self.device, 
+        #                                  model_path=pretrained_model_path,
+        #                                  use_torchvision=tea_use_torchvision)
+        # self.teacher_model.eval()
 
     def load_real_data(self, dataset, class_map, num_classes):
         images_all = []
@@ -317,7 +317,8 @@ class SoftLabelEvaluator:
         soft_labels = torch.cat(soft_labels, dim=0)
         return soft_labels
     
-    def compute_metrics(self, image_tensor: Tensor=None, image_path: str=None, soft_labels: Tensor=None, syn_lr: float=None):
+    def compute_metrics(self, image_tensor: Tensor=None, image_path: str=None, soft_labels: Tensor=None, syn_lr: float=None,tearcher_model=None):
+        self.teacher_model = tearcher_model.to(self.device)
         if image_tensor is None and image_path is None:
             raise ValueError("Either image_tensor or image_path must be provided")
 

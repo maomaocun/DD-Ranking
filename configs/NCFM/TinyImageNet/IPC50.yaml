@@ -1,6 +1,6 @@
 # real data
 dataset: TinyImageNet
-real_data_path: ../dataset/
+real_data_path: ../dataset/tinyimagenet/
 
 # synthetic data
 ipc: 50
@@ -32,7 +32,7 @@ optimizer: sgd
 lr_scheduler: step
 weight_decay: 0.0005
 momentum: 0.9
-num_eval: 5
+num_eval: 3
 num_epochs: 1000
 syn_batch_size: 256
 real_batch_size: 256

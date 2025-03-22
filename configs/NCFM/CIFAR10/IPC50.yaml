@@ -34,7 +34,7 @@ optimizer: sgd
 lr_scheduler: step
 weight_decay: 0.0005
 momentum: 0.9
-num_eval: 5
+num_eval: 3
 num_epochs: 1000
 syn_batch_size: 128
 real_batch_size: 256
@@ -43,7 +43,7 @@ num_workers: 4
 device: cuda
 syn_lr: 0.01
 teacher_model_epoch: 20
-pretrained_models_flod: /home/tiger/Documents/DD-Ranking/NCFM_Pretrained_models/cifar10/softlabel
+pretrained_models_flod: /home/tiger/Documents/NCFM/DD-Ranking/NCFM_Pretrained_models/cifar10/softlabel
 soft_label_mode: "S"
 soft_label_criterion: "sce"
 temperature: 1.0
