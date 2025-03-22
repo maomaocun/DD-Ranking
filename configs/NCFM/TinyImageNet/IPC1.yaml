@@ -1,6 +1,6 @@
 # real data
 dataset: TinyImageNet
-real_data_path: /root/DD-Ranking/NCFM_eval/dataset/tinyimagenet
+real_data_path: ../dataset/
 
 # synthetic data
 ipc: 1
@@ -41,7 +41,7 @@ num_workers: 4
 device: cuda
 syn_lr: 0.01
 teacher_model_epoch: 20
-pretrained_models_flod: /root/NCFM/pretrained_models/tinyimagenet/softlabel
+pretrained_models_flod: /home/tiger/Documents/DD-Ranking/NCFM_Pretrained_models/tinyimagenet/softlabel
 soft_label_mode: "S"
 soft_label_criterion: "sce"
 temperature: 1.0
