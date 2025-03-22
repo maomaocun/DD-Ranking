@@ -9,3 +9,5 @@ build/
 *.pyc
 *.txt
 datasetNCFM_eval/cifar-10-batches-py.zip
+dataset/
+CIFAR10_ipc1.pt

@@ -8,7 +8,7 @@ custom_val_trans: null
 ipc: 1
 im_size: [32, 32]
 nclass: 100
-
+width: 1.0
 # agent model
 model_name: ConvNet-3
 use_torchvision: false
@@ -44,6 +44,8 @@ device: cuda
 syn_lr: 0.01
 teacher_model_epoch: 20
 pretrained_models_flod: /root/NCFM/pretrained_models/cifar100/softlabel
-
+soft_label_mode: "S"
+soft_label_criterion: "sce"
+temperature: 1.0
 # save path
-save_path: ./results/cifar100/ipc10/NCFM.csv
+save_path: ./results/cifar100/ipc1/NCFM.csv

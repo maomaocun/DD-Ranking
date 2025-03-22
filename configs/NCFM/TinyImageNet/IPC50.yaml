@@ -6,7 +6,7 @@ real_data_path: /root/DD-Ranking/NCFM_eval/dataset/tinyimagenet
 ipc: 50
 im_size: [64, 64]
 nclass: 200
-
+width: 1.0
 # agent model
 model_name: ConvNet-4
 use_torchvision: True
@@ -22,10 +22,10 @@ aug_params:
   scale: 1.2
   crop: 0.125
   cutout: 0.5
+use_zca: false
 
 custom_train_trans: null
 custom_val_trans: null
-use_zca: false
 
 # training specifics
 optimizer: sgd
@@ -42,6 +42,8 @@ device: cuda
 syn_lr: 0.01
 teacher_model_epoch: 20
 pretrained_models_flod: /root/NCFM/pretrained_models/tinyimagenet/softlabel
-
+soft_label_mode: "S"
+soft_label_criterion: "sce"
+temperature: 1.0
 # save path
 save_path: ./results/tinyimagenet/ipc50/NCFM.csv
