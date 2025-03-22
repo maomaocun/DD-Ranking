@@ -25,13 +25,13 @@ os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 config = Config.from_file(args.config)
 
 # 加载数据
-data_dec, target_dec = load_synthetic_data(args.data_path, config,args.softlabel)
+data_dec, target_dec,tearcher_model= load_synthetic_data(args.data_path, config,args.softlabel)
 
 # 根据 --softlabel 参数判断使用哪种评估方式
 if args.softlabel:
     print("Using soft label evaluation.")
     soft_label_evaluator = SoftLabelEvaluator(config)
-    soft_label_evaluator.compute_metrics(image_tensor=data_dec, soft_labels=target_dec, syn_lr=config.get('syn_lr'))
+    soft_label_evaluator.compute_metrics(image_tensor=data_dec, soft_labels=target_dec, syn_lr=config.get('syn_lr'),tearcher_model = tearcher_model)
 else:
     print("Using hard label evaluation.")
     hard_label_evaluator = HardLabelEvaluator(config)
