@@ -332,7 +332,7 @@ class SoftLabelEvaluator:
         for i in range(self.num_eval):
             set_seed()
             print(f"########################### {i+1}th Evaluation ###########################")
-
+            print("=========================================================================")
             print("Caculating syn data hard label metrics...")
             syn_data_hard_label_acc, best_lr = self.hyper_param_search_for_hard_label(
                 image_tensor=image_tensor,

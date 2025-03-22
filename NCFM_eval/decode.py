@@ -5,12 +5,13 @@ from math import ceil
 import torch .nn as nn
 import os
 # 加载合成数据
-def load_synthetic_data(data_dir, config):
+from models import define_model
+def load_synthetic_data(data_dir, config,use_softlabel=False):
+    config.config["ipc"]= config.config["ipc"] *4
     """加载合成数据并解码"""
     data = torch.load(data_dir, map_location='cpu')
     syn_images = data[0]
     syn_labels = data[1]
-
     data_dec = []
     target_dec = []
 
@@ -25,6 +26,8 @@ def load_synthetic_data(data_dir, config):
 
     data_dec = torch.cat(data_dec)
     target_dec = torch.cat(target_dec)
+    if use_softlabel:
+        tearcher_model = define_model(config.get("dataset"),config.get('model_name'),config.get('nclass'), config.get('im_size')[0])
     print(f"Decode condensed data: {data_dec.shape},label: {target_dec.shape}")
 
     return data_dec, target_dec

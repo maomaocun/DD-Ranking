@@ -15,3 +15,7 @@ CUDA_VISIBLE_DEVICES=4 python NCFM_hl.py  --data_path /root/DD-Ranking/baselines
 CUDA_VISIBLE_DEVICES=3 python NCFM_hl.py  --data_path /root/DD-Ranking/baselines/NCFM/TinyImageNet_IPC50.pt --config /root/DD-Ranking/configs/NCFM/TinyImageNet/IPC50.yaml
 
 
+
+
+CUDA_VISIBLE_DEVICES=3 python run_NCFM_script.py  --data_path ../CIFAR10_ipc1.pt --config ../configs/NCFM/CIFAR10/IPC1.yaml --softlabel
+

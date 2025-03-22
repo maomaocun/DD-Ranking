@@ -4,7 +4,7 @@ import torch.nn.functional as F
 
 
 class SoftCrossEntropyLoss(nn.Module):
-    def __init__(self, temperature=1.2):
+    def __init__(self, temperature=1.2): 
         super(SoftCrossEntropyLoss, self).__init__()
         self.temperature = temperature
 
