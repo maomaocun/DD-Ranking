@@ -8,4 +8,4 @@ PKG-INFO
 build/
 *.pyc
 *.txt
-dataset
+datasetNCFM_eval/cifar-10-batches-py.zip
