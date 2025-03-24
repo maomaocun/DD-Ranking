@@ -390,7 +390,7 @@ class SoftLabelEvaluator:
             print(f"Syn data soft label acc: {syn_data_soft_label_acc:.2f}%")
 
             print("Caculating random data soft label metrics...")
-            random_images, _ = get_random_images(self.dst_train, self.class_indices, self.ipc)
+            random_images, _ = get_random_images(self.dst_train, self.class_indices, self.ipc//4)
             if self.soft_label_mode == 'S':
                 random_data_soft_labels = self.generate_soft_labels(random_images)
             else:

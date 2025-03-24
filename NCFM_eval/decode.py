@@ -17,7 +17,7 @@ def load_state_dict(state_dict_path, model):
     model.load_state_dict(new_state_dict)
 def load_synthetic_data(data_dir, config, use_softlabel=False):
     config.config["ipc"] = config.config["ipc"] * 4  # 更新 ipc 参数
-    """加载合成数据并解码"""
+    """加载合成数据并解码""" 
     data = torch.load(data_dir, map_location='cpu')
     syn_images = data[0]
     syn_labels = data[1]
